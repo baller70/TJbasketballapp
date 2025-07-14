@@ -61,7 +61,7 @@ model User {
   workouts          Workout[]
   drillCompletions  DrillCompletion[]
   voiceNotes        VoiceNote[]
-  videoUploads      VideoUpload[]
+  mediaUploads      MediaUpload[]
   achievements      UserAchievement[]
   notifications     Notification[]
   aiInteractions    AIInteraction[]
@@ -108,7 +108,7 @@ model Drill {
   drillCompletions DrillCompletion[]
   scheduleEntries  ScheduleEntry[]
   voiceNotes       VoiceNote[]
-  videoUploads     VideoUpload[]
+  mediaUploads     MediaUpload[]
 }
 
 model Workout {
@@ -179,7 +179,7 @@ model DrillCompletion {
   drill         Drill          @relation(fields: [drillId], references: [id], onDelete: Cascade)
   scheduleEntry ScheduleEntry? @relation(fields: [scheduleEntryId], references: [id])
   voiceNotes    VoiceNote[]
-  videoUploads  VideoUpload[]
+  mediaUploads  MediaUpload[]
 }
 
 model VoiceNote {
@@ -198,17 +198,23 @@ model VoiceNote {
   drillCompletion DrillCompletion? @relation(fields: [drillCompletionId], references: [id])
 }
 
-model VideoUpload {
-  id                String   @id @default(cuid())
+model MediaUpload {
+  id                String    @id @default(cuid())
   userId            String
   drillId           String
   drillCompletionId String?
-  videoUrl          String
+  mediaType         MediaType
+  fileUrl           String
   thumbnailUrl      String?
-  analysis          Json?    // AI analysis results
+  filename          String
+  fileSize          Int       // in bytes
+  duration          Int?      // for videos, in seconds
+  analysis          Json?     // AI analysis results
   feedback          String?
-  parentNotified    Boolean  @default(false)
-  createdAt         DateTime @default(now())
+  parentNotified    Boolean   @default(false)
+  reviewedBy        String?   // parent/coach who reviewed
+  reviewedAt        DateTime?
+  createdAt         DateTime  @default(now())
 
   // Relations
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -347,6 +353,7 @@ enum NotificationType {
   PARENT_NOTIFICATION
   SYSTEM
   AI_FEEDBACK
+  MEDIA_UPLOAD
 }
 
 enum AIInteractionType {
@@ -370,4 +377,9 @@ enum ChallengeStatus {
   COMPLETED
   FAILED
   EXPIRED
+}
+
+enum MediaType {
+  VIDEO
+  IMAGE
 }

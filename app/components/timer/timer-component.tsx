@@ -9,6 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Play, 
   Pause, 
@@ -22,10 +23,13 @@ import {
   SkipForward,
   Volume2,
   VolumeX,
-  Settings
+  Settings,
+  Camera,
+  Upload
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Drill, TimerState } from '@/lib/types';
+import MediaUpload from '@/components/media/media-upload';
 
 export default function TimerComponent() {
   const [drills, setDrills] = useState<Drill[]>([]);
@@ -44,6 +48,8 @@ export default function TimerComponent() {
   const [showCompletionDialog, setShowCompletionDialog] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [customDuration, setCustomDuration] = useState(15); // minutes
+  const [completionId, setCompletionId] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -187,14 +193,78 @@ export default function TimerComponent() {
       });
 
       if (response.ok) {
-        setShowCompletionDialog(false);
+        const completion = await response.json();
+        setCompletionId(completion.id);
+        // Keep dialog open for media upload
         setFeedback('');
         setRating(0);
-        // Show success message or update UI
       }
     } catch (error) {
       console.error('Error completing drill:', error);
     }
+  };
+
+  const handleMediaUpload = async (files: any[]) => {
+    if (!timerState.currentDrill || !completionId) return;
+
+    setUploading(true);
+    try {
+      const uploadPromises = files.map(async (fileUpload) => {
+        const formData = new FormData();
+        formData.append('file', fileUpload.file);
+        formData.append('drillId', timerState.currentDrill!.id);
+        formData.append('drillCompletionId', completionId);
+
+        const response = await fetch('/api/media/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Upload failed');
+        }
+
+        return response.json();
+      });
+
+      await Promise.all(uploadPromises);
+      
+      // Close dialog after successful upload
+      setShowCompletionDialog(false);
+      setCompletionId(null);
+      
+      // Reset timer state
+      setTimerState({
+        isRunning: false,
+        isPaused: false,
+        timeLeft: 0,
+        totalTime: 0,
+        currentDrill: undefined,
+        drillIndex: 0,
+        completedDrills: [],
+      });
+
+    } catch (error) {
+      console.error('Error uploading media:', error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleSkipUpload = () => {
+    setShowCompletionDialog(false);
+    setCompletionId(null);
+    
+    // Reset timer state
+    setTimerState({
+      isRunning: false,
+      isPaused: false,
+      timeLeft: 0,
+      totalTime: 0,
+      currentDrill: undefined,
+      drillIndex: 0,
+      completedDrills: [],
+    });
   };
 
   const formatTime = (seconds: number) => {
@@ -405,66 +475,123 @@ export default function TimerComponent() {
 
       {/* Completion Dialog */}
       <Dialog open={showCompletionDialog} onOpenChange={setShowCompletionDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Trophy className="h-5 w-5 text-yellow-500" />
               Practice Complete!
             </DialogTitle>
             <DialogDescription>
-              Great job completing your practice session! How did it go?
+              Great job completing your practice session! Rate your performance and optionally upload a video or image.
             </DialogDescription>
           </DialogHeader>
           
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Rate your performance (1-5 stars)
-              </label>
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    onClick={() => setRating(star)}
-                    className={`p-1 ${
-                      star <= rating ? 'text-yellow-500' : 'text-gray-300'
-                    }`}
-                  >
-                    <Star className="h-6 w-6 fill-current" />
-                  </button>
-                ))}
+          <Tabs defaultValue="feedback" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="feedback">Feedback</TabsTrigger>
+              <TabsTrigger value="upload" disabled={!completionId}>
+                <Camera className="h-4 w-4 mr-2" />
+                Upload Media
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="feedback" className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Rate your performance (1-5 stars)
+                </label>
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => setRating(star)}
+                      className={`p-1 ${
+                        star <= rating ? 'text-yellow-500' : 'text-gray-300'
+                      }`}
+                    >
+                      <Star className="h-6 w-6 fill-current" />
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Notes (optional)
+                </label>
+                <Textarea
+                  placeholder="How did the drill feel? Any observations or areas for improvement?"
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
+                  rows={3}
+                />
+              </div>
+              
+              <div className="flex items-center gap-2 pt-4">
+                {!completionId ? (
+                  <Button
+                    onClick={completeDrill}
+                    className="flex-1 bg-orange-600 hover:bg-orange-700"
+                  >
+                    <Trophy className="h-4 w-4 mr-2" />
+                    Complete Practice
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleSkipUpload}
+                    className="flex-1 bg-orange-600 hover:bg-orange-700"
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    Finish
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  onClick={() => setShowCompletionDialog(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </TabsContent>
             
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Notes (optional)
-              </label>
-              <Textarea
-                placeholder="How did the drill feel? Any observations or areas for improvement?"
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                rows={3}
-              />
-            </div>
-            
-            <div className="flex items-center gap-2 pt-4">
-              <Button
-                onClick={completeDrill}
-                className="flex-1 bg-orange-600 hover:bg-orange-700"
-              >
-                <Trophy className="h-4 w-4 mr-2" />
-                Complete Practice
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => setShowCompletionDialog(false)}
-                className="flex-1"
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
+            <TabsContent value="upload" className="space-y-4">
+              {completionId ? (
+                <>
+                  <div className="text-center py-4">
+                    <h3 className="text-lg font-semibold mb-2">Share Your Performance</h3>
+                    <p className="text-gray-600">
+                      Upload a video or image of your practice session for your coach/parent to review and provide feedback.
+                    </p>
+                  </div>
+                  
+                  <MediaUpload
+                    onUpload={handleMediaUpload}
+                    acceptedTypes={['video/*', 'image/*']}
+                    maxFileSize={50}
+                    maxFiles={3}
+                    disabled={uploading}
+                  />
+                  
+                  <div className="flex justify-center pt-4">
+                    <Button
+                      variant="outline"
+                      onClick={handleSkipUpload}
+                      disabled={uploading}
+                    >
+                      Skip Upload
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">
+                    Complete your practice feedback first to upload media.
+                  </p>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
     </div>

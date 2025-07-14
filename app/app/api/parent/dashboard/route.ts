@@ -58,6 +58,35 @@ export async function GET() {
       take: 10,
     });
 
+    // Get recent media uploads from children
+    const mediaUploads = await prisma.mediaUpload.findMany({
+      where: {
+        userId: {
+          in: childrenIds,
+        },
+      },
+      include: {
+        drill: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        drillCompletion: {
+          select: {
+            id: true,
+            rating: true,
+            completedAt: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: 20,
+    });
+
     // Calculate weekly progress for each child
     const weekStart = new Date();
     weekStart.setDate(weekStart.getDate() - weekStart.getDay());
@@ -114,6 +143,7 @@ export async function GET() {
       children: user.children,
       recentActivities,
       notifications,
+      mediaUploads,
       weeklyProgress,
     };
 

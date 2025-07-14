@@ -213,10 +213,32 @@ export interface DashboardStats {
   weeklyProgress: number;
 }
 
+export interface MediaUpload {
+  id: string;
+  userId: string;
+  drillId: string;
+  drillCompletionId: string | null;
+  mediaType: 'VIDEO' | 'IMAGE';
+  fileUrl: string;
+  thumbnailUrl: string | null;
+  filename: string;
+  fileSize: number;
+  duration: number | null;
+  analysis: any;
+  feedback: string | null;
+  parentNotified: boolean;
+  reviewedBy: string | null;
+  reviewedAt: Date | null;
+  createdAt: Date;
+  drill: Drill;
+  user: User;
+}
+
 export interface ParentDashboardData {
   children: User[];
   recentActivities: DrillCompletion[];
   notifications: Notification[];
+  mediaUploads: MediaUpload[];
   weeklyProgress: {
     [childId: string]: {
       completed: number;

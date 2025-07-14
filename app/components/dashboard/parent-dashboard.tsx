@@ -24,7 +24,8 @@ import {
 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { motion } from 'framer-motion';
-import { User, DrillCompletion, Notification, ParentDashboardData } from '@/lib/types';
+import { User, DrillCompletion, Notification, ParentDashboardData, MediaUpload } from '@/lib/types';
+import MediaViewer from '@/components/media/media-viewer';
 
 interface ParentDashboardProps {
   user: User & { children: (User & { playerProfile: any })[] };
@@ -36,6 +37,7 @@ export default function ParentDashboard({ user }: ParentDashboardProps) {
     children: [],
     recentActivities: [],
     notifications: [],
+    mediaUploads: [],
     weeklyProgress: {},
   });
   const [loading, setLoading] = useState(true);
@@ -66,6 +68,25 @@ export default function ParentDashboard({ user }: ParentDashboardProps) {
       fetchDashboardData();
     } catch (error) {
       console.error('Error marking notification as read:', error);
+    }
+  };
+
+  const handleProvideFeedback = async (uploadId: string, feedback: string) => {
+    try {
+      const response = await fetch(`/api/media/${uploadId}/feedback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ feedback }),
+      });
+
+      if (response.ok) {
+        // Refresh dashboard data to get updated media uploads
+        fetchDashboardData();
+      }
+    } catch (error) {
+      console.error('Error providing feedback:', error);
     }
   };
 
@@ -129,7 +150,7 @@ export default function ParentDashboard({ user }: ParentDashboardProps) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-white border border-blue-100">
+          <TabsList className="grid w-full grid-cols-5 bg-white border border-blue-100">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               Overview
@@ -141,6 +162,15 @@ export default function ParentDashboard({ user }: ParentDashboardProps) {
             <TabsTrigger value="activity" className="flex items-center gap-2">
               <Activity className="h-4 w-4" />
               Activity
+            </TabsTrigger>
+            <TabsTrigger value="media" className="flex items-center gap-2">
+              <Play className="h-4 w-4" />
+              Media Review
+              {dashboardData.mediaUploads?.filter(upload => !upload.feedback).length > 0 && (
+                <Badge variant="destructive" className="ml-1 text-xs">
+                  {dashboardData.mediaUploads.filter(upload => !upload.feedback).length}
+                </Badge>
+              )}
             </TabsTrigger>
             <TabsTrigger value="notifications" className="flex items-center gap-2">
               <Bell className="h-4 w-4" />
@@ -474,6 +504,27 @@ export default function ParentDashboard({ user }: ParentDashboardProps) {
                     </p>
                   )}
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="media">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Play className="h-5 w-5 text-blue-600" />
+                  Media Review
+                </CardTitle>
+                <CardDescription>
+                  Review and provide feedback on your children's practice videos and images
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <MediaViewer
+                  mediaUploads={dashboardData.mediaUploads || []}
+                  onProvideFeedback={handleProvideFeedback}
+                  showFeedbackForm={true}
+                />
               </CardContent>
             </Card>
           </TabsContent>
