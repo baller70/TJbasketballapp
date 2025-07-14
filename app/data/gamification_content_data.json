@@ -1,0 +1,726 @@
+{
+  "motivational_quotes": {
+    "hard_work_effort": [
+      {
+        "quote": "Hard work beats talent when talent doesn't work hard.",
+        "author": "Kevin Durant",
+        "age_group": "6-13",
+        "theme": "effort"
+      },
+      {
+        "quote": "The only place success comes before work is in the dictionary.",
+        "author": "Vince Lombardi",
+        "age_group": "8-13",
+        "theme": "work_ethic"
+      },
+      {
+        "quote": "Good, better, best. Never let it rest. Until your good is better and your better is best.",
+        "author": "Tim Duncan",
+        "age_group": "6-13",
+        "theme": "improvement"
+      },
+      {
+        "quote": "The harder you work, the harder it is to surrender.",
+        "author": "Vince Lombardi",
+        "age_group": "8-13",
+        "theme": "perseverance"
+      },
+      {
+        "quote": "Practice like you've never won. Play like you've never lost.",
+        "author": "Anonymous",
+        "age_group": "6-13",
+        "theme": "practice"
+      }
+    ],
+    "teamwork_collaboration": [
+      {
+        "quote": "Talent wins games, but teamwork and intelligence win championships.",
+        "author": "Michael Jordan",
+        "age_group": "6-13",
+        "theme": "teamwork"
+      },
+      {
+        "quote": "A basketball team is like the five fingers on your hand. If you can get them all together, you have a fist.",
+        "author": "Mike Krzyzewski",
+        "age_group": "8-13",
+        "theme": "unity"
+      },
+      {
+        "quote": "The strength of the team is each individual member. The strength of each member is the team.",
+        "author": "Phil Jackson",
+        "age_group": "6-13",
+        "theme": "mutual_support"
+      },
+      {
+        "quote": "There is no 'I' in team.",
+        "author": "Unknown",
+        "age_group": "6-13",
+        "theme": "selflessness"
+      },
+      {
+        "quote": "An assist makes two people happy. A point makes one guy happy.",
+        "author": "Nikola Jokic",
+        "age_group": "8-13",
+        "theme": "sharing"
+      }
+    ],
+    "resilience_perseverance": [
+      {
+        "quote": "I've failed over and over and over again in my life. And that is why I succeed.",
+        "author": "Michael Jordan",
+        "age_group": "8-13",
+        "theme": "learning_from_failure"
+      },
+      {
+        "quote": "It's not whether you get knocked down, it's whether you get up.",
+        "author": "Vince Lombardi",
+        "age_group": "6-13",
+        "theme": "resilience"
+      },
+      {
+        "quote": "I can accept failure, everyone fails at something. But I can't accept not trying.",
+        "author": "Michael Jordan",
+        "age_group": "6-13",
+        "theme": "effort"
+      },
+      {
+        "quote": "If you don't fall how are you going to know what getting up is like.",
+        "author": "Steph Curry",
+        "age_group": "8-13",
+        "theme": "learning"
+      },
+      {
+        "quote": "Every champion was once a contender who never gave up.",
+        "author": "Anonymous",
+        "age_group": "6-13",
+        "theme": "persistence"
+      }
+    ],
+    "confidence_self_belief": [
+      {
+        "quote": "You miss 100% of the shots you don't take.",
+        "author": "Wayne Gretzky",
+        "age_group": "6-13",
+        "theme": "taking_chances"
+      },
+      {
+        "quote": "The only person who can really motivate you is you.",
+        "author": "Shaquille O'Neal",
+        "age_group": "8-13",
+        "theme": "self_motivation"
+      },
+      {
+        "quote": "Believe you can and you're halfway there.",
+        "author": "Theodore Roosevelt",
+        "age_group": "6-13",
+        "theme": "self_belief"
+      },
+      {
+        "quote": "Whether you think you can or you can't, you're right.",
+        "author": "Henry Ford",
+        "age_group": "8-13",
+        "theme": "mindset"
+      },
+      {
+        "quote": "Never say never because limits, like fears, are often just an illusion.",
+        "author": "Michael Jordan",
+        "age_group": "8-13",
+        "theme": "overcoming_limits"
+      }
+    ],
+    "fun_inspirational": [
+      {
+        "quote": "Basketball is a beautiful game when the five players on the court play with one heartbeat.",
+        "author": "Anonymous",
+        "age_group": "6-13",
+        "theme": "team_harmony"
+      },
+      {
+        "quote": "Be the best version of yourself in anything that you do.",
+        "author": "Stephen Curry",
+        "age_group": "6-13",
+        "theme": "personal_excellence"
+      },
+      {
+        "quote": "The most important thing is to try and inspire people so that they can be great in whatever they want to do.",
+        "author": "Kobe Bryant",
+        "age_group": "8-13",
+        "theme": "inspiration"
+      },
+      {
+        "quote": "Anything is possible!",
+        "author": "Kevin Garnett",
+        "age_group": "6-13",
+        "theme": "possibility"
+      }
+    ]
+  },
+  "achievement_badges": {
+    "skill_based": [
+      {
+        "name": "Sharpshooter",
+        "description": "Make 10 shots in a row during practice",
+        "icon": "target",
+        "criteria": "consecutive_shots_made: 10",
+        "rarity": "common"
+      },
+      {
+        "name": "Assist Master",
+        "description": "Complete 5 perfect passes in one session",
+        "icon": "hands_helping",
+        "criteria": "perfect_passes: 5",
+        "rarity": "common"
+      },
+      {
+        "name": "Dribble Wizard",
+        "description": "Successfully complete all dribbling drills",
+        "icon": "basketball_dribble",
+        "criteria": "dribbling_drills_completed: 100%",
+        "rarity": "common"
+      },
+      {
+        "name": "Defensive Wall",
+        "description": "Complete 3 consecutive defensive stance drills perfectly",
+        "icon": "shield",
+        "criteria": "defensive_drills_perfect: 3",
+        "rarity": "uncommon"
+      },
+      {
+        "name": "Free Throw Champion",
+        "description": "Make 8 out of 10 free throws",
+        "icon": "basketball_hoop",
+        "criteria": "free_throw_percentage: 80%",
+        "rarity": "uncommon"
+      }
+    ],
+    "effort_persistence": [
+      {
+        "name": "Never Give Up",
+        "description": "Complete a difficult drill after failing 3 times",
+        "icon": "fist",
+        "criteria": "attempts_before_success: 3",
+        "rarity": "common"
+      },
+      {
+        "name": "Practice Warrior",
+        "description": "Attend 10 practice sessions in a row",
+        "icon": "calendar_check",
+        "criteria": "consecutive_practices: 10",
+        "rarity": "uncommon"
+      },
+      {
+        "name": "Early Bird",
+        "description": "Be the first to arrive at practice 5 times",
+        "icon": "sunrise",
+        "criteria": "first_to_arrive: 5",
+        "rarity": "common"
+      },
+      {
+        "name": "Improvement Champion",
+        "description": "Show measurable improvement in any skill over 2 weeks",
+        "icon": "trending_up",
+        "criteria": "skill_improvement: 2_weeks",
+        "rarity": "uncommon"
+      },
+      {
+        "name": "Hustle Hero",
+        "description": "Give maximum effort in every drill for one practice",
+        "icon": "lightning",
+        "criteria": "max_effort_full_practice: 1",
+        "rarity": "common"
+      }
+    ],
+    "teamwork_leadership": [
+      {
+        "name": "Team Captain",
+        "description": "Help a teammate master a new skill",
+        "icon": "helping_hand",
+        "criteria": "helped_teammate_skill: 1",
+        "rarity": "uncommon"
+      },
+      {
+        "name": "Encourager",
+        "description": "Give positive feedback to teammates 10 times",
+        "icon": "speech_bubble_positive",
+        "criteria": "positive_feedback_given: 10",
+        "rarity": "common"
+      },
+      {
+        "name": "Team Spirit",
+        "description": "Cheer for teammates during difficult moments",
+        "icon": "megaphone",
+        "criteria": "supportive_moments: 5",
+        "rarity": "common"
+      },
+      {
+        "name": "Mentor",
+        "description": "Guide a younger player through a drill",
+        "icon": "graduation_cap",
+        "criteria": "mentored_player: 1",
+        "rarity": "uncommon"
+      },
+      {
+        "name": "Fair Play Champion",
+        "description": "Show excellent sportsmanship for 5 sessions",
+        "icon": "handshake",
+        "criteria": "good_sportsmanship: 5",
+        "rarity": "uncommon"
+      }
+    ],
+    "milestone_achievements": [
+      {
+        "name": "First Steps",
+        "description": "Complete your first basketball drill",
+        "icon": "baby_steps",
+        "criteria": "first_drill_completed: 1",
+        "rarity": "starter"
+      },
+      {
+        "name": "Week Warrior",
+        "description": "Practice for 7 days straight",
+        "icon": "week_calendar",
+        "criteria": "daily_practice: 7",
+        "rarity": "uncommon"
+      },
+      {
+        "name": "Century Club",
+        "description": "Complete 100 total drills",
+        "icon": "hundred",
+        "criteria": "total_drills_completed: 100",
+        "rarity": "rare"
+      },
+      {
+        "name": "Master Student",
+        "description": "Watch and complete 25 instructional videos",
+        "icon": "graduation_cap",
+        "criteria": "videos_completed: 25",
+        "rarity": "rare"
+      },
+      {
+        "name": "Dedication Star",
+        "description": "Use the app for 30 days total",
+        "icon": "star",
+        "criteria": "total_app_days: 30",
+        "rarity": "rare"
+      }
+    ],
+    "fun_creative": [
+      {
+        "name": "Trick Shot Artist",
+        "description": "Successfully complete a creative shot challenge",
+        "icon": "magic_wand",
+        "criteria": "creative_shot_completed: 1",
+        "rarity": "uncommon"
+      },
+      {
+        "name": "Speed Demon",
+        "description": "Complete a speed drill in record time",
+        "icon": "lightning_bolt",
+        "criteria": "speed_record: 1",
+        "rarity": "uncommon"
+      },
+      {
+        "name": "Consistency King/Queen",
+        "description": "Maintain the same performance level for 5 days",
+        "icon": "balance_scale",
+        "criteria": "consistent_performance: 5",
+        "rarity": "rare"
+      },
+      {
+        "name": "Explorer",
+        "description": "Try every type of drill available",
+        "icon": "compass",
+        "criteria": "all_drill_types_tried: 100%",
+        "rarity": "rare"
+      }
+    ]
+  },
+  "progress_milestones": {
+    "beginner": [
+      {
+        "milestone": "First Dribble",
+        "description": "Successfully dribble the ball 10 times without losing control",
+        "celebration": "Confetti animation with cheering sounds",
+        "points": 50,
+        "unlock": "Basic dribbling drills"
+      },
+      {
+        "milestone": "First Basket",
+        "description": "Score your first basket in practice mode",
+        "celebration": "Virtual fireworks with crowd cheering",
+        "points": 100,
+        "unlock": "Shooting challenges"
+      },
+      {
+        "milestone": "Week One Complete",
+        "description": "Practice for 7 days",
+        "celebration": "Achievement banner with team cheer",
+        "points": 200,
+        "unlock": "Advanced drills section"
+      }
+    ],
+    "intermediate": [
+      {
+        "milestone": "Drill Master",
+        "description": "Complete 25 different drills",
+        "celebration": "Special master badge ceremony",
+        "points": 300,
+        "unlock": "Expert level content"
+      },
+      {
+        "milestone": "Skill Combo",
+        "description": "Combine dribbling and shooting in one session",
+        "celebration": "Skill combination light show",
+        "points": 250,
+        "unlock": "Advanced combination drills"
+      },
+      {
+        "milestone": "Team Player",
+        "description": "Help teammates 5 times",
+        "celebration": "Team unity celebration animation",
+        "points": 400,
+        "unlock": "Leadership challenges"
+      }
+    ],
+    "advanced": [
+      {
+        "milestone": "Century Challenge",
+        "description": "Complete 100 total practice sessions",
+        "celebration": "Hall of Fame induction ceremony",
+        "points": 1000,
+        "unlock": "Master coach tips section"
+      },
+      {
+        "milestone": "Skills Mastery",
+        "description": "Achieve proficiency in all basic skills",
+        "celebration": "Skills mastery crown ceremony",
+        "points": 800,
+        "unlock": "Create your own drills"
+      },
+      {
+        "milestone": "Champion Mindset",
+        "description": "Show consistent improvement over 30 days",
+        "celebration": "Champion's parade with confetti",
+        "points": 1500,
+        "unlock": "Special champion avatar items"
+      }
+    ]
+  },
+  "gamification_mechanics": {
+    "points_system": {
+      "daily_practice": 10,
+      "drill_completion": 20,
+      "skill_improvement": 50,
+      "helping_teammate": 30,
+      "consecutive_days": 15,
+      "perfect_form": 25,
+      "video_watched": 5,
+      "goal_achieved": 100
+    },
+    "level_system": {
+      "rookie": {
+        "points_required": 0,
+        "perks": ["Basic drills", "Beginner tips", "Simple challenges"]
+      },
+      "player": {
+        "points_required": 500,
+        "perks": ["Intermediate drills", "Skill tracking", "Team challenges"]
+      },
+      "star": {
+        "points_required": 1500,
+        "perks": ["Advanced drills", "Performance analytics", "Leadership roles"]
+      },
+      "champion": {
+        "points_required": 3000,
+        "perks": ["Expert content", "Mentor privileges", "Custom challenges"]
+      },
+      "legend": {
+        "points_required": 5000,
+        "perks": ["All content unlocked", "Hall of Fame", "Special recognition"]
+      }
+    },
+    "streak_system": {
+      "daily_practice": {
+        "description": "Practice every day",
+        "rewards": {
+          "3_days": "Streak starter badge",
+          "7_days": "Week warrior badge + 50 bonus points",
+          "14_days": "Dedication star + 100 bonus points",
+          "30_days": "Champion consistency + 250 bonus points"
+        }
+      },
+      "skill_improvement": {
+        "description": "Show improvement in skills consistently",
+        "rewards": {
+          "3_days": "Getting better badge",
+          "7_days": "Improvement champion + avatar item",
+          "14_days": "Skill master + special celebration"
+        }
+      }
+    },
+    "challenges": {
+      "daily": [
+        {
+          "name": "Perfect Form",
+          "description": "Complete 5 drills with perfect form",
+          "reward": "50 points + form master badge",
+          "time_limit": "24 hours"
+        },
+        {
+          "name": "Speed Challenge",
+          "description": "Complete a drill faster than yesterday",
+          "reward": "30 points + speed badge",
+          "time_limit": "24 hours"
+        },
+        {
+          "name": "Helper Hero",
+          "description": "Encourage a teammate",
+          "reward": "40 points + team spirit badge",
+          "time_limit": "24 hours"
+        }
+      ],
+      "weekly": [
+        {
+          "name": "Skill Explorer",
+          "description": "Try 3 new types of drills",
+          "reward": "150 points + explorer badge",
+          "time_limit": "7 days"
+        },
+        {
+          "name": "Consistency Master",
+          "description": "Practice every day this week",
+          "reward": "200 points + consistency badge",
+          "time_limit": "7 days"
+        }
+      ],
+      "monthly": [
+        {
+          "name": "Champion's Journey",
+          "description": "Complete 50 drills and help 10 teammates",
+          "reward": "500 points + champion badge + special avatar",
+          "time_limit": "30 days"
+        }
+      ]
+    }
+  },
+  "positive_reinforcement_strategies": {
+    "encouragement_phrases": [
+      "Great job! You're getting better every day!",
+      "I can see your improvement - keep it up!",
+      "Your hard work is paying off!",
+      "That's the spirit - never give up!",
+      "You're becoming a real basketball player!",
+      "Amazing effort - you should be proud!",
+      "Look how far you've come!",
+      "Your dedication is inspiring!",
+      "Keep practicing - you're doing great!",
+      "That's exactly the right attitude!"
+    ],
+    "effort_recognition": [
+      "I noticed you kept trying even when it was hard",
+      "Your determination is impressive",
+      "You showed great sportsmanship today",
+      "I'm proud of how you helped your teammate",
+      "Your positive attitude makes a difference",
+      "You're setting a great example for others",
+      "I can see you're really listening and learning",
+      "Your improvement shows your hard work",
+      "You handled that challenge like a champion",
+      "Your teamwork makes everyone better"
+    ],
+    "growth_mindset_messages": [
+      "Mistakes help us learn and grow",
+      "Every expert was once a beginner",
+      "Practice makes progress, not perfection",
+      "Your brain grows stronger when you challenge it",
+      "It's okay to struggle - that's how we improve",
+      "Focus on getting better, not being perfect",
+      "You haven't learned this... yet!",
+      "Every great player started where you are now",
+      "The more you practice, the easier it becomes",
+      "Believe in yourself - you can do this!"
+    ],
+    "celebration_moments": [
+      "First successful attempt at any skill",
+      "Showing improvement from previous session",
+      "Helping a teammate learn something new",
+      "Demonstrating good sportsmanship",
+      "Completing a challenging drill",
+      "Attending practice consistently",
+      "Showing positive attitude during difficulty",
+      "Achieving a personal goal",
+      "Supporting teammates during their attempts",
+      "Asking good questions about technique"
+    ]
+  },
+  "themed_rewards": {
+    "virtual_items": [
+      {
+        "name": "Champion's Crown",
+        "description": "Special crown for reaching champion level",
+        "unlock_condition": "level_champion",
+        "category": "avatar_accessory"
+      },
+      {
+        "name": "Golden Basketball",
+        "description": "Shiny gold basketball for your avatar",
+        "unlock_condition": "100_baskets_made",
+        "category": "avatar_item"
+      },
+      {
+        "name": "Team Captain Badge",
+        "description": "Special badge for leadership qualities",
+        "unlock_condition": "helped_10_teammates",
+        "category": "badge"
+      },
+      {
+        "name": "Lightning Shoes",
+        "description": "Super fast shoes for speed challenges",
+        "unlock_condition": "speed_challenge_winner",
+        "category": "avatar_accessory"
+      },
+      {
+        "name": "All-Star Jersey",
+        "description": "Special jersey for outstanding performance",
+        "unlock_condition": "30_day_streak",
+        "category": "avatar_clothing"
+      }
+    ],
+    "collectibles": [
+      {
+        "name": "Basketball Cards",
+        "description": "Collect cards of famous players",
+        "unlock_methods": ["daily_practice", "skill_milestones", "helping_teammates"],
+        "total_available": 50
+      },
+      {
+        "name": "Team Logos",
+        "description": "Unlock logos of professional teams",
+        "unlock_methods": ["level_progression", "achievement_badges"],
+        "total_available": 30
+      },
+      {
+        "name": "Basketball Stickers",
+        "description": "Fun stickers for your profile",
+        "unlock_methods": ["daily_challenges", "weekly_goals"],
+        "total_available": 100
+      }
+    ],
+    "special_unlocks": [
+      {
+        "name": "Create Your Own Drill",
+        "description": "Design and share your own practice drill",
+        "unlock_condition": "complete_100_drills",
+        "category": "feature"
+      },
+      {
+        "name": "Coach Mode",
+        "description": "Help teach other players",
+        "unlock_condition": "mentor_5_players",
+        "category": "feature"
+      },
+      {
+        "name": "Hall of Fame",
+        "description": "Your name in the app's hall of fame",
+        "unlock_condition": "legend_level",
+        "category": "recognition"
+      },
+      {
+        "name": "Personal Highlights Reel",
+        "description": "Video compilation of your best moments",
+        "unlock_condition": "50_perfect_drills",
+        "category": "feature"
+      }
+    ],
+    "real_world_rewards": [
+      {
+        "name": "Digital Certificate",
+        "description": "Printable certificate of achievement",
+        "unlock_condition": "complete_skill_level",
+        "category": "certificate"
+      },
+      {
+        "name": "Parent/Coach Report",
+        "description": "Detailed progress report to share",
+        "unlock_condition": "monthly_goal_achieved",
+        "category": "report"
+      },
+      {
+        "name": "Skill Improvement Chart",
+        "description": "Visual chart showing your progress",
+        "unlock_condition": "track_improvement_30_days",
+        "category": "chart"
+      }
+    ]
+  },
+  "engagement_features": {
+    "social_elements": [
+      {
+        "feature": "Team Challenges",
+        "description": "Work together with teammates to achieve goals",
+        "benefits": ["builds collaboration", "shared success", "peer motivation"]
+      },
+      {
+        "feature": "Peer Encouragement",
+        "description": "Send supportive messages to teammates",
+        "benefits": ["positive communication", "team bonding", "emotional support"]
+      },
+      {
+        "feature": "Mentorship Program",
+        "description": "Experienced players guide newcomers",
+        "benefits": ["leadership development", "knowledge sharing", "community building"]
+      }
+    ],
+    "personalization": [
+      {
+        "feature": "Custom Avatar",
+        "description": "Create and customize your player avatar",
+        "benefits": ["self-expression", "ownership", "identity"]
+      },
+      {
+        "feature": "Goal Setting",
+        "description": "Set personal improvement goals",
+        "benefits": ["motivation", "focus", "achievement tracking"]
+      },
+      {
+        "feature": "Progress Tracking",
+        "description": "Visual displays of skill development",
+        "benefits": ["motivation", "awareness", "celebration"]
+      }
+    ],
+    "feedback_systems": [
+      {
+        "feature": "Immediate Feedback",
+        "description": "Instant response to actions and attempts",
+        "benefits": ["quick learning", "correction", "encouragement"]
+      },
+      {
+        "feature": "Progress Celebrations",
+        "description": "Special animations and sounds for achievements",
+        "benefits": ["positive reinforcement", "joy", "memory creation"]
+      },
+      {
+        "feature": "Gentle Correction",
+        "description": "Constructive feedback for improvement",
+        "benefits": ["learning", "growth mindset", "skill development"]
+      }
+    ]
+  },
+  "age_specific_considerations": {
+    "ages_6_8": {
+      "focus": ["fun", "basic_skills", "short_attention_span", "immediate_rewards"],
+      "recommended_mechanics": ["simple_points", "colorful_badges", "quick_celebrations", "easy_challenges"],
+      "quote_themes": ["simple_encouragement", "teamwork", "trying_your_best"]
+    },
+    "ages_9_11": {
+      "focus": ["skill_development", "team_cooperation", "goal_setting", "friendly_competition"],
+      "recommended_mechanics": ["level_progression", "streak_tracking", "team_challenges", "achievement_badges"],
+      "quote_themes": ["perseverance", "improvement", "helping_others", "positive_attitude"]
+    },
+    "ages_12_13": {
+      "focus": ["advanced_skills", "leadership", "strategy", "self_motivation"],
+      "recommended_mechanics": ["complex_challenges", "mentorship_roles", "detailed_analytics", "competitive_elements"],
+      "quote_themes": ["leadership", "dedication", "overcoming_challenges", "inspiring_others"]
+    }
+  }
+}

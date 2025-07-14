@@ -1,0 +1,909 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created_date": "2025-07-14T14:14:39.540780",
+    "target_age_range": "6-13 years",
+    "total_drills": 35,
+    "categories": [
+      "Shooting",
+      "Dribbling & Ball Handling",
+      "Passing",
+      "Defense & Rebounding",
+      "Footwork & Movement",
+      "Conditioning & Agility",
+      "Fundamentals & Fun Games"
+    ]
+  },
+  "drills": [
+    {
+      "name": "B.E.E.F. Form Shooting",
+      "description": "Learn the perfect shooting form using Balance, Eyes, Elbow, Follow-through - the four keys to great shooting!",
+      "category": "shooting",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball",
+        "hoop"
+      ],
+      "step_by_step": [
+        "Stand close to the basket (3-5 feet away)",
+        "Get in BALANCE with feet shoulder-width apart",
+        "Keep your EYES focused on the back of the rim",
+        "Line up your shooting ELBOW under the ball",
+        "Shoot with soft FOLLOW-THROUGH, snapping your wrist down",
+        "Practice 10 shots, focusing on form not speed",
+        "Gradually move back as form improves"
+      ],
+      "coaching_tips": [
+        "Emphasize proper form over making shots initially",
+        "Use positive reinforcement for good form",
+        "Start very close to build confidence",
+        "Watch for common mistakes like side-arm shooting"
+      ]
+    },
+    {
+      "name": "Around the World",
+      "description": "Travel around the world by making shots from different spots around the hoop!",
+      "category": "shooting",
+      "skill_level": "beginner",
+      "duration": "15-20 minutes",
+      "equipment": [
+        "basketball",
+        "hoop",
+        "court markings or cones"
+      ],
+      "step_by_step": [
+        "Set up 7-10 shooting spots around the key in a semicircle",
+        "Start at the first spot (usually right baseline)",
+        "Make a shot to advance to the next spot",
+        "If you miss, you can either start over or stay at that spot",
+        "Continue around all spots to complete the 'world'",
+        "First player to complete all spots wins"
+      ],
+      "coaching_tips": [
+        "Adjust shooting distances based on age and ability",
+        "Allow younger kids to shoot from closer spots",
+        "Encourage proper shooting form at each spot",
+        "Make it fun with team challenges"
+      ]
+    },
+    {
+      "name": "Layup Lines",
+      "description": "Practice running layups like the pros do in warm-ups!",
+      "category": "shooting",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball",
+        "hoop"
+      ],
+      "step_by_step": [
+        "Form two lines - one at right wing, one under the basket",
+        "Right wing line dribbles toward basket",
+        "Use proper footwork: right foot, left foot, then shoot",
+        "Aim for the top corner of the square on the backboard",
+        "Player under basket gets rebound and passes to next shooter",
+        "Switch lines after each attempt",
+        "Practice from both sides of the basket"
+      ],
+      "coaching_tips": [
+        "Teach proper footwork: outside foot, inside foot, then up",
+        "Start with walking speed, then increase to jogging",
+        "Emphasize using the backboard for younger players",
+        "Keep the line moving to maintain engagement"
+      ]
+    },
+    {
+      "name": "HORSE",
+      "description": "Challenge your friends to match your creative shots in this classic game!",
+      "category": "shooting",
+      "skill_level": "intermediate",
+      "duration": "15-20 minutes",
+      "equipment": [
+        "basketball",
+        "hoop"
+      ],
+      "step_by_step": [
+        "First player takes a shot from anywhere on the court",
+        "If they make it, next player must make the same shot",
+        "If second player misses, they get a letter (H, then O, then R, S, E)",
+        "If second player makes it, they become the shooter",
+        "Continue until someone spells H-O-R-S-E",
+        "Last player remaining wins"
+      ],
+      "coaching_tips": [
+        "Encourage creativity but keep shots realistic",
+        "Focus on form even during fun competitive games",
+        "Adjust rules for younger kids (use shorter words like 'PIG')",
+        "Keep everyone engaged by rotating quickly"
+      ]
+    },
+    {
+      "name": "Knockout",
+      "description": "Fast-paced shooting game where you try to make your shot before the player behind you!",
+      "category": "shooting",
+      "skill_level": "intermediate",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "2 basketballs",
+        "hoop"
+      ],
+      "step_by_step": [
+        "Form a line at the free throw line (or closer for younger players)",
+        "First two players get basketballs",
+        "Both players shoot at the same time",
+        "If first player makes their shot, they get the ball and go to back of line",
+        "If first player misses, they must get rebound and score before second player",
+        "If second player scores first, first player is 'knocked out'",
+        "Continue until only one player remains"
+      ],
+      "coaching_tips": [
+        "Start closer to basket for younger players",
+        "Emphasize following shots for rebounds",
+        "Keep game moving quickly to maintain excitement",
+        "Have multiple games going for larger groups"
+      ]
+    },
+    {
+      "name": "Stationary Dribbling",
+      "description": "Master ball control by practicing dribbling in one spot using different techniques!",
+      "category": "dribbling",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball"
+      ],
+      "step_by_step": [
+        "Start with basic dribbling with dominant hand",
+        "Keep ball low (below waist) and use fingertips",
+        "Practice 30 seconds with each hand",
+        "Add variations: high dribble, low dribble, crossover",
+        "Keep eyes up, not looking at the ball",
+        "Practice dribbling around your body",
+        "End with figure-8 dribbling through legs"
+      ],
+      "coaching_tips": [
+        "Emphasize using fingertips, not palms",
+        "Start slow and build up speed gradually",
+        "Encourage keeping head up to see the court",
+        "Use positive reinforcement for effort"
+      ]
+    },
+    {
+      "name": "Dribble Tag",
+      "description": "Fun tag game where everyone must dribble while trying to avoid being tagged!",
+      "category": "dribbling",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball for each player",
+        "court boundaries"
+      ],
+      "step_by_step": [
+        "Every player has a basketball within court boundaries",
+        "Choose 1-2 players to be 'it' (depending on group size)",
+        "All players must dribble at all times",
+        "If tagged or lose control of ball, you become 'it'",
+        "If you dribble out of bounds, you become 'it'",
+        "Continue until time runs out",
+        "Switch who starts as 'it' for multiple rounds"
+      ],
+      "coaching_tips": [
+        "Emphasize ball control over speed",
+        "Adjust boundaries based on skill level",
+        "Encourage players to protect their dribble",
+        "Keep games short and energetic"
+      ]
+    },
+    {
+      "name": "Cone Dribbling Course",
+      "description": "Navigate through a fun obstacle course while keeping control of your basketball!",
+      "category": "dribbling",
+      "skill_level": "beginner",
+      "duration": "15-20 minutes",
+      "equipment": [
+        "basketball",
+        "8-10 cones"
+      ],
+      "step_by_step": [
+        "Set up cones in a zigzag pattern down the court",
+        "Start at first cone with basketball",
+        "Dribble around each cone alternating hands",
+        "Use crossover dribble to change direction at each cone",
+        "Focus on keeping ball low and controlled",
+        "Time yourself and try to improve",
+        "Add variations like behind-the-back or between legs"
+      ],
+      "coaching_tips": [
+        "Start with wider spacing between cones",
+        "Emphasize control over speed initially",
+        "Demonstrate proper crossover technique",
+        "Make it competitive with relay races"
+      ]
+    },
+    {
+      "name": "Red Light, Green Light",
+      "description": "Practice dribbling control by starting and stopping on command!",
+      "category": "dribbling",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball for each player"
+      ],
+      "step_by_step": [
+        "All players start at baseline with basketball",
+        "On 'Green Light', players dribble forward",
+        "On 'Red Light', players must stop immediately in triple threat position",
+        "On 'Yellow Light', players dribble in place",
+        "Add variations: 'Purple Light' (dribble backward)",
+        "First player to opposite end wins",
+        "Play multiple rounds with different commands"
+      ],
+      "coaching_tips": [
+        "Emphasize proper stopping technique",
+        "Teach triple threat position during stops",
+        "Keep commands varied and unpredictable",
+        "Focus on ball control during direction changes"
+      ]
+    },
+    {
+      "name": "Two-Ball Dribbling",
+      "description": "Challenge yourself by dribbling two basketballs at the same time!",
+      "category": "dribbling",
+      "skill_level": "advanced",
+      "duration": "15-20 minutes",
+      "equipment": [
+        "2 basketballs per player"
+      ],
+      "step_by_step": [
+        "Start with two basketballs, one in each hand",
+        "Begin dribbling both balls simultaneously",
+        "Practice alternating dribbles (right, left, right, left)",
+        "Try synchronous dribbling (both balls together)",
+        "Add movement: walk forward while dribbling",
+        "Practice crossovers with both balls",
+        "Challenge: dribble one high, one low"
+      ],
+      "coaching_tips": [
+        "Start stationary before adding movement",
+        "This drill quickly reveals weaker hand",
+        "Be patient - this is very challenging",
+        "Focus on rhythm and coordination"
+      ]
+    },
+    {
+      "name": "Partner Passing",
+      "description": "Practice basic passing techniques with a partner to build accuracy and catching skills!",
+      "category": "passing",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "1 basketball per pair"
+      ],
+      "step_by_step": [
+        "Stand 8-10 feet apart from partner",
+        "Start with chest passes - step forward and push through",
+        "Practice bounce passes - aim for spot 2/3 to partner",
+        "Try overhead passes - bring ball behind head",
+        "Focus on catching with both hands",
+        "Take one step back every 10 successful passes",
+        "Practice different pass types in sequence"
+      ],
+      "coaching_tips": [
+        "Emphasize stepping toward target",
+        "Teach proper hand position for different passes",
+        "Focus on accuracy over power",
+        "Encourage communication between partners"
+      ]
+    },
+    {
+      "name": "Monkey in the Middle",
+      "description": "Two players pass while one defender tries to steal the ball - great for passing under pressure!",
+      "category": "passing",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "1 basketball per group of 3"
+      ],
+      "step_by_step": [
+        "Form groups of 3 players",
+        "Two players stand 12-15 feet apart",
+        "One player (the 'monkey') stands in the middle",
+        "Outside players pass back and forth",
+        "Middle player tries to deflect or steal passes",
+        "If middle player gets ball, they switch with passer",
+        "Focus on using fakes and quick passes"
+      ],
+      "coaching_tips": [
+        "Encourage use of pass fakes",
+        "Teach proper defensive positioning",
+        "Emphasize quick decision making",
+        "Keep rotations active so everyone gets chances"
+      ]
+    },
+    {
+      "name": "Circle Passing",
+      "description": "Practice passing and catching while moving in a circle with your team!",
+      "category": "passing",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "1-2 basketballs per group"
+      ],
+      "step_by_step": [
+        "Form circle with 6-8 players",
+        "Start with one ball, pass to player across circle",
+        "After passing, jog to that player's spot",
+        "Continue passing and following your pass",
+        "Add second ball once rhythm is established",
+        "Change direction periodically",
+        "Add different types of passes"
+      ],
+      "coaching_tips": [
+        "Start slow and build up speed",
+        "Emphasize calling teammates' names",
+        "Watch for proper passing technique",
+        "Make it fun with different pass types"
+      ]
+    },
+    {
+      "name": "Ultimate Basketball",
+      "description": "No dribbling allowed! Move the ball only by passing in this fun team game!",
+      "category": "passing",
+      "skill_level": "intermediate",
+      "duration": "15-20 minutes",
+      "equipment": [
+        "1 basketball",
+        "court boundaries"
+      ],
+      "step_by_step": [
+        "Divide into two teams of 4-5 players each",
+        "No dribbling allowed - only passing and pivoting",
+        "Score by passing ball to teammate in 'end zone'",
+        "Defense tries to intercept passes",
+        "If ball hits ground, possession changes",
+        "Players cannot run with ball - only pivot",
+        "Play to set number of points or time limit"
+      ],
+      "coaching_tips": [
+        "Emphasize spacing and getting open",
+        "Teach proper pivoting technique",
+        "Encourage quick decision making",
+        "Focus on communication between teammates"
+      ]
+    },
+    {
+      "name": "Four Corner Passing",
+      "description": "Practice passing and catching while moving to different corners of the court!",
+      "category": "passing",
+      "skill_level": "intermediate",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "1 basketball per group"
+      ],
+      "step_by_step": [
+        "Set up four lines at corners of half court",
+        "Start with ball in one corner",
+        "Pass to adjacent corner (clockwise)",
+        "After passing, run to corner you passed to",
+        "Continue passing and following in sequence",
+        "Add second ball once rhythm established",
+        "Change direction and passing patterns"
+      ],
+      "coaching_tips": [
+        "Focus on leading receivers properly",
+        "Emphasize catching ball ready to pass",
+        "Watch for traveling violations",
+        "Keep players moving and engaged"
+      ]
+    },
+    {
+      "name": "Defensive Stance",
+      "description": "Learn the proper basketball defensive position - the foundation of good defense!",
+      "category": "defense",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "none"
+      ],
+      "step_by_Step": [
+        "Stand with feet shoulder-width apart",
+        "Bend knees and stay low in athletic position",
+        "Keep back straight and chest up",
+        "Arms out to sides with palms up",
+        "Weight on balls of feet, ready to move",
+        "Practice staying in stance for 30 seconds",
+        "Move in stance: shuffle left, right, forward, back"
+      ],
+      "coaching_tips": [
+        "Emphasize staying low and balanced",
+        "Don't let players cross feet when moving",
+        "Keep head up to see offensive player",
+        "Make it fun with mirror exercises"
+      ]
+    },
+    {
+      "name": "Mirror Drill",
+      "description": "Practice defensive footwork by mirroring your partner's movements!",
+      "category": "defense",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "none"
+      ],
+      "step_by_step": [
+        "Partner up players facing each other",
+        "One player is offense, one is defense",
+        "Offensive player moves slowly side to side",
+        "Defensive player mirrors movements in defensive stance",
+        "No contact allowed - just footwork practice",
+        "Switch roles every 30 seconds",
+        "Progress to more complex movements"
+      ],
+      "coaching_tips": [
+        "Emphasize proper defensive stance",
+        "Keep movements controlled and realistic",
+        "Focus on staying in front of offensive player",
+        "Encourage communication"
+      ]
+    },
+    {
+      "name": "Closeout Drill",
+      "description": "Practice running at a shooter and stopping in proper defensive position!",
+      "category": "defense",
+      "skill_level": "intermediate",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball",
+        "cones"
+      ],
+      "step_by_step": [
+        "Place cones around three-point line",
+        "Defender starts under basket",
+        "Offensive player stands at a cone with ball",
+        "Defender sprints toward offensive player",
+        "Defender must stop in proper defensive stance",
+        "Use proper technique: run and then chop feet",
+        "Contest shot with hand up",
+        "Rotate positions after each repetition"
+      ],
+      "coaching_tips": [
+        "Teach proper approach angle",
+        "Emphasize controlled deceleration",
+        "Keep hand up to contest shot",
+        "Don't let defenders fly by offensive player"
+      ]
+    },
+    {
+      "name": "Box-Out Drill",
+      "description": "Learn to get good rebounding position by boxing out opponents!",
+      "category": "defense",
+      "skill_level": "intermediate",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball",
+        "hoop"
+      ],
+      "step_by_step": [
+        "Pair up players - one offense, one defense",
+        "Coach shoots ball from various spots",
+        "When ball is shot, defensive player finds opponent",
+        "Defensive player turns and makes contact",
+        "Keep opponent away from basket with wide base",
+        "Go get the rebound after securing position",
+        "Switch roles after each shot"
+      ],
+      "coaching_tips": [
+        "Emphasize finding opponent first",
+        "Teach proper pivoting technique",
+        "Keep wide base and low center of gravity",
+        "Focus on position over jumping"
+      ]
+    },
+    {
+      "name": "Steal the Bacon",
+      "description": "Fun defensive reaction drill where players compete to get the loose ball!",
+      "category": "defense",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball"
+      ],
+      "step_by_step": [
+        "Form two lines facing each other 15 feet apart",
+        "Number players in each line (1, 2, 3, etc.)",
+        "Place ball in middle between lines",
+        "Call out a number - those players race for ball",
+        "Player who gets ball tries to return to their line",
+        "Other player plays defense",
+        "Award points for successful returns",
+        "Keep score between teams"
+      ],
+      "coaching_tips": [
+        "Emphasize proper defensive stance",
+        "Teach safe pursuit of loose balls",
+        "Focus on protecting the ball once possessed",
+        "Keep game moving with quick rotations"
+      ]
+    },
+    {
+      "name": "Jump Stop",
+      "description": "Learn to stop quickly and under control - essential for all basketball moves!",
+      "category": "footwork",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball"
+      ],
+      "step_by_step": [
+        "Start by jogging slowly down the court",
+        "On coach's whistle, jump stop with both feet",
+        "Land with feet shoulder-width apart",
+        "Bend knees and get into triple threat position",
+        "Practice with and without basketball",
+        "Increase speed gradually",
+        "Add pivoting after the jump stop"
+      ],
+      "coaching_tips": [
+        "Emphasize landing with both feet at same time",
+        "Keep knees bent for balance",
+        "Don't let players travel after stopping",
+        "Connect to game situations"
+      ]
+    },
+    {
+      "name": "Pivoting Practice",
+      "description": "Master the art of pivoting to protect the ball and create space!",
+      "category": "footwork",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball"
+      ],
+      "step_by_step": [
+        "Start in triple threat position with ball",
+        "Keep one foot planted (pivot foot)",
+        "Step with other foot in different directions",
+        "Practice front pivots (step forward)",
+        "Practice reverse pivots (step backward)",
+        "Keep pivot foot planted at all times",
+        "Add ball protection during pivots"
+      ],
+      "coaching_tips": [
+        "Emphasize not lifting pivot foot",
+        "Keep low and balanced during pivots",
+        "Protect ball with off-arm",
+        "Practice with both feet as pivot foot"
+      ]
+    },
+    {
+      "name": "Triple Threat Position",
+      "description": "Learn the most important basketball position - ready to shoot, pass, or dribble!",
+      "category": "footwork",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball"
+      ],
+      "step_by_step": [
+        "Hold ball at waist level with both hands",
+        "Keep feet shoulder-width apart",
+        "Keep knees slightly bent",
+        "Ball should be on shooting side",
+        "Keep head up and eyes on defense",
+        "Practice moving into triple threat from different positions",
+        "Practice quick moves from triple threat"
+      ],
+      "coaching_tips": [
+        "Emphasize being ready for any option",
+        "Keep movements quick and decisive",
+        "Don't let players hold ball too long",
+        "Connect to game situations"
+      ]
+    },
+    {
+      "name": "Jab Step",
+      "description": "Use a quick fake step to test the defender and create opportunities!",
+      "category": "footwork",
+      "skill_level": "intermediate",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball"
+      ],
+      "step_by_step": [
+        "Start in triple threat position",
+        "Take quick, short step with non-pivot foot",
+        "Don't fully commit to the step",
+        "Return to triple threat position",
+        "Read defender's reaction",
+        "If defender backs up, take jump shot",
+        "If defender stays close, drive past them"
+      ],
+      "coaching_tips": [
+        "Keep jab step short and controlled",
+        "Emphasize reading defender's reaction",
+        "Don't rush the decision",
+        "Practice with both feet"
+      ]
+    },
+    {
+      "name": "V-Cut",
+      "description": "Learn to get open by cutting toward the ball handler in a V-shape!",
+      "category": "footwork",
+      "skill_level": "intermediate",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball"
+      ],
+      "step_by_step": [
+        "Start away from ball handler",
+        "Take 2-3 steps toward basket",
+        "Plant inside foot and push off",
+        "Cut back toward ball handler",
+        "Create V-shape with your movement",
+        "Call for ball with hands ready",
+        "Practice from different positions"
+      ],
+      "coaching_tips": [
+        "Emphasize sharp change of direction",
+        "Keep hands ready to catch pass",
+        "Time the cut with ball handler",
+        "Make cuts game-like and purposeful"
+      ]
+    },
+    {
+      "name": "Suicides",
+      "description": "Classic basketball conditioning drill - run to each line and back!",
+      "category": "conditioning",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "court with lines"
+      ],
+      "step_by_step": [
+        "Start at baseline",
+        "Sprint to free throw line and back",
+        "Immediately sprint to half court and back",
+        "Sprint to far free throw line and back",
+        "Sprint to opposite baseline and back",
+        "Touch each line with your hand",
+        "Rest 30 seconds between sets",
+        "Complete 3-5 sets"
+      ],
+      "coaching_tips": [
+        "Emphasize touching each line",
+        "Focus on proper running form",
+        "Adjust number of sets based on age",
+        "Keep players hydrated"
+      ]
+    },
+    {
+      "name": "Defensive Slides",
+      "description": "Build defensive conditioning while practicing proper sliding technique!",
+      "category": "conditioning",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "court"
+      ],
+      "step_by_step": [
+        "Start at sideline in defensive stance",
+        "Slide across court maintaining stance",
+        "Don't cross feet or stand up",
+        "Touch opposite sideline with hand",
+        "Slide back to starting position",
+        "Complete 5-10 trips across court",
+        "Rest between sets"
+      ],
+      "coaching_tips": [
+        "Maintain proper defensive stance",
+        "Keep head up and back straight",
+        "Don't let feet come together",
+        "Focus on quick, short steps"
+      ]
+    },
+    {
+      "name": "Dribble Sprints",
+      "description": "Combine ball handling with conditioning by dribbling at full speed!",
+      "category": "conditioning",
+      "skill_level": "intermediate",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball"
+      ],
+      "step_by_step": [
+        "Start at baseline with basketball",
+        "Dribble full speed to opposite baseline",
+        "Use proper dribbling technique while running",
+        "Change hands at half court",
+        "Walk back while dribbling for recovery",
+        "Complete 5-8 full court sprints",
+        "Focus on maintaining ball control"
+      ],
+      "coaching_tips": [
+        "Emphasize ball control over speed",
+        "Keep head up while dribbling",
+        "Use proper hand positioning",
+        "Allow recovery time between sprints"
+      ]
+    },
+    {
+      "name": "Agility Ladder",
+      "description": "Improve foot speed and coordination with quick ladder movements!",
+      "category": "conditioning",
+      "skill_level": "intermediate",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "agility ladder or court lines"
+      ],
+      "step_by_step": [
+        "Set up agility ladder or use court lines",
+        "Practice different foot patterns",
+        "Two feet in each box",
+        "In-in-out-out pattern",
+        "Lateral shuffles through ladder",
+        "Single foot hops",
+        "Complete 3-5 trips through ladder"
+      ],
+      "coaching_tips": [
+        "Start slow and build speed",
+        "Focus on quick, light feet",
+        "Keep knees slightly bent",
+        "Rest between different patterns"
+      ]
+    },
+    {
+      "name": "Basketball Burpees",
+      "description": "Fun basketball-themed burpees to build total body conditioning!",
+      "category": "conditioning",
+      "skill_level": "intermediate",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball"
+      ],
+      "step_by_step": [
+        "Start standing with basketball",
+        "Place ball on ground and jump feet back to plank",
+        "Do one push-up (optional for younger kids)",
+        "Jump feet back to squat position",
+        "Grab ball and jump up with arms overhead",
+        "Land in triple threat position",
+        "Complete 10-15 repetitions"
+      ],
+      "coaching_tips": [
+        "Modify for different age groups",
+        "Focus on proper form over speed",
+        "Keep movements controlled",
+        "Allow rest between sets"
+      ]
+    },
+    {
+      "name": "Sharks and Minnows",
+      "description": "Exciting dribbling game where minnows try to avoid the sharks!",
+      "category": "fundamentals",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball for each player"
+      ],
+      "step_by_step": [
+        "All players (minnows) start at one baseline with basketballs",
+        "Choose 1-2 players to be sharks (no basketball)",
+        "Minnows must dribble to opposite baseline",
+        "Sharks try to knock balls away from minnows",
+        "If ball is knocked away, that player becomes a shark",
+        "Continue until only one minnow remains",
+        "Winner becomes shark for next round"
+      ],
+      "coaching_tips": [
+        "Emphasize protecting the basketball",
+        "Keep game boundaries clear",
+        "Encourage players to keep head up",
+        "Have multiple games for large groups"
+      ]
+    },
+    {
+      "name": "Musical Basketballs",
+      "description": "Basketball version of musical chairs using dribbling skills!",
+      "category": "fundamentals",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketballs (one less than players)",
+        "music"
+      ],
+      "step_by_step": [
+        "Place basketballs around court (one less than players)",
+        "Players walk/jog around basketballs when music plays",
+        "When music stops, players grab a basketball and dribble",
+        "Player without basketball sits out one round",
+        "Remove one basketball and continue",
+        "Last player dribbling wins",
+        "Add variations like specific dribbling moves"
+      ],
+      "coaching_tips": [
+        "Focus on proper dribbling technique",
+        "Keep eliminated players involved as helpers",
+        "Emphasize good sportsmanship",
+        "Make it fun and energetic"
+      ]
+    },
+    {
+      "name": "Follow the Leader",
+      "description": "Practice various basketball movements by following the leader!",
+      "category": "fundamentals",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball for each player"
+      ],
+      "step_by_step": [
+        "Form a line with one player as leader",
+        "All players have basketballs",
+        "Leader performs various movements while dribbling",
+        "Everyone else follows and copies movements",
+        "Include crossovers, direction changes, stops",
+        "Rotate leadership every 1-2 minutes",
+        "Encourage creative movements"
+      ],
+      "coaching_tips": [
+        "Choose good leaders who demonstrate proper form",
+        "Encourage variety in movements",
+        "Keep line moving and engaged",
+        "Give everyone a chance to lead"
+      ]
+    },
+    {
+      "name": "Basketball Spelling Bee",
+      "description": "Spell words by making shots - education meets basketball!",
+      "category": "fundamentals",
+      "skill_level": "intermediate",
+      "duration": "15-20 minutes",
+      "equipment": [
+        "basketball",
+        "hoop"
+      ],
+      "step_by_step": [
+        "Choose words related to basketball or other subjects",
+        "Players take turns shooting from designated spots",
+        "Each made shot earns one letter of the word",
+        "Must spell complete word to win",
+        "Miss a shot and next player takes turn",
+        "Can use different shot types for different letters",
+        "Team version: work together to spell words"
+      ],
+      "coaching_tips": [
+        "Choose age-appropriate words",
+        "Adjust shooting distances for skill level",
+        "Emphasize proper shooting form",
+        "Make it educational and fun"
+      ]
+    },
+    {
+      "name": "Hot Potato Passing",
+      "description": "Fast-paced passing game where you don't want to be holding the 'hot potato'!",
+      "category": "fundamentals",
+      "skill_level": "beginner",
+      "duration": "10-15 minutes",
+      "equipment": [
+        "basketball",
+        "music or timer"
+      ],
+      "step_by_step": [
+        "Players form circle standing arm's length apart",
+        "Pass basketball around circle quickly",
+        "When music stops or timer buzzes, player with ball sits down",
+        "Continue with remaining players",
+        "Circle gets smaller as players are eliminated",
+        "Last player standing wins",
+        "Add variations like different pass types"
+      ],
+      "coaching_tips": [
+        "Emphasize quick, accurate passes",
+        "Keep eliminated players involved",
+        "Use proper passing technique",
+        "Make timing unpredictable"
+      ]
+    }
+  ]
+}

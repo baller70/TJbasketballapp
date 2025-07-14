@@ -1,0 +1,499 @@
+{
+  "metadata": {
+    "created_date": "2025-07-14T14:39:29.984159",
+    "total_drills": 35,
+    "target_age_range": "6-13 years",
+    "source": "YouTube and other free video platforms",
+    "description": "Curated collection of basketball training videos for youth players ages 6-13. All videos are from reputable basketball training channels and demonstrate proper technique for each drill."
+  },
+  "videos": [
+    {
+      "drill_name": "B.E.E.F. Form Shooting",
+      "drill_category": "shooting",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=9vZH-cYsRMw",
+      "video_title": "BEEF Shooting Form - Basketball Fundamentals",
+      "duration": "~5-10 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=6p3_rOgjlD8",
+        "https://www.youtube.com/watch?v=gOhmxJoU_OI"
+      ]
+    },
+    {
+      "drill_name": "Around the World",
+      "drill_category": "shooting",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=KCJHGqWZRLU",
+      "video_title": "Around the World Basketball Shooting Drill",
+      "duration": "~3-8 minutes",
+      "source_channel": "Teach Hoops",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=Ajk66wl0ih4",
+        "https://www.youtube.com/watch?v=KCYAeuepnNw"
+      ]
+    },
+    {
+      "drill_name": "Layup Lines",
+      "drill_category": "shooting",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=Tm7N2HU4noQ",
+      "video_title": "Layup Lines Basketball Drill for Youth",
+      "duration": "~5-12 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=aOOcxybK5WY",
+        "https://www.youtube.com/watch?v=oGoSL-IWHXQ"
+      ]
+    },
+    {
+      "drill_name": "HORSE",
+      "drill_category": "shooting",
+      "skill_level": "intermediate",
+      "video_url": "https://www.youtube.com/watch?v=cvjVTZpAU7M",
+      "video_title": "How to Play HORSE Basketball Game",
+      "duration": "~3-6 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=9tgbn2hP93g"
+      ]
+    },
+    {
+      "drill_name": "Knockout",
+      "drill_category": "shooting",
+      "skill_level": "intermediate",
+      "video_url": "https://www.youtube.com/watch?v=tbKtfGr-ObE",
+      "video_title": "Basketball Knockout Drill for Kids",
+      "duration": "~5-10 minutes",
+      "source_channel": "Better Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=HKg-HxX-0CI"
+      ]
+    },
+    {
+      "drill_name": "Stationary Dribbling",
+      "drill_category": "dribbling",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=1zRQwaN96rk",
+      "video_title": "17 Stationary Dribbling Drills for Basketball",
+      "duration": "~8-15 minutes",
+      "source_channel": "BreakthroughBBall",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=u8LSHc0s0Do",
+        "https://www.youtube.com/watch?v=LPzpJxy7kiA"
+      ]
+    },
+    {
+      "drill_name": "Dribble Tag",
+      "drill_category": "dribbling",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=dBBshNEsrAM",
+      "video_title": "Best Youth Basketball Drill - Dribble Tag Game",
+      "duration": "~4-8 minutes",
+      "source_channel": "Better Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=ztmYGPoz4d8",
+        "https://www.youtube.com/watch?v=LS-sLvesd2Q"
+      ]
+    },
+    {
+      "drill_name": "Cone Dribbling Course",
+      "drill_category": "dribbling",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=iTr0D5pyt_U",
+      "video_title": "Basic Cone Dribbling for Youth Basketball",
+      "duration": "~5-10 minutes",
+      "source_channel": "AvcssBasketball",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=zZiQgaLVYI4",
+        "https://www.youtube.com/watch?v=jkwd10N3PiQ"
+      ]
+    },
+    {
+      "drill_name": "Red Light, Green Light",
+      "drill_category": "dribbling",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=x3F_wmmwlm0",
+      "video_title": "Red Light Green Light Basketball Drill",
+      "duration": "~3-6 minutes",
+      "source_channel": "Jr. NBA Jr. WNBA",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=-SPtwtabM-M",
+        "https://www.youtube.com/watch?v=j3rngZcW4Bw"
+      ]
+    },
+    {
+      "drill_name": "Two-Ball Dribbling",
+      "drill_category": "dribbling",
+      "skill_level": "advanced",
+      "video_url": "https://www.youtube.com/watch?v=AAmAzdZCxIE",
+      "video_title": "Two Ball Dribbling Drills for Basketball",
+      "duration": "~10-15 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=UVAz2aASZx4",
+        "https://www.youtube.com/watch?v=vDf1_hYaL5Q"
+      ]
+    },
+    {
+      "drill_name": "Partner Passing",
+      "drill_category": "passing",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=Z9vsaj_9ZIU",
+      "video_title": "Partner Passing Basketball Drill",
+      "duration": "~5-10 minutes",
+      "source_channel": "Coach Ashworth",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=HL6KBD31-zQ",
+        "https://www.youtube.com/watch?v=ivKZ5ea5QCY"
+      ]
+    },
+    {
+      "drill_name": "Monkey in the Middle",
+      "drill_category": "passing",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=RZdEc-F540Q",
+      "video_title": "Youth Basketball Drills: Monkey in the Middle",
+      "duration": "~3-6 minutes",
+      "source_channel": "Brian McCormick",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=90WV1ehdTko",
+        "https://www.youtube.com/watch?v=dawxo5zkzHk"
+      ]
+    },
+    {
+      "drill_name": "Circle Passing",
+      "drill_category": "passing",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=HiYPbqKyeLs",
+      "video_title": "Circle Passing Basketball Drill",
+      "duration": "~4-8 minutes",
+      "source_channel": "Jr. NBA Jr. WNBA",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=A1l3Cai9ELk",
+        "https://www.youtube.com/watch?v=AA5ZJORmyRg"
+      ]
+    },
+    {
+      "drill_name": "Ultimate Basketball",
+      "drill_category": "passing",
+      "skill_level": "intermediate",
+      "video_url": "https://www.youtube.com/watch?v=AWVgKM_9Yq4",
+      "video_title": "Best Basketball Passing Drills for Kids",
+      "duration": "~8-15 minutes",
+      "source_channel": "yougotmojo",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=iblG4PEVMfE",
+        "https://www.youtube.com/watch?v=46SmnaaLj3Y"
+      ]
+    },
+    {
+      "drill_name": "Four Corner Passing",
+      "drill_category": "passing",
+      "skill_level": "intermediate",
+      "video_url": "https://www.youtube.com/watch?v=Y_ZN9E1BqME",
+      "video_title": "4 Corner Passing by Tara VanDerveer",
+      "duration": "~5-10 minutes",
+      "source_channel": "FastModel Sports",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=KIBYZqwHKWE",
+        "https://www.youtube.com/watch?v=o16ifJr53jU"
+      ]
+    },
+    {
+      "drill_name": "Defensive Stance",
+      "drill_category": "defense",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=gQ8GETRH2GY",
+      "video_title": "Basketball Defensive Stance and Drills for Kids",
+      "duration": "~8-15 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=Gbt4Jd053eI",
+        "https://www.youtube.com/watch?v=w7N513QFyEg"
+      ]
+    },
+    {
+      "drill_name": "Mirror Drill",
+      "drill_category": "defense",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=HR9maRH3oIg",
+      "video_title": "Basketball Mirror Drill for Defense",
+      "duration": "~4-8 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=zZXmTLUwTDM",
+        "https://www.youtube.com/watch?v=1y3gD6rUzVk"
+      ]
+    },
+    {
+      "drill_name": "Closeout Drill",
+      "drill_category": "defense",
+      "skill_level": "intermediate",
+      "video_url": "https://www.youtube.com/watch?v=ZsI4iCR3lak",
+      "video_title": "Basketball Closeout Drill by George Karl",
+      "duration": "~5-10 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=lFY__uSOJIY",
+        "https://www.youtube.com/watch?v=wDI5-nCjGl0"
+      ]
+    },
+    {
+      "drill_name": "Box-Out Drill",
+      "drill_category": "defense",
+      "skill_level": "intermediate",
+      "video_url": "https://www.youtube.com/watch?v=gOofKe4_NnE",
+      "video_title": "Best Youth Basketball Box Out Drills",
+      "duration": "~6-12 minutes",
+      "source_channel": "Limitless Performance",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=_hatxgUVqAk",
+        "https://www.youtube.com/watch?v=NiwfyUgomJE"
+      ]
+    },
+    {
+      "drill_name": "Steal the Bacon",
+      "drill_category": "defense",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=OK9_Itdznfo",
+      "video_title": "Basketball Drill: Steal the Bacon",
+      "duration": "~4-8 minutes",
+      "source_channel": "CoachingCorps",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=13zc8dVgxAU",
+        "https://www.youtube.com/watch?v=l82b2JKBTd4"
+      ]
+    },
+    {
+      "drill_name": "Jump Stop",
+      "drill_category": "footwork",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=AueLd1-H1V8",
+      "video_title": "Jump Stop Shooting Drill",
+      "duration": "~3-6 minutes",
+      "source_channel": "Jr. NBA Jr. WNBA",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=jgqdv9ySjYM",
+        "https://www.youtube.com/watch?v=k1XStmZZl-Y"
+      ]
+    },
+    {
+      "drill_name": "Pivoting Practice",
+      "drill_category": "footwork",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=Jh6Vr9mPFuY",
+      "video_title": "Pivot Drill for Youth Basketball",
+      "duration": "~5-10 minutes",
+      "source_channel": "AvcssBasketball",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=S9eWP-Qg7Jg",
+        "https://www.youtube.com/watch?v=smL8LgHxnVQ"
+      ]
+    },
+    {
+      "drill_name": "Triple Threat Position",
+      "drill_category": "footwork",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=yxte621NVfA",
+      "video_title": "Master the Triple Threat - Youth Basketball",
+      "duration": "~6-12 minutes",
+      "source_channel": "Give N' Grow",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=IzMWYUO9tVw",
+        "https://www.youtube.com/watch?v=7WU_lb8t3Gk"
+      ]
+    },
+    {
+      "drill_name": "Jab Step",
+      "drill_category": "footwork",
+      "skill_level": "intermediate",
+      "video_url": "https://www.youtube.com/watch?v=hixKgOeaIzY",
+      "video_title": "Jab Step Basketball Drill for Youth",
+      "duration": "~4-8 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=1-rR3Ju1wFU",
+        "https://www.youtube.com/watch?v=PJb2kvW_A_E"
+      ]
+    },
+    {
+      "drill_name": "V-Cut",
+      "drill_category": "footwork",
+      "skill_level": "intermediate",
+      "video_url": "https://www.youtube.com/watch?v=Xvs_jQ9OnTk",
+      "video_title": "Top 3 V Cut Basketball Drills for Kids",
+      "duration": "~5-10 minutes",
+      "source_channel": "Basketball Coach Allen",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=QSzapEqhOaE",
+        "https://www.youtube.com/watch?v=UOg6Mf_Hg1Y"
+      ]
+    },
+    {
+      "drill_name": "Suicides",
+      "drill_category": "conditioning",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=QioPCop7ri4",
+      "video_title": "Basketball Line Drill (Suicides) with Basketball",
+      "duration": "~3-8 minutes",
+      "source_channel": "AvcssBasketball",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=xNhC95Zczv4",
+        "https://www.youtube.com/watch?v=UqjSh3Bv_FM"
+      ]
+    },
+    {
+      "drill_name": "Defensive Slides",
+      "drill_category": "conditioning",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=1wXggfJ5NkM",
+      "video_title": "Full Court Defensive Conditioning Drill",
+      "duration": "~5-10 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=s8WxcLbmLD8",
+        "https://www.youtube.com/watch?v=OJA552n_S6I"
+      ]
+    },
+    {
+      "drill_name": "Dribble Sprints",
+      "drill_category": "conditioning",
+      "skill_level": "intermediate",
+      "video_url": "https://www.youtube.com/watch?v=UVAz2aASZx4",
+      "video_title": "7 Best Youth Basketball Dribbling Drills",
+      "duration": "~10-15 minutes",
+      "source_channel": "BreakthroughBBall",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=MNJQOxrqEMc",
+        "https://www.youtube.com/watch?v=geDFfk-zxPg"
+      ]
+    },
+    {
+      "drill_name": "Agility Ladder",
+      "drill_category": "conditioning",
+      "skill_level": "intermediate",
+      "video_url": "https://www.youtube.com/watch?v=l9zPxGy0fzI",
+      "video_title": "Agility Ladder Drills for Basketball Kids",
+      "duration": "~8-15 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=wqJEBkiTD8o",
+        "https://www.youtube.com/watch?v=kj1wfv6LhfU"
+      ]
+    },
+    {
+      "drill_name": "Basketball Burpees",
+      "drill_category": "conditioning",
+      "skill_level": "intermediate",
+      "video_url": "https://www.youtube.com/watch?v=y-7sT2SVl4c",
+      "video_title": "Basketball Burpees Conditioning Drill",
+      "duration": "~5-10 minutes",
+      "source_channel": "Premier Hoops",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=3j1zBdH6Zs8",
+        "https://www.youtube.com/watch?v=PhAXCWAjnU8"
+      ]
+    },
+    {
+      "drill_name": "Sharks and Minnows",
+      "drill_category": "fundamentals",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=uD9Lbag_z_0",
+      "video_title": "Sharks and Minnows Basketball Drill",
+      "duration": "~4-8 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=OGNoXV9ha-Q",
+        "https://www.youtube.com/watch?v=sP258r6A6Ek"
+      ]
+    },
+    {
+      "drill_name": "Musical Basketballs",
+      "drill_category": "fundamentals",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=IizOFVB2kmA",
+      "video_title": "Musical Basketballs - Fun Youth Basketball Drill",
+      "duration": "~3-6 minutes",
+      "source_channel": "Jr. NBA Jr. WNBA",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=xyZNJoctA9w",
+        "https://www.youtube.com/watch?v=VTGs361LfeU"
+      ]
+    },
+    {
+      "drill_name": "Follow the Leader",
+      "drill_category": "fundamentals",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=6sETpTYwz0c",
+      "video_title": "Follow the Leader Basketball Drill",
+      "duration": "~4-8 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=gHWq9xGFmWo",
+        "https://www.youtube.com/watch?v=V7wtegqqe4g"
+      ]
+    },
+    {
+      "drill_name": "Basketball Spelling Bee",
+      "drill_category": "fundamentals",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=5ygGObn35bc",
+      "video_title": "Spelling Bee Basketball Drill",
+      "duration": "~4-8 minutes",
+      "source_channel": "Jr. NBA",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=HxecRUGkafc",
+        "https://www.youtube.com/watch?v=IkK3MGvYygY"
+      ]
+    },
+    {
+      "drill_name": "Hot Potato Passing",
+      "drill_category": "fundamentals",
+      "skill_level": "beginner",
+      "video_url": "https://www.youtube.com/watch?v=Yre_oR2leJo",
+      "video_title": "1v1 Hot Potato Basketball Drill",
+      "duration": "~3-6 minutes",
+      "source_channel": "Basketball Training",
+      "platform": "YouTube",
+      "alternative_videos": [
+        "https://www.youtube.com/watch?v=T2LECLSgD2o",
+        "https://www.youtube.com/watch?v=AWVgKM_9Yq4"
+      ]
+    }
+  ]
+}

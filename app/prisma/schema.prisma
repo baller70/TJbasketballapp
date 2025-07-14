@@ -1,0 +1,373 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/hoopsquest/app/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          UserRole  @default(PLAYER)
+  dateOfBirth   DateTime?
+  parentId      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  parent        User?     @relation("ParentChild", fields: [parentId], references: [id])
+  children      User[]    @relation("ParentChild")
+  
+  // Player-specific relations
+  playerProfile     PlayerProfile?
+  scheduleEntries   ScheduleEntry[]
+  workouts          Workout[]
+  drillCompletions  DrillCompletion[]
+  voiceNotes        VoiceNote[]
+  videoUploads      VideoUpload[]
+  achievements      UserAchievement[]
+  notifications     Notification[]
+  aiInteractions    AIInteraction[]
+  progressEntries   ProgressEntry[]
+  userChallenges    UserChallenge[]
+}
+
+model PlayerProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  skillLevel      String   @default("beginner")
+  favoritePosition String?
+  totalPoints     Int      @default(0)
+  currentLevel    String   @default("rookie")
+  currentStreak   Int      @default(0)
+  longestStreak   Int      @default(0)
+  lastActiveDate  DateTime?
+  avatarItems     Json?
+  goals           Json?
+  preferences     Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Drill {
+  id            String   @id @default(cuid())
+  name          String   @unique
+  description   String
+  category      String
+  skillLevel    String
+  duration      String
+  equipment     String[]
+  stepByStep    String[]
+  coachingTips  String[]
+  videoUrl      String?
+  alternativeVideos String[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  workoutDrills    WorkoutDrill[]
+  drillCompletions DrillCompletion[]
+  scheduleEntries  ScheduleEntry[]
+  voiceNotes       VoiceNote[]
+  videoUploads     VideoUpload[]
+}
+
+model Workout {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  totalDuration Int    @default(0)
+  userId      String
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workoutDrills   WorkoutDrill[]
+  scheduleEntries ScheduleEntry[]
+}
+
+model WorkoutDrill {
+  id        String @id @default(cuid())
+  workoutId String
+  drillId   String
+  order     Int
+  duration  Int?
+  notes     String?
+
+  workout Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  drill   Drill   @relation(fields: [drillId], references: [id], onDelete: Cascade)
+
+  @@unique([workoutId, drillId])
+}
+
+model ScheduleEntry {
+  id          String       @id @default(cuid())
+  userId      String
+  date        DateTime
+  startTime   DateTime
+  endTime     DateTime?
+  status      ScheduleStatus @default(SCHEDULED)
+  drillId     String?
+  workoutId   String?
+  notes       String?
+  completedAt DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relations
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  drill        Drill?       @relation(fields: [drillId], references: [id])
+  workout      Workout?     @relation(fields: [workoutId], references: [id])
+  completions  DrillCompletion[]
+}
+
+model DrillCompletion {
+  id              String    @id @default(cuid())
+  userId          String
+  drillId         String
+  scheduleEntryId String?
+  completedAt     DateTime  @default(now())
+  duration        Int       // in seconds
+  performance     Json?     // stores performance metrics
+  aiAnalysis      Json?     // AI feedback and analysis
+  feedback        String?
+  rating          Int?      // 1-5 stars
+
+  // Relations
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  drill         Drill          @relation(fields: [drillId], references: [id], onDelete: Cascade)
+  scheduleEntry ScheduleEntry? @relation(fields: [scheduleEntryId], references: [id])
+  voiceNotes    VoiceNote[]
+  videoUploads  VideoUpload[]
+}
+
+model VoiceNote {
+  id                String  @id @default(cuid())
+  userId            String
+  drillId           String
+  drillCompletionId String?
+  audioUrl          String
+  transcript        String?
+  duration          Int     // in seconds
+  createdAt         DateTime @default(now())
+
+  // Relations
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  drill           Drill            @relation(fields: [drillId], references: [id], onDelete: Cascade)
+  drillCompletion DrillCompletion? @relation(fields: [drillCompletionId], references: [id])
+}
+
+model VideoUpload {
+  id                String   @id @default(cuid())
+  userId            String
+  drillId           String
+  drillCompletionId String?
+  videoUrl          String
+  thumbnailUrl      String?
+  analysis          Json?    // AI analysis results
+  feedback          String?
+  parentNotified    Boolean  @default(false)
+  createdAt         DateTime @default(now())
+
+  // Relations
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  drill           Drill            @relation(fields: [drillId], references: [id], onDelete: Cascade)
+  drillCompletion DrillCompletion? @relation(fields: [drillCompletionId], references: [id])
+}
+
+model Achievement {
+  id          String @id @default(cuid())
+  name        String @unique
+  description String
+  icon        String
+  criteria    String
+  rarity      String
+  points      Int    @default(0)
+  category    String
+  createdAt   DateTime @default(now())
+
+  // Relations
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime @default(now())
+  progress      Int      @default(100)
+
+  // Relations
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String
+  data      Json?
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AIInteraction {
+  id          String            @id @default(cuid())
+  userId      String
+  type        AIInteractionType
+  input       String
+  output      String
+  context     Json?
+  feedback    String?
+  createdAt   DateTime          @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ProgressEntry {
+  id          String   @id @default(cuid())
+  userId      String
+  skillType   String
+  skillName   String
+  value       Float
+  unit        String
+  date        DateTime @default(now())
+  context     Json?
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Challenge {
+  id          String      @id @default(cuid())
+  name        String      @unique
+  description String
+  type        ChallengeType
+  criteria    Json
+  reward      Json
+  timeLimit   Int?        // in hours
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  expiresAt   DateTime?
+
+  // Relations
+  userChallenges UserChallenge[]
+}
+
+model UserChallenge {
+  id          String          @id @default(cuid())
+  userId      String
+  challengeId String
+  status      ChallengeStatus @default(ACTIVE)
+  progress    Int             @default(0)
+  startedAt   DateTime        @default(now())
+  completedAt DateTime?
+
+  // Relations
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, challengeId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Enums
+enum UserRole {
+  PARENT
+  PLAYER
+}
+
+enum ScheduleStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  MISSED
+}
+
+enum NotificationType {
+  REMINDER
+  ACHIEVEMENT
+  PARENT_NOTIFICATION
+  SYSTEM
+  AI_FEEDBACK
+}
+
+enum AIInteractionType {
+  DRILL_RECOMMENDATION
+  VIDEO_ANALYSIS
+  MOTIVATIONAL_MESSAGE
+  COACHING_TIP
+  CHAT_CONVERSATION
+  PROGRESS_INSIGHT
+}
+
+enum ChallengeType {
+  DAILY
+  WEEKLY
+  MONTHLY
+  MILESTONE
+}
+
+enum ChallengeStatus {
+  ACTIVE
+  COMPLETED
+  FAILED
+  EXPIRED
+}
