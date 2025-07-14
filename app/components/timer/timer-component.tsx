@@ -488,10 +488,10 @@ export default function TimerComponent() {
           
           <Tabs defaultValue="feedback" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="feedback">Feedback</TabsTrigger>
+              <TabsTrigger value="feedback">Rate & Feedback</TabsTrigger>
               <TabsTrigger value="upload" disabled={!completionId}>
                 <Camera className="h-4 w-4 mr-2" />
-                Upload Media
+                Upload Video/Image
               </TabsTrigger>
             </TabsList>
             

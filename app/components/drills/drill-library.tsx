@@ -20,16 +20,23 @@ import {
   Trophy,
   ExternalLink,
   Plus,
-  CheckCircle
+  CheckCircle,
+  Upload,
+  Camera,
+  Video
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Drill, DrillFilters } from '@/lib/types';
+import MediaUpload from '@/components/media/media-upload';
 
 export default function DrillLibrary() {
   const [drills, setDrills] = useState<Drill[]>([]);
   const [filteredDrills, setFilteredDrills] = useState<Drill[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDrill, setSelectedDrill] = useState<Drill | null>(null);
+  const [uploadDrill, setUploadDrill] = useState<Drill | null>(null);
+  const [showUploadDialog, setShowUploadDialog] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [filters, setFilters] = useState<DrillFilters>({
     category: undefined,
     skillLevel: undefined,
@@ -126,6 +133,49 @@ export default function DrillLibrary() {
       }
     } catch (error) {
       console.error('Error adding drill to schedule:', error);
+    }
+  };
+
+  const handleUploadMedia = (drill: Drill) => {
+    setUploadDrill(drill);
+    setShowUploadDialog(true);
+  };
+
+  const handleMediaUpload = async (files: any[]) => {
+    if (!uploadDrill) return;
+
+    setUploading(true);
+    try {
+      const uploadPromises = files.map(async (fileUpload) => {
+        const formData = new FormData();
+        formData.append('file', fileUpload.file);
+        formData.append('drillId', uploadDrill.id);
+
+        const response = await fetch('/api/media/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Upload failed');
+        }
+
+        return response.json();
+      });
+
+      await Promise.all(uploadPromises);
+      
+      // Close dialog after successful upload
+      setShowUploadDialog(false);
+      setUploadDrill(null);
+      
+      // Show success message
+      console.log('Media uploaded successfully');
+
+    } catch (error) {
+      console.error('Error uploading media:', error);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -389,6 +439,15 @@ export default function DrillLibrary() {
                   
                   <Button 
                     size="sm" 
+                    variant="outline"
+                    className="bg-blue-50 hover:bg-blue-100 border-blue-200"
+                    onClick={() => handleUploadMedia(drill)}
+                  >
+                    <Upload className="h-4 w-4" />
+                  </Button>
+                  
+                  <Button 
+                    size="sm" 
                     className="bg-orange-600 hover:bg-orange-700"
                     onClick={() => addToSchedule(drill.id)}
                   >
@@ -412,6 +471,51 @@ export default function DrillLibrary() {
           </CardContent>
         </Card>
       )}
+
+      {/* Upload Dialog */}
+      <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Camera className="h-5 w-5 text-blue-600" />
+              Upload Practice Video/Image
+            </DialogTitle>
+            <DialogDescription>
+              Share your practice session for {uploadDrill?.name} by uploading a video or image for coach/parent review.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="text-center py-4">
+              <div className="flex items-center justify-center gap-2 text-sm text-gray-600 mb-4">
+                <Video className="h-4 w-4" />
+                <span>Videos and Images Accepted</span>
+              </div>
+              <p className="text-gray-600">
+                Upload your practice session to get feedback from your coach or parent.
+              </p>
+            </div>
+            
+            <MediaUpload
+              onUpload={handleMediaUpload}
+              acceptedTypes={['video/*', 'image/*']}
+              maxFileSize={50}
+              maxFiles={3}
+              disabled={uploading}
+            />
+            
+            <div className="flex justify-end gap-2 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => setShowUploadDialog(false)}
+                disabled={uploading}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
