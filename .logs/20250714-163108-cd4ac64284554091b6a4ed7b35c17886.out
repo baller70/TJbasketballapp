@@ -1,0 +1,146 @@
+  ▲ Next.js 14.2.28
+  - Local:        http://localhost:3000
+  - Environments: .env
+  - Experiments (use with caution):
+    · outputFileTracingRoot
+
+ ✓ Starting...
+ ✓ Ready in 1753ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.9s (1490 modules)
+ GET / 200 in 3477ms
+ ✓ Compiled in 579ms (635 modules)
+ GET / 200 in 42ms
+ ✓ Compiled /dashboard in 356ms (868 modules)
+ ✓ Compiled in 2.1s (801 modules)
+ GET /api/auth/session 200 in 3103ms
+ GET /dashboard?_rsc=3y0gy 200 in 108ms
+ GET /api/auth/session 200 in 40ms
+ ✓ Compiled /api/dashboard/stats in 281ms (1076 modules)
+ ✓ Compiled (1078 modules)
+ GET /api/ai/motivational-quote 401 in 622ms
+ GET /api/dashboard/stats 200 in 576ms
+ GET /api/ai/motivational-quote 401 in 22ms
+ GET /api/dashboard/stats 200 in 33ms
+ ✓ Compiled /api/drills in 184ms (1080 modules)
+ GET /api/drills 200 in 228ms
+ GET /api/drills 200 in 22ms
+ GET /api/drills 200 in 30ms
+ ✓ Compiled /api/schedule in 216ms (1082 modules)
+ GET /api/drills 200 in 301ms
+ GET /api/schedule?start=2025-07-01T04:00:00.000Z&end=2025-07-31T04:00:00.000Z 200 in 473ms
+ GET /api/schedule?start=2025-07-01T04:00:00.000Z&end=2025-07-31T04:00:00.000Z 200 in 22ms
+ GET / 200 in 83ms
+ GET /api/drills 200 in 18ms
+ GET /api/drills 200 in 16ms
+ GET / 200 in 26ms
+ GET / 200 in 28ms
+ GET /api/auth/session 200 in 50ms
+ GET /dashboard?_rsc=3y0gy 200 in 24ms
+ GET /api/auth/session 200 in 17ms
+ GET /api/ai/motivational-quote 401 in 21ms
+ GET /api/ai/motivational-quote 401 in 16ms
+ GET /api/dashboard/stats 200 in 27ms
+ GET /api/dashboard/stats 200 in 22ms
+ GET /api/drills 200 in 20ms
+ GET /api/drills 200 in 21ms
+ GET /api/drills 200 in 17ms
+ GET /api/drills 200 in 20ms
+ POST /api/schedule 201 in 26ms
+ POST /api/schedule 201 in 21ms
+ POST /api/schedule 201 in 21ms
+ POST /api/schedule 201 in 20ms
+ POST /api/schedule 201 in 20ms
+ GET / 200 in 26ms
+ POST /api/schedule 201 in 21ms
+ POST /api/schedule 201 in 22ms
+ POST /api/schedule 201 in 25ms
+ POST /api/schedule 201 in 21ms
+ GET / 200 in 25ms
+ POST /api/schedule 201 in 19ms
+ POST /api/schedule 201 in 19ms
+ POST /api/schedule 201 in 20ms
+ GET /api/drills 200 in 29ms
+ ✓ Compiled /api/workouts in 363ms (894 modules)
+ GET /api/drills 200 in 448ms
+ GET /api/workouts 401 in 600ms
+ GET /api/workouts 401 in 20ms
+ GET / 200 in 81ms
+ POST /api/workouts 401 in 20ms
+ POST /api/workouts 401 in 22ms
+ POST /api/workouts 401 in 19ms
+ POST /api/workouts 401 in 20ms
+ POST /api/workouts 401 in 20ms
+ POST /api/workouts 401 in 17ms
+ GET / 200 in 24ms
+ POST /api/workouts 401 in 16ms
+ POST /api/workouts 401 in 18ms
+ POST /api/workouts 401 in 18ms
+ POST /api/workouts 401 in 16ms
+ POST /api/workouts 401 in 18ms
+ POST /api/workouts 401 in 18ms
+ POST /api/workouts 401 in 18ms
+ POST /api/workouts 401 in 19ms
+ POST /api/workouts 401 in 21ms
+ POST /api/workouts 401 in 17ms
+ POST /api/workouts 401 in 17ms
+ POST /api/workouts 401 in 16ms
+ POST /api/workouts 401 in 16ms
+ POST /api/workouts 401 in 18ms
+ POST /api/workouts 401 in 16ms
+ POST /api/workouts 401 in 17ms
+ POST /api/workouts 401 in 17ms
+ POST /api/workouts 401 in 17ms
+ GET /api/drills 200 in 18ms
+ GET /api/drills 200 in 16ms
+ GET / 200 in 26ms
+ ✓ Compiled /api/achievements in 249ms (889 modules)
+ GET /api/achievements 401 in 304ms
+ ✓ Compiled /api/challenges in 143ms (891 modules)
+ GET /api/challenges 401 in 225ms
+ GET /api/achievements 401 in 50ms
+ GET /api/challenges 401 in 18ms
+ GET /api/drills 200 in 21ms
+ GET /api/workouts 401 in 20ms
+ GET /api/drills 200 in 20ms
+ GET /api/workouts 401 in 23ms
+ GET /api/drills 200 in 18ms
+ GET /api/drills 200 in 20ms
+ ✓ Compiled /api/schedule in 291ms (898 modules)
+ GET /api/drills 200 in 471ms
+ GET /api/schedule?start=2025-07-01T04:00:00.000Z&end=2025-07-31T04:00:00.000Z 200 in 491ms
+ GET /api/drills 200 in 17ms
+ GET /api/schedule?start=2025-07-01T04:00:00.000Z&end=2025-07-31T04:00:00.000Z 200 in 19ms
+ GET / 200 in 36ms
+ ✓ Compiled /api/schedule/[id] in 160ms (900 modules)
+ PATCH /api/schedule/cmd3b4g450006v6lph8873ep3 401 in 518ms
+ GET /api/schedule?start=2025-07-01T04:00:00.000Z&end=2025-07-31T04:00:00.000Z 200 in 32ms
+ GET /api/drills 200 in 32ms
+ GET /api/schedule?start=2025-07-01T04:00:00.000Z&end=2025-07-31T04:00:00.000Z 200 in 21ms
+ GET /api/drills 200 in 18ms
+ GET / 200 in 34ms
+ GET / 200 in 24ms
+ GET / 200 in 31ms
+ GET / 200 in 30ms
+ GET / 200 in 29ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 833ms (1044 modules)
+ ✓ Compiled (1050 modules)
+ GET /api/auth/session 200 in 935ms
+ GET /api/auth/session 200 in 17ms
+ GET /dashboard?_rsc=3y0gy 200 in 45ms
+ ✓ Compiled /api/ai/motivational-quote in 179ms (1076 modules)
+ GET /api/ai/motivational-quote 401 in 264ms
+ ✓ Compiled /api/dashboard/stats in 191ms (1078 modules)
+ GET /api/dashboard/stats 200 in 235ms
+ GET /api/ai/motivational-quote 401 in 20ms
+ GET /api/dashboard/stats 200 in 23ms
+ ✓ Compiled in 516ms (813 modules)
+ ✓ Compiled in 357ms (813 modules)
+ ✓ Compiled in 314ms (813 modules)
+ ✓ Compiled in 789ms (813 modules)
+ ✓ Compiled in 318ms (813 modules)
+ ✓ Compiled in 573ms (813 modules)
+ ✓ Compiled in 547ms (813 modules)
+ ✓ Compiled in 341ms (813 modules)
+[?25h

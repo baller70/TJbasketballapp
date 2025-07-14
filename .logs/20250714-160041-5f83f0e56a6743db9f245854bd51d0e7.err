@@ -1,0 +1,53 @@
+ ⨯ PrismaClientValidationError: 
+Invalid `_lib_db__WEBPACK_IMPORTED_MODULE_3__.prisma.user.findUnique()` invocation in
+/home/ubuntu/hoopsquest/app/.next/server/app/dashboard/page.js:10699:73
+
+  10696 if (!session?.user) {
+  10697     (0,next_navigation__WEBPACK_IMPORTED_MODULE_2__.redirect)("/auth/signin");
+  10698 }
+→ 10699 const user = await _lib_db__WEBPACK_IMPORTED_MODULE_3__.prisma.user.findUnique({
+          where: {
+            id: undefined,
+        ?   email?: String,
+        ?   AND?: UserWhereInput | UserWhereInput[],
+        ?   OR?: UserWhereInput[],
+        ?   NOT?: UserWhereInput | UserWhereInput[],
+        ?   name?: StringNullableFilter | String | Null,
+        ?   emailVerified?: DateTimeNullableFilter | DateTime | Null,
+        ?   image?: StringNullableFilter | String | Null,
+        ?   password?: StringNullableFilter | String | Null,
+        ?   role?: EnumUserRoleFilter | UserRole,
+        ?   dateOfBirth?: DateTimeNullableFilter | DateTime | Null,
+        ?   parentId?: StringNullableFilter | String | Null,
+        ?   createdAt?: DateTimeFilter | DateTime,
+        ?   updatedAt?: DateTimeFilter | DateTime,
+        ?   accounts?: AccountListRelationFilter,
+        ?   sessions?: SessionListRelationFilter,
+        ?   parent?: UserNullableScalarRelationFilter | UserWhereInput | Null,
+        ?   children?: UserListRelationFilter,
+        ?   playerProfile?: PlayerProfileNullableScalarRelationFilter | PlayerProfileWhereInput | Null,
+        ?   scheduleEntries?: ScheduleEntryListRelationFilter,
+        ?   workouts?: WorkoutListRelationFilter,
+        ?   drillCompletions?: DrillCompletionListRelationFilter,
+        ?   voiceNotes?: VoiceNoteListRelationFilter,
+        ?   videoUploads?: VideoUploadListRelationFilter,
+        ?   achievements?: UserAchievementListRelationFilter,
+        ?   notifications?: NotificationListRelationFilter,
+        ?   aiInteractions?: AIInteractionListRelationFilter,
+        ?   progressEntries?: ProgressEntryListRelationFilter,
+        ?   userChallenges?: UserChallengeListRelationFilter
+          },
+          include: {
+            playerProfile: true,
+            children: {
+              include: {
+                playerProfile: true
+              }
+            },
+            parent: true
+          }
+        })
+
+Argument `where` of type UserWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.
+    at async DashboardPage (/home/ubuntu/hoopsquest/app/.next/server/app/dashboard/page.js:10699:18)
+digest: "3046914796"

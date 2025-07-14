@@ -1,0 +1,81 @@
+ ⨯ PrismaClientValidationError: 
+Invalid `_lib_db__WEBPACK_IMPORTED_MODULE_3__.prisma.user.findUnique()` invocation in
+/home/ubuntu/hoopsquest/app/.next/server/app/dashboard/page.js:10699:73
+
+  10696 if (!session?.user) {
+  10697     (0,next_navigation__WEBPACK_IMPORTED_MODULE_2__.redirect)("/auth/signin");
+  10698 }
+→ 10699 const user = await _lib_db__WEBPACK_IMPORTED_MODULE_3__.prisma.user.findUnique({
+          where: {
+            id: undefined,
+        ?   email?: String,
+        ?   AND?: UserWhereInput | UserWhereInput[],
+        ?   OR?: UserWhereInput[],
+        ?   NOT?: UserWhereInput | UserWhereInput[],
+        ?   name?: StringNullableFilter | String | Null,
+        ?   emailVerified?: DateTimeNullableFilter | DateTime | Null,
+        ?   image?: StringNullableFilter | String | Null,
+        ?   password?: StringNullableFilter | String | Null,
+        ?   role?: EnumUserRoleFilter | UserRole,
+        ?   dateOfBirth?: DateTimeNullableFilter | DateTime | Null,
+        ?   parentId?: StringNullableFilter | String | Null,
+        ?   createdAt?: DateTimeFilter | DateTime,
+        ?   updatedAt?: DateTimeFilter | DateTime,
+        ?   accounts?: AccountListRelationFilter,
+        ?   sessions?: SessionListRelationFilter,
+        ?   parent?: UserNullableScalarRelationFilter | UserWhereInput | Null,
+        ?   children?: UserListRelationFilter,
+        ?   playerProfile?: PlayerProfileNullableScalarRelationFilter | PlayerProfileWhereInput | Null,
+        ?   scheduleEntries?: ScheduleEntryListRelationFilter,
+        ?   workouts?: WorkoutListRelationFilter,
+        ?   drillCompletions?: DrillCompletionListRelationFilter,
+        ?   voiceNotes?: VoiceNoteListRelationFilter,
+        ?   videoUploads?: VideoUploadListRelationFilter,
+        ?   achievements?: UserAchievementListRelationFilter,
+        ?   notifications?: NotificationListRelationFilter,
+        ?   aiInteractions?: AIInteractionListRelationFilter,
+        ?   progressEntries?: ProgressEntryListRelationFilter,
+        ?   userChallenges?: UserChallengeListRelationFilter
+          },
+          include: {
+            playerProfile: true,
+            children: {
+              include: {
+                playerProfile: true
+              }
+            },
+            parent: true
+          }
+        })
+
+Argument `where` of type UserWhereUniqueInput needs at least one of `id` or `email` arguments. Available options are marked with ?.
+    at async DashboardPage (/home/ubuntu/hoopsquest/app/.next/server/app/dashboard/page.js:10699:18)
+digest: "3046914796"
+ ⚠ ./app/dashboard/page.tsx
+Attempted import error: 'handler' is not exported from '@/app/api/auth/[...nextauth]/route' (imported as 'handler').
+
+Import trace for requested module:
+./app/dashboard/page.tsx
+ ⨯ ./app/api/auth/[...nextauth]/route.ts
+Error: 
+  [31mx[0m Expected a semicolon
+    ,-[[36;1;4m/home/ubuntu/hoopsquest/app/app/api/auth/[...nextauth]/route.ts[0m:88:1]
+ [2m88[0m |   pages: {
+ [2m89[0m |     signIn: '/auth/signin'
+ [2m90[0m |   }
+ [2m91[0m | });
+    : [31;1m ^[0m
+ [2m92[0m | 
+ [2m93[0m | export { handler as GET, handler as POST };
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/api/auth/[...nextauth]/route.ts
+ ⚠ ./app/dashboard/page.tsx
+Attempted import error: 'handler' is not exported from '@/app/api/auth/[...nextauth]/route' (imported as 'handler').
+
+Import trace for requested module:
+./app/dashboard/page.tsx

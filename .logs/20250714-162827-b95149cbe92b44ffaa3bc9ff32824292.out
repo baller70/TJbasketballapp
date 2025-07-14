@@ -1,0 +1,6 @@
+components/dashboard/parent-dashboard.tsx(36,75): error TS2345: Argument of type '{ children: never[]; recentActivities: never[]; notifications: never[]; weeklyProgress: {}; }' is not assignable to parameter of type 'ParentDashboardData | (() => ParentDashboardData)'.
+  Property 'mediaUploads' is missing in type '{ children: never[]; recentActivities: never[]; notifications: never[]; weeklyProgress: {}; }' but required in type 'ParentDashboardData'.
+components/media/media-upload.tsx(164,9): error TS18048: 'selectedFiles.length' is possibly 'undefined'.
+components/media/media-upload.tsx(165,25): error TS2345: Argument of type 'FileList | null' is not assignable to parameter of type 'FileList'.
+  Type 'null' is not assignable to type 'FileList'.
+exit_code=2

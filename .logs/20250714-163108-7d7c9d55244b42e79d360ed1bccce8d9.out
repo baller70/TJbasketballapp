@@ -1,0 +1,223 @@
+sending incremental file list
+components.json
+next-env.d.ts
+next.config.js
+package.json
+postcss.config.js
+tailwind.config.ts
+tsconfig.json
+tsconfig.tsbuildinfo
+app/
+app/globals.css
+app/layout.tsx
+app/page.tsx
+app/api/
+app/api/achievements/
+app/api/achievements/route.ts
+app/api/ai/
+app/api/ai/chat/
+app/api/ai/chat/route.ts
+app/api/ai/drill-recommendation/
+app/api/ai/drill-recommendation/route.ts
+app/api/ai/motivational-quote/
+app/api/ai/motivational-quote/route.ts
+app/api/auth/
+app/api/auth/[...nextauth]/
+app/api/auth/[...nextauth]/route.ts
+app/api/auth/signup/
+app/api/auth/signup/route.ts
+app/api/challenges/
+app/api/challenges/route.ts
+app/api/dashboard/
+app/api/dashboard/stats/
+app/api/dashboard/stats/route.ts
+app/api/drills/
+app/api/drills/route.ts
+app/api/drills/complete/
+app/api/drills/complete/route.ts
+app/api/media/
+app/api/media/route.ts
+app/api/media/[id]/
+app/api/media/[id]/feedback/
+app/api/media/[id]/feedback/route.ts
+app/api/media/upload/
+app/api/media/upload/route.ts
+app/api/notifications/
+app/api/notifications/[id]/
+app/api/notifications/[id]/mark-read/
+app/api/notifications/[id]/mark-read/route.ts
+app/api/parent/
+app/api/parent/dashboard/
+app/api/parent/dashboard/route.ts
+app/api/schedule/
+app/api/schedule/route.ts
+app/api/schedule/[id]/
+app/api/schedule/[id]/route.ts
+app/api/workouts/
+app/api/workouts/route.ts
+app/auth/
+app/auth/signin/
+app/auth/signin/page.tsx
+app/auth/signup/
+app/auth/signup/page.tsx
+app/dashboard/
+app/dashboard/page.tsx
+components/
+components/theme-provider.tsx
+components/achievements/
+components/achievements/achievements-view.tsx
+components/ai/
+components/ai/ai-chat.tsx
+components/auth/
+components/auth/signin-form.tsx
+components/auth/signup-form.tsx
+components/calendar/
+components/calendar/calendar-view.tsx
+components/dashboard/
+components/dashboard/parent-dashboard.tsx
+components/dashboard/player-dashboard.tsx
+components/drills/
+components/drills/drill-library.tsx
+components/landing/
+components/landing/landing-page.tsx
+components/media/
+components/media/media-upload.tsx
+components/media/media-viewer.tsx
+components/providers/
+components/providers/providers.tsx
+components/providers/session-provider.tsx
+components/timer/
+components/timer/timer-component.tsx
+components/ui/
+components/ui/accordion.tsx
+components/ui/alert-dialog.tsx
+components/ui/alert.tsx
+components/ui/aspect-ratio.tsx
+components/ui/avatar.tsx
+components/ui/badge.tsx
+components/ui/breadcrumb.tsx
+components/ui/button.tsx
+components/ui/calendar.tsx
+components/ui/card.tsx
+components/ui/carousel.tsx
+components/ui/checkbox.tsx
+components/ui/collapsible.tsx
+components/ui/command.tsx
+components/ui/context-menu.tsx
+components/ui/date-range-picker.tsx
+components/ui/dialog.tsx
+components/ui/drawer.tsx
+components/ui/dropdown-menu.tsx
+components/ui/form.tsx
+components/ui/hover-card.tsx
+components/ui/input-otp.tsx
+components/ui/input.tsx
+components/ui/label.tsx
+components/ui/menubar.tsx
+components/ui/navigation-menu.tsx
+components/ui/pagination.tsx
+components/ui/popover.tsx
+components/ui/progress.tsx
+components/ui/radio-group.tsx
+components/ui/resizable.tsx
+components/ui/scroll-area.tsx
+components/ui/select.tsx
+components/ui/separator.tsx
+components/ui/sheet.tsx
+components/ui/skeleton.tsx
+components/ui/slider.tsx
+components/ui/sonner.tsx
+components/ui/switch.tsx
+components/ui/table.tsx
+components/ui/tabs.tsx
+components/ui/task-card.tsx
+components/ui/textarea.tsx
+components/ui/toast.tsx
+components/ui/toaster.tsx
+components/ui/toggle-group.tsx
+components/ui/toggle.tsx
+components/ui/tooltip.tsx
+components/ui/use-toast.ts
+components/workout/
+components/workout/workout-builder.tsx
+data/
+data/basketball_drills_data.json
+data/basketball_videos_data.json
+data/gamification_content_data.json
+hooks/
+hooks/use-toast.ts
+lib/
+lib/auth-config.ts
+lib/auth.ts
+lib/db.ts
+lib/types.ts
+lib/utils.ts
+prisma/
+prisma/schema.prisma
+public/
+public/uploads/
+public/uploads/images/
+public/uploads/thumbnails/
+public/uploads/videos/
+scripts/
+scripts/seed.ts
+types/
+types/next-auth.d.ts
+
+sent 698,051 bytes  received 2,355 bytes  1,400,812.00 bytes/sec
+total size is 688,566  speedup is 0.98
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+  ▲ Next.js 14.2.28
+  - Experiments (use with caution):
+    · outputFileTracingRoot
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/7) ...
+   Generating static pages (1/7) 
+   Generating static pages (3/7) 
+   Generating static pages (5/7) 
+ ✓ Generating static pages (7/7)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ƒ /                                    4.22 kB         141 kB
+├ ○ /_not-found                          873 B          88.1 kB
+├ ƒ /api/achievements                    0 B                0 B
+├ ƒ /api/ai/chat                         0 B                0 B
+├ ƒ /api/ai/drill-recommendation         0 B                0 B
+├ ƒ /api/ai/motivational-quote           0 B                0 B
+├ ƒ /api/auth/[...nextauth]              0 B                0 B
+├ ƒ /api/auth/signup                     0 B                0 B
+├ ƒ /api/challenges                      0 B                0 B
+├ ƒ /api/dashboard/stats                 0 B                0 B
+├ ƒ /api/drills                          0 B                0 B
+├ ƒ /api/drills/complete                 0 B                0 B
+├ ƒ /api/media                           0 B                0 B
+├ ƒ /api/media/[id]/feedback             0 B                0 B
+├ ƒ /api/media/upload                    0 B                0 B
+├ ƒ /api/notifications/[id]/mark-read    0 B                0 B
+├ ƒ /api/parent/dashboard                0 B                0 B
+├ ƒ /api/schedule                        0 B                0 B
+├ ƒ /api/schedule/[id]                   0 B                0 B
+├ ƒ /api/workouts                        0 B                0 B
+├ ○ /auth/signin                         2.93 kB         117 kB
+├ ○ /auth/signup                         4.05 kB         132 kB
+└ ƒ /dashboard                           65 kB           228 kB
++ First Load JS shared by all            87.2 kB
+  ├ chunks/117-c2403c69391707df.js       31.6 kB
+  ├ chunks/fd9d1056-b4265959c7a15da2.js  53.6 kB
+  └ other shared chunks (total)          1.96 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
