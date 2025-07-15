@@ -94,7 +94,7 @@ export default function SignInForm() {
 
         <Button
           type="submit"
-          className="w-full bg-orange-600 hover:bg-orange-700"
+                          className="w-full bg-basketball-gold hover:bg-basketball-gold-600"
           disabled={loading}
         >
           {loading ? (
@@ -114,7 +114,7 @@ export default function SignInForm() {
       <div className="text-center">
         <p className="text-sm text-gray-600">
           Don't have an account?{' '}
-          <Link href="/auth/signup" className="text-orange-600 hover:text-orange-700 font-semibold">
+                        <Link href="/auth/signup" className="text-basketball-gold hover:text-basketball-gold-600 font-semibold">
             Sign up here
           </Link>
         </p>

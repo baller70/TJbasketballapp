@@ -36,32 +36,32 @@ export default function LandingPage() {
 
   const features = [
     {
-      icon: <Play className="h-8 w-8 text-orange-600" />,
+      icon: <Play className="h-8 w-8 text-basketball-gold" />,
       title: "35+ Basketball Drills",
       description: "Age-appropriate drills for kids 6-13, from basic fundamentals to advanced skills"
     },
     {
-      icon: <Timer className="h-8 w-8 text-orange-600" />,
+      icon: <Timer className="h-8 w-8 text-basketball-gold" />,
       title: "Smart Timer System",
       description: "Built-in timer with voice guidance and progress tracking for every drill"
     },
     {
-      icon: <Calendar className="h-8 w-8 text-orange-600" />,
+      icon: <Calendar className="h-8 w-8 text-basketball-gold" />,
       title: "Practice Scheduling",
       description: "Easy calendar system to plan and track daily basketball practice sessions"
     },
     {
-      icon: <Trophy className="h-8 w-8 text-orange-600" />,
+      icon: <Trophy className="h-8 w-8 text-basketball-gold" />,
       title: "Achievement System",
       description: "Unlock badges, earn points, and level up as you complete drills and hit milestones"
     },
     {
-      icon: <Users className="h-8 w-8 text-orange-600" />,
+      icon: <Users className="h-8 w-8 text-basketball-gold" />,
       title: "Parent Dashboard",
       description: "Monitor your child's progress, receive notifications, and celebrate achievements together"
     },
     {
-      icon: <Star className="h-8 w-8 text-orange-600" />,
+      icon: <Star className="h-8 w-8 text-basketball-gold" />,
       title: "AI Coaching Tips",
       description: "Get personalized feedback and motivational messages powered by AI"
     }
@@ -83,30 +83,30 @@ export default function LandingPage() {
   }, [testimonials.length]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-basketball-gold-50 to-blue-50">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-orange-200">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-basketball-gold-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-basketball-gold rounded-lg flex items-center justify-center">
                 <Play className="h-6 w-6 text-white" />
               </div>
               <span className="text-xl font-bold text-gray-900">HoopsQuest</span>
             </div>
             
             <nav className="hidden md:flex items-center gap-6">
-              <Link href="#features" className="text-gray-600 hover:text-orange-600 transition-colors">
+              <Link href="#features" className="text-gray-600 hover:text-basketball-gold transition-colors">
                 Features
               </Link>
-              <Link href="#testimonials" className="text-gray-600 hover:text-orange-600 transition-colors">
+              <Link href="#testimonials" className="text-gray-600 hover:text-basketball-gold transition-colors">
                 Testimonials
               </Link>
-              <Link href="/auth/signin" className="text-gray-600 hover:text-orange-600 transition-colors">
+              <Link href="/auth/signin" className="text-gray-600 hover:text-basketball-gold transition-colors">
                 Sign In
               </Link>
               <Link href="/auth/signup">
-                <Button className="bg-orange-600 hover:bg-orange-700">
+                <Button className="bg-basketball-gold hover:bg-basketball-gold-600">
                   Get Started
                 </Button>
               </Link>
@@ -132,12 +132,12 @@ export default function LandingPage() {
               className="space-y-8"
             >
               <div>
-                <Badge className="mb-4 bg-orange-100 text-orange-800 border-orange-200">
+                <Badge className="mb-4 bg-basketball-gold-100 text-basketball-gold-800 border-basketball-gold-200">
                   Perfect for Ages 6-13
                 </Badge>
                 <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
                   The Ultimate{' '}
-                  <span className="text-orange-600">Basketball</span>{' '}
+                  <span className="text-basketball-gold">Basketball</span>{' '}
                   Accountability App
                 </h1>
                 <p className="text-xl text-gray-600 mt-6">
@@ -147,13 +147,13 @@ export default function LandingPage() {
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/auth/signup">
-                  <Button size="lg" className="bg-orange-600 hover:bg-orange-700 text-lg px-8 py-6">
+                  <Button size="lg" className="bg-basketball-gold hover:bg-basketball-gold-600 text-lg px-8 py-6">
                     Start Free Trial
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <Link href="/auth/signin">
-                  <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-orange-200">
+                  <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-basketball-gold-200">
                     Sign In
                   </Button>
                 </Link>
@@ -177,11 +177,11 @@ export default function LandingPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative"
             >
-              <div className="relative aspect-video bg-gradient-to-br from-orange-100 to-blue-100 rounded-2xl p-8 shadow-2xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-blue-500/20 rounded-2xl" />
+              <div className="relative aspect-video bg-gradient-to-br from-basketball-gold-100 to-blue-100 rounded-2xl p-8 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-br from-basketball-gold-500/20 to-blue-500/20 rounded-2xl" />
                 <div className="relative h-full flex items-center justify-center">
                   <div className="text-center">
-                    <div className="w-24 h-24 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-24 h-24 bg-basketball-gold rounded-full flex items-center justify-center mx-auto mb-4">
                       <Play className="h-12 w-12 text-white" />
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">Ready to Play?</h3>
@@ -206,7 +206,7 @@ export default function LandingPage() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="text-3xl md:text-4xl font-bold text-orange-600 mb-2">
+                <div className="text-3xl md:text-4xl font-bold text-basketball-gold mb-2">
                   {stat.number}
                 </div>
                 <div className="text-gray-600">{stat.label}</div>
@@ -236,7 +236,7 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <Card className="h-full border-orange-100 hover:border-orange-200 transition-all duration-300 hover:shadow-lg">
+                <Card className="h-full border-basketball-gold-100 hover:border-basketball-gold-200 transition-all duration-300 hover:shadow-lg">
                   <CardHeader>
                     <div className="mb-4">{feature.icon}</div>
                     <CardTitle className="text-xl">{feature.title}</CardTitle>
@@ -266,7 +266,7 @@ export default function LandingPage() {
           </div>
           
           <div className="max-w-3xl mx-auto">
-            <Card className="border-orange-100 shadow-lg">
+            <Card className="border-basketball-gold-100 shadow-lg">
               <CardContent className="p-8">
                 <div className="flex items-center mb-4">
                   {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
@@ -277,8 +277,8 @@ export default function LandingPage() {
                   "{testimonials[currentTestimonial].content}"
                 </blockquote>
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-4">
-                    <Users className="h-6 w-6 text-orange-600" />
+                  <div className="w-12 h-12 bg-basketball-gold-100 rounded-full flex items-center justify-center mr-4">
+                    <Users className="h-6 w-6 text-basketball-gold" />
                   </div>
                   <div>
                     <div className="font-semibold text-gray-900">
@@ -298,7 +298,7 @@ export default function LandingPage() {
                   key={index}
                   onClick={() => setCurrentTestimonial(index)}
                   className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentTestimonial ? 'bg-orange-600' : 'bg-gray-300'
+                    index === currentTestimonial ? 'bg-basketball-gold' : 'bg-gray-300'
                   }`}
                 />
               ))}
@@ -308,23 +308,23 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-orange-600 to-orange-700">
+      <section className="py-20 bg-gradient-to-r from-basketball-gold to-basketball-gold-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Ready to Transform Your Child's Basketball Journey?
           </h2>
-          <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-basketball-gold-100 mb-8 max-w-2xl mx-auto">
             Join thousands of families who have made basketball practice fun, engaging, and effective with HoopsQuest.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/auth/signup">
-              <Button size="lg" className="bg-white text-orange-600 hover:bg-gray-100 text-lg px-8 py-6">
+              <Button size="lg" className="bg-white text-basketball-gold hover:bg-gray-100 text-lg px-8 py-6">
                 Start Your Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
             <Link href="/auth/signin">
-              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-orange-600 text-lg px-8 py-6">
+              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-basketball-gold text-lg px-8 py-6">
                 Sign In
               </Button>
             </Link>
@@ -338,7 +338,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-4 gap-8">
             <div className="col-span-2">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-basketball-gold rounded-lg flex items-center justify-center">
                   <Play className="h-6 w-6 text-white" />
                 </div>
                 <span className="text-xl font-bold">HoopsQuest</span>
