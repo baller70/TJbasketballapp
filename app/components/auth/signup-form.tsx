@@ -137,7 +137,7 @@ export default function SignUpForm() {
 
         <Button
           type="submit"
-                          className="w-full bg-basketball-gold hover:bg-basketball-gold-600"
+          className="w-full bg-orange-600 hover:bg-orange-700"
           disabled={loading || !formData.role}
         >
           {loading ? (

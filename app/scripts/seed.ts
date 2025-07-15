@@ -26,11 +26,11 @@ async function main() {
       category: drill.category,
       skillLevel: drill.skill_level,
       duration: drill.duration,
-      equipment: drill.equipment || [],
-      stepByStep: drill.step_by_step || [],
-      coachingTips: drill.coaching_tips || [],
+      equipment: JSON.stringify(drill.equipment || []),
+      stepByStep: JSON.stringify(drill.step_by_step || []),
+      coachingTips: JSON.stringify(drill.coaching_tips || []),
       videoUrl: video?.video_url || null,
-      alternativeVideos: video?.alternative_videos || [],
+      alternativeVideos: JSON.stringify(video?.alternative_videos || []),
     };
   });
 

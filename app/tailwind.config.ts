@@ -60,22 +60,6 @@ const config: Config = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
-        // Basketball App Colors
-        basketball: {
-          gold: '#b3ab69',
-          black: '#000000',
-          white: '#ffffff',
-          'gold-50': '#f8f7f3',
-          'gold-100': '#f0eee6',
-          'gold-200': '#e1dcc8',
-          'gold-300': '#d2caa9',
-          'gold-400': '#c3b88a',
-          'gold-500': '#b3ab69',
-          'gold-600': '#9a9355',
-          'gold-700': '#7a7343',
-          'gold-800': '#5a5432',
-          'gold-900': '#3a3521',
-        },
       },
       keyframes: {
         'accordion-down': {

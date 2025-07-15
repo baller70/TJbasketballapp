@@ -1,11 +1,9 @@
 generator client {
     provider = "prisma-client-js"
-    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
-    output = "/home/ubuntu/hoopsquest/app/node_modules/.prisma/client"
 }
 
 datasource db {
-    provider = "postgresql"
+    provider = "sqlite"
     url      = env("DATABASE_URL")
 }
 
@@ -15,12 +13,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -95,11 +93,11 @@ model Drill {
   category      String
   skillLevel    String
   duration      String
-  equipment     String[]
-  stepByStep    String[]
-  coachingTips  String[]
+  equipment     String
+  stepByStep    String
+  coachingTips  String
   videoUrl      String?
-  alternativeVideos String[]
+  alternativeVideos String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
