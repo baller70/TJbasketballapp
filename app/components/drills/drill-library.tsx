@@ -248,6 +248,7 @@ export default function DrillLibrary() {
       }
     } catch (error) {
       console.error('Error fetching comments:', error);
+      setComments([]);
     }
   };
 
