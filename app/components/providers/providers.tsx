@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import CustomSessionProvider from './session-provider';
 import { ThemeProvider } from '../theme-provider';
 import { Toaster } from '@/components/ui/toaster';
+import { Toaster as Sonner } from '@/components/ui/sonner';
 
 interface Props {
   children: React.ReactNode;
@@ -31,6 +32,7 @@ export default function Providers({ children }: Props) {
       <CustomSessionProvider>
         {children}
         <Toaster />
+        <Sonner />
       </CustomSessionProvider>
     </ThemeProvider>
   );

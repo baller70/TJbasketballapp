@@ -12,7 +12,16 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(drills);
+    // Parse JSON strings to arrays for frontend consumption
+    const parsedDrills = drills.map((drill: any) => ({
+      ...drill,
+      equipment: JSON.parse(drill.equipment || '[]'),
+      stepByStep: JSON.parse(drill.stepByStep || '[]'),
+      coachingTips: JSON.parse(drill.coachingTips || '[]'),
+      alternativeVideos: JSON.parse(drill.alternativeVideos || '[]'),
+    }));
+
+    return NextResponse.json(parsedDrills);
   } catch (error) {
     console.error('Error fetching drills:', error);
     return NextResponse.json(

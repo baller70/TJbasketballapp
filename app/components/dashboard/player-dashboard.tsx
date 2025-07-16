@@ -31,6 +31,7 @@ import TimerComponent from '@/components/timer/timer-component';
 import WorkoutBuilder from '@/components/workout/workout-builder';
 import AchievementsView from '@/components/achievements/achievements-view';
 import AIChat from '@/components/ai/ai-chat';
+import DailyInspiration from '@/components/daily-inspiration/daily-inspiration';
 
 interface PlayerDashboardProps {
   user: User & { playerProfile: PlayerProfile };
@@ -192,6 +193,9 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
               </Card>
             </motion.div>
 
+            {/* Daily Inspiration Section */}
+            <DailyInspiration userId={user.id} />
+
             {/* Big Cards Row - User Level and Weekly Goals */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.div
@@ -316,8 +320,8 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <Card className="border-orange-100 hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
+                <Card className="border-orange-100 hover:shadow-lg transition-shadow h-32">
+                  <CardContent className="p-6 h-full flex flex-col justify-between">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-600 mb-1">Drills Completed</p>
@@ -327,11 +331,16 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
                         <BookOpen className="h-6 w-6 text-blue-600" />
                       </div>
                     </div>
-                    <p className="text-sm text-gray-600 mt-2">
-                      {stats.averageRating > 0 && (
+                    <p className="text-sm text-gray-600">
+                      {stats.averageRating > 0 ? (
                         <span className="flex items-center gap-1">
                           <Star className="h-4 w-4 text-yellow-500" />
                           {stats.averageRating.toFixed(1)} avg rating
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1">
+                          <Star className="h-4 w-4 text-gray-400" />
+                          No ratings yet
                         </span>
                       )}
                     </p>
@@ -344,8 +353,8 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
               >
-                <Card className="border-orange-100 hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
+                <Card className="border-orange-100 hover:shadow-lg transition-shadow h-32">
+                  <CardContent className="p-6 h-full flex flex-col justify-between">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-600 mb-1">Workouts Completed</p>
@@ -355,7 +364,7 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
                         <Play className="h-6 w-6 text-green-600" />
                       </div>
                     </div>
-                    <p className="text-sm text-gray-600 mt-2">
+                    <p className="text-sm text-gray-600">
                       <span className="flex items-center gap-1">
                         <TrendingUp className="h-4 w-4 text-green-500" />
                         This week
@@ -370,18 +379,18 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.5 }}
               >
-                <Card className="border-orange-100 hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
+                <Card className="border-orange-100 hover:shadow-lg transition-shadow h-32">
+                  <CardContent className="p-6 h-full flex flex-col justify-between">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-gray-600 mb-1">Next Workout</p>
-                        <p className="text-lg font-bold text-gray-900">Tomorrow</p>
+                        <p className="text-2xl font-bold text-gray-900">Tomorrow</p>
                       </div>
                       <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
                         <Clock className="h-6 w-6 text-purple-600" />
                       </div>
                     </div>
-                    <p className="text-sm text-gray-600 mt-2">
+                    <p className="text-sm text-gray-600">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-4 w-4 text-purple-500" />
                         Shooting Practice
