@@ -192,30 +192,60 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
               </Card>
             </motion.div>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Big Cards Row - User Level and Weekly Goals */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
               >
                 <Card className="border-orange-100 hover:shadow-lg transition-shadow">
-                  <CardContent className="p-6">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Trophy className="h-5 w-5 text-purple-600" />
+                      Player Level
+                    </CardTitle>
+                    <CardDescription>Track your basketball journey</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-gray-600 mb-1">Weekly Progress</p>
-                        <p className="text-2xl font-bold text-gray-900">
-                          {stats.weeklyProgress}/{stats.weeklyGoal}
+                        <p className="text-3xl font-bold text-gray-900 capitalize">
+                          {currentLevel}
                         </p>
+                        <p className="text-sm text-gray-600">Current Level</p>
                       </div>
-                      <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                        <Calendar className="h-6 w-6 text-orange-600" />
+                      <div className={`w-16 h-16 ${levelData.color} rounded-full flex items-center justify-center`}>
+                        <Trophy className="h-8 w-8 text-white" />
                       </div>
                     </div>
-                    <Progress 
-                      value={(stats.weeklyProgress / stats.weeklyGoal) * 100} 
-                      className="mt-3"
-                    />
+                    
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Progress to {levelData.next}</span>
+                        <span className="text-sm text-gray-600">
+                          {stats.totalPoints}/{levelData.pointsNeeded} XP
+                        </span>
+                      </div>
+                      <Progress 
+                        value={(stats.totalPoints / levelData.pointsNeeded) * 100} 
+                        className="h-2"
+                      />
+                      <p className="text-xs text-gray-500">
+                        {levelData.pointsNeeded - stats.totalPoints} XP needed for next level
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 pt-2">
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-orange-600">{stats.totalPoints}</p>
+                        <p className="text-xs text-gray-600">Total XP</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-blue-600">{stats.currentStreak}</p>
+                        <p className="text-xs text-gray-600">Day Streak</p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -224,6 +254,67 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <Card className="border-orange-100 hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Target className="h-5 w-5 text-orange-600" />
+                      Weekly Goals
+                    </CardTitle>
+                    <CardDescription>Stay on track with your training</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-3xl font-bold text-gray-900">
+                          {stats.weeklyProgress}/{stats.weeklyGoal}
+                        </p>
+                        <p className="text-sm text-gray-600">Sessions This Week</p>
+                      </div>
+                      <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center">
+                        <Calendar className="h-8 w-8 text-orange-600" />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Weekly Progress</span>
+                        <span className="text-sm text-gray-600">
+                          {Math.round((stats.weeklyProgress / stats.weeklyGoal) * 100)}%
+                        </span>
+                      </div>
+                      <Progress 
+                        value={(stats.weeklyProgress / stats.weeklyGoal) * 100} 
+                        className="h-2"
+                      />
+                      <p className="text-xs text-gray-500">
+                        {stats.weeklyGoal - stats.weeklyProgress} sessions remaining this week
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 pt-2">
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-green-600">
+                          {stats.weeklyProgress > 0 ? Math.round((stats.weeklyProgress / stats.weeklyGoal) * 100) : 0}%
+                        </p>
+                        <p className="text-xs text-gray-600">Completed</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-blue-600">{7 - new Date().getDay()}</p>
+                        <p className="text-xs text-gray-600">Days Left</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </div>
+
+            {/* Smaller Cards Row - Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
               >
                 <Card className="border-orange-100 hover:shadow-lg transition-shadow">
                   <CardContent className="p-6">
@@ -251,25 +342,50 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
               >
                 <Card className="border-orange-100 hover:shadow-lg transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-gray-600 mb-1">Next Level</p>
-                        <p className="text-lg font-bold text-gray-900">{levelData.next}</p>
+                        <p className="text-sm text-gray-600 mb-1">Workouts Completed</p>
+                        <p className="text-2xl font-bold text-gray-900">{stats.weeklyProgress}</p>
                       </div>
-                      <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                        <Trophy className="h-6 w-6 text-purple-600" />
+                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <Play className="h-6 w-6 text-green-600" />
                       </div>
                     </div>
-                    <Progress 
-                      value={(stats.totalPoints / levelData.pointsNeeded) * 100} 
-                      className="mt-3"
-                    />
                     <p className="text-sm text-gray-600 mt-2">
-                      {levelData.pointsNeeded - stats.totalPoints} points to go
+                      <span className="flex items-center gap-1">
+                        <TrendingUp className="h-4 w-4 text-green-500" />
+                        This week
+                      </span>
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+              >
+                <Card className="border-orange-100 hover:shadow-lg transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-gray-600 mb-1">Next Workout</p>
+                        <p className="text-lg font-bold text-gray-900">Tomorrow</p>
+                      </div>
+                      <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <Clock className="h-6 w-6 text-purple-600" />
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-2">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4 text-purple-500" />
+                        Shooting Practice
+                      </span>
                     </p>
                   </CardContent>
                 </Card>
