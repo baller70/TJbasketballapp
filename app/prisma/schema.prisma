@@ -60,6 +60,8 @@ model User {
   drillCompletions  DrillCompletion[]
   voiceNotes        VoiceNote[]
   mediaUploads      MediaUpload[]
+  drillComments     DrillComment[]
+  customDrills      Drill[]
   achievements      UserAchievement[]
   notifications     Notification[]
   aiInteractions    AIInteraction[]
@@ -98,6 +100,8 @@ model Drill {
   coachingTips  String
   videoUrl      String?
   alternativeVideos String
+  isCustom      Boolean  @default(false)
+  createdBy     String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -107,6 +111,8 @@ model Drill {
   scheduleEntries  ScheduleEntry[]
   voiceNotes       VoiceNote[]
   mediaUploads     MediaUpload[]
+  drillComments    DrillComment[]
+  creator          User?    @relation(fields: [createdBy], references: [id])
 }
 
 model Workout {
@@ -218,6 +224,19 @@ model MediaUpload {
   user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   drill           Drill            @relation(fields: [drillId], references: [id], onDelete: Cascade)
   drillCompletion DrillCompletion? @relation(fields: [drillCompletionId], references: [id])
+}
+
+model DrillComment {
+  id        String   @id @default(cuid())
+  userId    String
+  drillId   String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  drill Drill @relation(fields: [drillId], references: [id], onDelete: Cascade)
 }
 
 model Achievement {
