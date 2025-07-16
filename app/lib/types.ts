@@ -37,6 +37,8 @@ export interface Drill {
   coachingTips: string[];
   videoUrl: string | null;
   alternativeVideos: string[];
+  isCustom?: boolean;
+  createdBy?: string;
 }
 
 export interface Workout {

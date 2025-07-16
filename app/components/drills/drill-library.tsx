@@ -3,142 +3,131 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { 
-  Search, 
-  Filter, 
-  Play, 
-  Clock, 
-  Star, 
-  BookOpen, 
-  Users,
-  Target,
-  Trophy,
-  ExternalLink,
+  Target, 
+  Zap, 
+  Users, 
+  Shield, 
+  Navigation, 
+  Activity, 
+  Layers, 
   Plus,
-  CheckCircle,
+  ChevronDown,
+  ChevronRight,
+  Clock,
+  Trophy,
+  Calendar,
+  Play,
   Upload,
-  Camera,
-  Video,
-  Zap,
-  Shield,
-  Navigation,
-  Activity,
-  Layers,
-  MessageCircle,
-  Send,
-  Image,
-  FileText
+  MessageSquare,
+  User
 } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { Drill, DrillFilters, SkillLevel } from '@/lib/types';
+import { toast } from 'sonner';
+import { Drill } from '@/lib/types';
 
-// Category configuration with icons and descriptions
-const SKILL_CATEGORIES = {
-  shooting: {
-    name: 'Shooting',
-    icon: Target,
-    description: 'Master your shooting form and accuracy',
-    color: 'bg-red-100 text-red-800',
+const SKILL_CATEGORIES = [
+  { 
+    id: 'shooting', 
+    name: 'Shooting', 
+    icon: Target, 
+    color: 'bg-red-500',
     bgColor: 'bg-red-50',
-    borderColor: 'border-red-200'
+    textColor: 'text-red-700',
+    description: 'Improve your shooting accuracy and form'
   },
-  dribbling: {
-    name: 'Dribbling & Ball Handling',
-    icon: Zap,
-    description: 'Improve your ball control and dribbling skills',
-    color: 'bg-blue-100 text-blue-800',
-    bgColor: 'bg-blue-50',
-    borderColor: 'border-blue-200'
-  },
-  passing: {
-    name: 'Passing',
-    icon: Users,
-    description: 'Learn different types of passes and teamwork',
-    color: 'bg-green-100 text-green-800',
-    bgColor: 'bg-green-50',
-    borderColor: 'border-green-200'
-  },
-  defense: {
-    name: 'Defense & Rebounding',
-    icon: Shield,
-    description: 'Develop defensive skills and rebounding techniques',
-    color: 'bg-purple-100 text-purple-800',
-    bgColor: 'bg-purple-50',
-    borderColor: 'border-purple-200'
-  },
-  footwork: {
-    name: 'Footwork & Movement',
-    icon: Navigation,
-    description: 'Build agility and proper movement patterns',
-    color: 'bg-yellow-100 text-yellow-800',
+  { 
+    id: 'dribbling', 
+    name: 'Dribbling & Ball Handling', 
+    icon: Zap, 
+    color: 'bg-yellow-500',
     bgColor: 'bg-yellow-50',
-    borderColor: 'border-yellow-200'
+    textColor: 'text-yellow-700',
+    description: 'Master ball control and dribbling techniques'
   },
-  conditioning: {
-    name: 'Conditioning & Agility',
-    icon: Activity,
-    description: 'Build strength, speed, and endurance',
-    color: 'bg-pink-100 text-pink-800',
-    bgColor: 'bg-pink-50',
-    borderColor: 'border-pink-200'
+  { 
+    id: 'passing', 
+    name: 'Passing', 
+    icon: Users, 
+    color: 'bg-blue-500',
+    bgColor: 'bg-blue-50',
+    textColor: 'text-blue-700',
+    description: 'Develop precise passing skills'
   },
-  fundamentals: {
-    name: 'Fundamentals & Fun Games',
-    icon: Layers,
-    description: 'Learn basic skills through fun activities',
-    color: 'bg-gray-100 text-gray-800',
-    bgColor: 'bg-gray-50',
-    borderColor: 'border-gray-200'
+  { 
+    id: 'defense', 
+    name: 'Defense', 
+    icon: Shield, 
+    color: 'bg-green-500',
+    bgColor: 'bg-green-50',
+    textColor: 'text-green-700',
+    description: 'Build strong defensive fundamentals'
+  },
+  { 
+    id: 'footwork', 
+    name: 'Footwork', 
+    icon: Navigation, 
+    color: 'bg-purple-500',
+    bgColor: 'bg-purple-50',
+    textColor: 'text-purple-700',
+    description: 'Enhance agility and movement'
+  },
+  { 
+    id: 'conditioning', 
+    name: 'Conditioning', 
+    icon: Activity, 
+    color: 'bg-orange-500',
+    bgColor: 'bg-orange-50',
+    textColor: 'text-orange-700',
+    description: 'Build endurance and strength'
+  },
+  { 
+    id: 'fundamentals', 
+    name: 'Fundamentals', 
+    icon: Layers, 
+    color: 'bg-indigo-500',
+    bgColor: 'bg-indigo-50',
+    textColor: 'text-indigo-700',
+    description: 'Master the basics of basketball'
   }
-};
+];
 
 export default function DrillLibrary() {
   const [drills, setDrills] = useState<Drill[]>([]);
-  const [filteredDrills, setFilteredDrills] = useState<Drill[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDrill, setSelectedDrill] = useState<Drill | null>(null);
-  const [showDrillDialog, setShowDrillDialog] = useState(false);
-
-  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [activeTab, setActiveTab] = useState('all');
+  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState('');
-  const [mediaUploads, setMediaUploads] = useState<any[]>([]);
-  const [uploadingMedia, setUploadingMedia] = useState(false);
-  const [showCustomDrillDialog, setShowCustomDrillDialog] = useState(false);
+  const [media, setMedia] = useState<any[]>([]);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+
   const [customDrill, setCustomDrill] = useState({
     name: '',
     description: '',
     category: '',
     skillLevel: '',
-    duration: '',
+    duration: 15,
     equipment: '',
     stepByStep: '',
     coachingTips: '',
     videoUrl: ''
   });
-  const [creatingDrill, setCreatingDrill] = useState(false);
-  const [filters, setFilters] = useState<DrillFilters>({
-    category: undefined,
-    skillLevel: undefined,
-    searchTerm: '',
-    duration: undefined,
-  });
 
   useEffect(() => {
     fetchDrills();
   }, []);
-
-  useEffect(() => {
-    filterDrills();
-  }, [drills, filters, activeCategory]);
 
   const fetchDrills = async () => {
     try {
@@ -154,91 +143,6 @@ export default function DrillLibrary() {
     }
   };
 
-  const filterDrills = () => {
-    let filtered = drills;
-
-    // Filter by active category
-    if (activeCategory !== 'all') {
-      filtered = filtered.filter(drill => drill.category === activeCategory);
-    }
-
-    // Apply other filters
-    if (filters.category) {
-      filtered = filtered.filter(drill => drill.category === filters.category);
-    }
-
-    if (filters.skillLevel) {
-      filtered = filtered.filter(drill => drill.skillLevel === filters.skillLevel);
-    }
-
-    if (filters.searchTerm) {
-      filtered = filtered.filter(drill => 
-        drill.name.toLowerCase().includes(filters.searchTerm?.toLowerCase() || '') ||
-        drill.description.toLowerCase().includes(filters.searchTerm?.toLowerCase() || '')
-      );
-    }
-
-    if (filters.duration) {
-      filtered = filtered.filter(drill => {
-        const duration = parseInt(drill.duration);
-        if (filters.duration === '5') return duration <= 5;
-        if (filters.duration === '10') return duration <= 10;
-        if (filters.duration === '15') return duration <= 15;
-        if (filters.duration === '20') return duration >= 20;
-        return true;
-      });
-    }
-
-    setFilteredDrills(filtered);
-  };
-
-  const getCategoryColor = (category: string) => {
-    const colors = {
-      shooting: 'bg-red-100 text-red-800',
-      dribbling: 'bg-blue-100 text-blue-800',
-      passing: 'bg-green-100 text-green-800',
-      defense: 'bg-purple-100 text-purple-800',
-      footwork: 'bg-yellow-100 text-yellow-800',
-      conditioning: 'bg-pink-100 text-pink-800',
-      fundamentals: 'bg-gray-100 text-gray-800',
-    };
-    return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800';
-  };
-
-  const getSkillLevelColor = (level: string) => {
-    const colors = {
-      beginner: 'bg-green-100 text-green-800',
-      intermediate: 'bg-yellow-100 text-yellow-800',
-      advanced: 'bg-red-100 text-red-800',
-    };
-    return colors[level as keyof typeof colors] || 'bg-gray-100 text-gray-800';
-  };
-
-  const addToSchedule = async (drillId: string) => {
-    try {
-      const response = await fetch('/api/schedule', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          drillId,
-          date: new Date().toISOString(),
-          startTime: new Date().toISOString(),
-        }),
-      });
-
-      if (response.ok) {
-        // Show success message
-        console.log('Drill added to schedule');
-      }
-    } catch (error) {
-      console.error('Error adding drill to schedule:', error);
-    }
-  };
-
-
-
   const fetchComments = async (drillId: string) => {
     try {
       const response = await fetch(`/api/drills/${drillId}/comments`);
@@ -252,71 +156,26 @@ export default function DrillLibrary() {
     }
   };
 
-  const fetchMediaUploads = async (drillId: string) => {
+  const fetchMedia = async (drillId: string) => {
     try {
       const response = await fetch(`/api/drills/${drillId}/media`);
       if (response.ok) {
         const data = await response.json();
-        setMediaUploads(data);
+        setMedia(data);
       }
     } catch (error) {
-      console.error('Error fetching media uploads:', error);
+      console.error('Error fetching media:', error);
+      setMedia([]);
     }
   };
 
-  const handleAddComment = async () => {
-    if (!selectedDrill || !newComment.trim()) return;
-
-    try {
-      const response = await fetch(`/api/drills/${selectedDrill.id}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ content: newComment }),
-      });
-
-      if (response.ok) {
-        const newCommentData = await response.json();
-        setComments([newCommentData, ...comments]);
-        setNewComment('');
-      }
-    } catch (error) {
-      console.error('Error adding comment:', error);
-    }
-  };
-
-  const handleFileUpload = async (file: File) => {
-    if (!selectedDrill) return;
-
-    setUploadingMedia(true);
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch(`/api/drills/${selectedDrill.id}/media`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const uploadedMedia = await response.json();
-        setMediaUploads([uploadedMedia, ...mediaUploads]);
-      }
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    } finally {
-      setUploadingMedia(false);
-    }
-  };
-
-  const handleCreateCustomDrill = async () => {
+  const handleCreateDrill = async () => {
     if (!customDrill.name || !customDrill.description || !customDrill.category || !customDrill.skillLevel) {
-      alert('Please fill in all required fields (name, description, category, and skill level)');
+      toast.error('Please fill in all required fields');
       return;
     }
 
-    setCreatingDrill(true);
+    setIsCreating(true);
     try {
       const response = await fetch('/api/drills/custom', {
         method: 'POST',
@@ -328,681 +187,508 @@ export default function DrillLibrary() {
 
       if (response.ok) {
         const newDrill = await response.json();
-        setDrills([newDrill, ...drills]);
+        setDrills([...drills, newDrill]);
+        setShowCreateDialog(false);
         setCustomDrill({
           name: '',
           description: '',
           category: '',
           skillLevel: '',
-          duration: '',
+          duration: 15,
           equipment: '',
           stepByStep: '',
           coachingTips: '',
           videoUrl: ''
         });
-        setShowCustomDrillDialog(false);
-        alert('Custom drill created successfully!');
+        toast.success('Custom drill created successfully!');
       } else {
-        const error = await response.json();
-        alert(`Error creating drill: ${error.error}`);
+        toast.error('Failed to create drill');
       }
     } catch (error) {
-      console.error('Error creating custom drill:', error);
-      alert('Error creating custom drill');
+      console.error('Error creating drill:', error);
+      toast.error('Error creating drill');
     } finally {
-      setCreatingDrill(false);
+      setIsCreating(false);
     }
   };
 
-  const getDrillsByCategory = (category: string) => {
-    return drills.filter(drill => drill.category === category);
+  const handleAddToSchedule = async (drill: Drill) => {
+    try {
+      const response = await fetch('/api/schedule', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: drill.name,
+          description: drill.description,
+          date: new Date().toISOString(),
+          type: 'drill'
+        }),
+      });
+
+      if (response.ok) {
+        toast.success('Drill added to schedule!');
+      } else {
+        toast.error('Failed to add drill to schedule');
+      }
+    } catch (error) {
+      console.error('Error adding drill to schedule:', error);
+      toast.error('Error adding drill to schedule');
+    }
+  };
+
+  const handleDrillClick = (drill: Drill) => {
+    setSelectedDrill(drill);
+    fetchComments(drill.id);
+    fetchMedia(drill.id);
+  };
+
+  const toggleCategory = (categoryId: string) => {
+    setExpandedCategories(prev => ({
+      ...prev,
+      [categoryId]: !prev[categoryId]
+    }));
+  };
+
+  const getFilteredDrills = (categoryId: string) => {
+    return drills.filter(drill => drill.category.toLowerCase() === categoryId);
   };
 
   const renderDrillCard = (drill: Drill, index: number) => (
-    <motion.div
+    <Card 
       key={drill.id}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.1 }}
+      className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:scale-[1.02] bg-gradient-to-br from-white to-orange-50/30 border-orange-200/50"
+      onClick={() => handleDrillClick(drill)}
     >
-      <Card className="group border-orange-100 hover:border-orange-200 hover:shadow-xl transition-all duration-300 h-full bg-gradient-to-br from-white to-orange-50/30">
-        <CardHeader className="pb-4 relative">
-          {/* Header with badges */}
-          <div className="flex items-start justify-between mb-3">
-            <div className="flex items-center gap-2 flex-wrap">
-              <Badge className={getCategoryColor(drill.category)}>
-                {drill.category}
-              </Badge>
-              <Badge className={getSkillLevelColor(drill.skillLevel)}>
-                {drill.skillLevel}
-              </Badge>
-              {(drill as any).isCustom && (
-                <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200">
-                  <Star className="h-3 w-3 mr-1" />
-                  Custom
-                </Badge>
-              )}
-            </div>
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-              <Play className="h-5 w-5 text-orange-600" />
-            </div>
-          </div>
-          
-          {/* Title and description */}
-          <div>
-            <CardTitle className="text-lg font-bold line-clamp-2 text-gray-900 mb-2">
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <CardTitle className="text-lg font-bold text-gray-800 group-hover:text-orange-600 transition-colors">
               {drill.name}
             </CardTitle>
-            <CardDescription className="line-clamp-3 text-gray-600 text-sm leading-relaxed">
+            <CardDescription className="text-sm text-gray-600 mt-1">
               {drill.description}
             </CardDescription>
           </div>
-        </CardHeader>
-        
-        <CardContent className="pt-0">
-          {/* Stats section */}
-          <div className="bg-gray-50/50 rounded-lg p-3 mb-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Clock className="h-4 w-4 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">Duration</p>
-                  <p className="text-sm font-semibold text-gray-900">{drill.duration}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                  <Target className="h-4 w-4 text-green-600" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">Equipment</p>
-                  <p className="text-sm font-semibold text-gray-900">{drill.equipment.length} items</p>
-                </div>
-              </div>
-            </div>
+          <div className="flex flex-col gap-1 ml-3">
+            <Badge 
+              variant="secondary" 
+              className={`text-xs font-medium ${
+                drill.skillLevel === 'Beginner' ? 'bg-green-100 text-green-700' :
+                drill.skillLevel === 'Intermediate' ? 'bg-yellow-100 text-yellow-700' :
+                'bg-red-100 text-red-700'
+              }`}
+            >
+              {drill.skillLevel}
+            </Badge>
+            {drill.isCustom && (
+              <Badge variant="outline" className="text-xs bg-purple-100 text-purple-700 border-purple-300">
+                Custom
+              </Badge>
+            )}
           </div>
-
-          {/* Action button */}
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button 
-                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium py-2.5 rounded-lg transition-all duration-300 group-hover:shadow-lg"
-                onClick={() => {
-                  setSelectedDrill(drill);
-                  fetchComments(drill.id);
-                  fetchMediaUploads(drill.id);
-                }}
-              >
-                <BookOpen className="h-4 w-4 mr-2" />
-                View Details & Start Drill
-              </Button>
-            </DialogTrigger>
-              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle className="flex items-center gap-2">
-                    <Play className="h-5 w-5 text-orange-600" />
-                    {selectedDrill?.name}
-                  </DialogTitle>
-                  <DialogDescription>
-                    {selectedDrill?.description}
-                  </DialogDescription>
-                </DialogHeader>
-                
-                {selectedDrill && (
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-4">
-                      <Badge className={getCategoryColor(selectedDrill.category)}>
-                        {selectedDrill.category}
-                      </Badge>
-                      <Badge className={getSkillLevelColor(selectedDrill.skillLevel)}>
-                        {selectedDrill.skillLevel}
-                      </Badge>
-                      {(selectedDrill as any).isCustom && (
-                        <Badge variant="secondary" className="bg-purple-100 text-purple-800">
-                          Custom
-                        </Badge>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Clock className="h-4 w-4" />
-                        <span>{selectedDrill.duration} minutes</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Users className="h-4 w-4" />
-                        <span>{selectedDrill.equipment.length} equipment needed</span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold mb-2">Equipment Needed:</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedDrill.equipment.map((item, index) => (
-                          <Badge key={index} variant="outline">
-                            {item}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold mb-2">Step-by-Step Instructions:</h4>
-                      <ol className="list-decimal list-inside space-y-2">
-                        {selectedDrill.stepByStep.map((step, index) => (
-                          <li key={index} className="text-sm text-gray-700">{step}</li>
-                        ))}
-                      </ol>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold mb-2">Coaching Tips:</h4>
-                      <ul className="list-disc list-inside space-y-1">
-                        {selectedDrill.coachingTips.map((tip, index) => (
-                          <li key={index} className="text-sm text-gray-700">{tip}</li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {selectedDrill.alternativeVideos && selectedDrill.alternativeVideos.length > 0 && (
-                      <div>
-                        <h4 className="font-semibold mb-2">Video Resources:</h4>
-                        <div className="space-y-2">
-                          {selectedDrill.alternativeVideos.map((video, index) => (
-                            <a
-                              key={index}
-                              href={video as string}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-2 text-sm text-blue-600 hover:underline"
-                            >
-                              <ExternalLink className="h-4 w-4" />
-                              Video {index + 1}
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Media Upload Section */}
-                    <div className="border-t pt-6">
-                      <h4 className="font-semibold mb-4 flex items-center gap-2">
-                        <Upload className="h-5 w-5" />
-                        Upload Videos & Images
-                      </h4>
-                      
-                      <div className="space-y-4">
-                        {/* File Upload Area */}
-                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                          <input
-                            type="file"
-                            id="media-upload"
-                            multiple
-                            accept="video/*,image/*"
-                            onChange={(e) => {
-                              const files = Array.from(e.target.files || []);
-                              files.forEach(file => handleFileUpload(file));
-                            }}
-                            className="hidden"
-                          />
-                          <label
-                            htmlFor="media-upload"
-                            className="cursor-pointer flex flex-col items-center gap-2"
-                          >
-                            <div className="p-3 bg-gray-100 rounded-full">
-                              <Upload className="h-6 w-6 text-gray-600" />
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-gray-700">
-                                Click to upload or drag and drop
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                Videos (MP4, MOV) and Images (PNG, JPG, GIF)
-                              </p>
-                            </div>
-                          </label>
-                        </div>
-
-                        {/* Uploaded Media Display */}
-                        {mediaUploads.length > 0 && (
-                          <div>
-                            <h5 className="font-medium mb-2">Uploaded Media:</h5>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                              {mediaUploads.map((media, index) => (
-                                <div key={index} className="relative group">
-                                  {media.type === 'video' ? (
-                                    <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                                      <Video className="h-8 w-8 text-gray-400" />
-                                    </div>
-                                  ) : (
-                                    <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
-                                      <Image className="h-8 w-8 text-gray-400" />
-                                    </div>
-                                  )}
-                                  <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-2 rounded-b-lg">
-                                    {media.filename}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {uploadingMedia && (
-                          <div className="text-center py-4">
-                            <div className="inline-flex items-center gap-2 text-sm text-gray-600">
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-600"></div>
-                              Uploading media...
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Comments Section */}
-                    <div className="border-t pt-6">
-                      <h4 className="font-semibold mb-4 flex items-center gap-2">
-                        <MessageCircle className="h-5 w-5" />
-                        Comments & Discussion
-                      </h4>
-                      
-                      {/* Add Comment */}
-                      <div className="mb-4">
-                        <div className="flex gap-2">
-                          <Textarea
-                            placeholder="Add a comment, ask a question, or share your experience with this drill..."
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                            rows={3}
-                            className="flex-1"
-                          />
-                          <Button
-                            onClick={handleAddComment}
-                            disabled={!newComment.trim()}
-                            className="self-end"
-                          >
-                            <Send className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-
-                      {/* Comments List */}
-                      <ScrollArea className="h-64 pr-4">
-                        {comments.length === 0 ? (
-                          <div className="text-center py-8 text-gray-500">
-                            <MessageCircle className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                            <p>No comments yet. Be the first to share your thoughts!</p>
-                          </div>
-                        ) : (
-                          <div className="space-y-4">
-                            {comments.map((comment, index) => (
-                              <div key={index} className="bg-gray-50 rounded-lg p-4">
-                                <div className="flex items-start justify-between mb-2">
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                                      <span className="text-sm font-medium text-orange-600">
-                                        {comment.user?.name?.charAt(0) || 'U'}
-                                      </span>
-                                    </div>
-                                    <div>
-                                      <p className="text-sm font-medium">{comment.user?.name || 'Anonymous'}</p>
-                                      <p className="text-xs text-gray-500">
-                                        {comment.user?.role && (
-                                          <Badge variant="outline" className="mr-2 text-xs">
-                                            {comment.user.role}
-                                          </Badge>
-                                        )}
-                                        {new Date(comment.createdAt).toLocaleDateString()}
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                                <p className="text-sm text-gray-700 whitespace-pre-wrap">
-                                  {comment.content}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </ScrollArea>
-                    </div>
-
-                    <div className="flex gap-2 pt-4">
-                      <Button 
-                        onClick={() => addToSchedule(selectedDrill.id)}
-                        className="flex-1"
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add to Schedule
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </DialogContent>
-            </Dialog>
-        </CardContent>
-      </Card>
-    </motion.div>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="pt-0">
+        <div className="space-y-3">
+          <div className="flex items-center gap-4 text-sm text-gray-600">
+            <div className="flex items-center gap-1">
+              <Clock className="w-4 h-4" />
+              <span>{drill.duration} min</span>
+            </div>
+            {drill.equipment && drill.equipment.length > 0 && (
+              <div className="flex items-center gap-1">
+                <Trophy className="w-4 h-4" />
+                <span>{drill.equipment.join(', ')}</span>
+              </div>
+            )}
+          </div>
+          
+          <div className="flex gap-2 pt-2">
+            <Button 
+              size="sm" 
+              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAddToSchedule(drill);
+              }}
+            >
+              <Calendar className="w-4 h-4 mr-1" />
+              Add to Schedule
+            </Button>
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="px-3 border-orange-200 hover:bg-orange-50"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDrillClick(drill);
+              }}
+            >
+              <Play className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 
-  if (loading) {
+  const renderCategoryDropdown = (category: any) => {
+    const categoryDrills = getFilteredDrills(category.id);
+    const isExpanded = expandedCategories[category.id];
+    const Icon = category.icon;
+
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
+      <div key={category.id} className="mb-6">
+        <Collapsible
+          open={isExpanded}
+          onOpenChange={() => toggleCategory(category.id)}
+        >
+          <CollapsibleTrigger asChild>
+            <Button
+              variant="ghost"
+              className="w-full justify-between p-6 h-auto hover:bg-gray-50 border border-gray-200 rounded-lg"
+            >
+              <div className="flex items-center gap-4">
+                <div className={`p-3 rounded-lg ${category.color}`}>
+                  <Icon className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-left">
+                  <h3 className="text-xl font-bold text-gray-800">{category.name}</h3>
+                  <p className="text-sm text-gray-600 mt-1">{category.description}</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {categoryDrills.length} drill{categoryDrills.length !== 1 ? 's' : ''}
+                  </p>
+                </div>
+              </div>
+              {isExpanded ? (
+                <ChevronDown className="w-5 h-5 text-gray-500" />
+              ) : (
+                <ChevronRight className="w-5 h-5 text-gray-500" />
+              )}
+            </Button>
+          </CollapsibleTrigger>
+          
+          <CollapsibleContent className="mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pl-4">
+              {categoryDrills.map((drill, index) => renderDrillCard(drill, index))}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       </div>
     );
+  };
+
+  if (loading) {
+    return <div className="flex justify-center items-center h-64">Loading drills...</div>;
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Drill Library</h2>
-          <p className="text-gray-600">Discover and practice basketball drills organized by skill type</p>
+          <h2 className="text-3xl font-bold text-gray-800">Drill Library</h2>
+          <p className="text-gray-600 mt-1">Choose from our collection of basketball drills</p>
         </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-gray-600">
-            {drills.length} total drills
-          </Badge>
-          <Dialog open={showCustomDrillDialog} onOpenChange={setShowCustomDrillDialog}>
-            <DialogTrigger asChild>
-              <Button className="bg-orange-600 hover:bg-orange-700">
-                <Plus className="h-4 w-4 mr-2" />
-                Create Custom Drill
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Create Custom Drill</DialogTitle>
-                <DialogDescription>
-                  Design your own basketball drill with custom instructions and requirements
-                </DialogDescription>
-              </DialogHeader>
-              
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Drill Name *</label>
-                    <Input
-                      placeholder="Enter drill name"
-                      value={customDrill.name}
-                      onChange={(e) => setCustomDrill({ ...customDrill, name: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Duration (minutes)</label>
-                    <Input
-                      type="number"
-                      placeholder="15"
-                      value={customDrill.duration}
-                      onChange={(e) => setCustomDrill({ ...customDrill, duration: e.target.value })}
-                    />
-                  </div>
-                </div>
-
+        <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
+          <DialogTrigger asChild>
+            <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+              <Plus className="w-4 h-4 mr-2" />
+              Create Custom Drill
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Create Custom Drill</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Description *</label>
-                  <Textarea
-                    placeholder="Describe what this drill is about and its purpose"
-                    value={customDrill.description}
-                    onChange={(e) => setCustomDrill({ ...customDrill, description: e.target.value })}
-                    rows={3}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Category *</label>
-                    <Select
-                      value={customDrill.category}
-                      onValueChange={(value) => setCustomDrill({ ...customDrill, category: value })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Object.entries(SKILL_CATEGORIES).map(([key, category]) => (
-                          <SelectItem key={key} value={key}>{category.name}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Skill Level *</label>
-                    <Select
-                      value={customDrill.skillLevel}
-                      onValueChange={(value) => setCustomDrill({ ...customDrill, skillLevel: value })}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select skill level" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="beginner">Beginner</SelectItem>
-                        <SelectItem value="intermediate">Intermediate</SelectItem>
-                        <SelectItem value="advanced">Advanced</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1">Equipment</label>
+                  <Label htmlFor="name">Drill Name *</Label>
                   <Input
-                    placeholder="Basketball, cones, ladder (separate with commas)"
-                    value={customDrill.equipment}
-                    onChange={(e) => setCustomDrill({ ...customDrill, equipment: e.target.value })}
+                    id="name"
+                    value={customDrill.name}
+                    onChange={(e) => setCustomDrill({...customDrill, name: e.target.value})}
+                    placeholder="Enter drill name"
                   />
                 </div>
-
                 <div>
-                  <label className="block text-sm font-medium mb-1">Step-by-Step Instructions</label>
-                  <Textarea
-                    placeholder="1. Start in athletic stance&#10;2. Dribble with right hand&#10;3. Switch to left hand&#10;(each line will be a separate step)"
-                    value={customDrill.stepByStep}
-                    onChange={(e) => setCustomDrill({ ...customDrill, stepByStep: e.target.value })}
-                    rows={4}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1">Coaching Tips</label>
-                  <Textarea
-                    placeholder="Keep your head up&#10;Focus on ball control&#10;Maintain proper form&#10;(each line will be a separate tip)"
-                    value={customDrill.coachingTips}
-                    onChange={(e) => setCustomDrill({ ...customDrill, coachingTips: e.target.value })}
-                    rows={3}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1">Video URL (optional)</label>
-                  <Input
-                    placeholder="https://youtube.com/watch?v=..."
-                    value={customDrill.videoUrl}
-                    onChange={(e) => setCustomDrill({ ...customDrill, videoUrl: e.target.value })}
-                  />
-                </div>
-
-                <div className="flex justify-end gap-2 pt-4">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowCustomDrillDialog(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={handleCreateCustomDrill}
-                    disabled={creatingDrill}
-                    className="bg-orange-600 hover:bg-orange-700"
-                  >
-                    {creatingDrill ? 'Creating...' : 'Create Drill'}
-                  </Button>
+                  <Label htmlFor="category">Category *</Label>
+                  <Select value={customDrill.category} onValueChange={(value) => setCustomDrill({...customDrill, category: value})}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SKILL_CATEGORIES.map(cat => (
+                        <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+              
+              <div>
+                <Label htmlFor="description">Description *</Label>
+                <Textarea
+                  id="description"
+                  value={customDrill.description}
+                  onChange={(e) => setCustomDrill({...customDrill, description: e.target.value})}
+                  placeholder="Describe what this drill teaches"
+                  rows={3}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="skillLevel">Skill Level *</Label>
+                  <Select value={customDrill.skillLevel} onValueChange={(value) => setCustomDrill({...customDrill, skillLevel: value})}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select skill level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Beginner">Beginner</SelectItem>
+                      <SelectItem value="Intermediate">Intermediate</SelectItem>
+                      <SelectItem value="Advanced">Advanced</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="duration">Duration (minutes)</Label>
+                  <Input
+                    id="duration"
+                    type="number"
+                    value={customDrill.duration}
+                    onChange={(e) => setCustomDrill({...customDrill, duration: parseInt(e.target.value) || 15})}
+                    placeholder="15"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="equipment">Equipment (comma-separated)</Label>
+                <Input
+                  id="equipment"
+                  value={customDrill.equipment}
+                  onChange={(e) => setCustomDrill({...customDrill, equipment: e.target.value})}
+                  placeholder="Basketball, Cones, etc."
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="stepByStep">Step-by-Step Instructions</Label>
+                <Textarea
+                  id="stepByStep"
+                  value={customDrill.stepByStep}
+                  onChange={(e) => setCustomDrill({...customDrill, stepByStep: e.target.value})}
+                  placeholder="Enter each step on a new line"
+                  rows={4}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="coachingTips">Coaching Tips</Label>
+                <Textarea
+                  id="coachingTips"
+                  value={customDrill.coachingTips}
+                  onChange={(e) => setCustomDrill({...customDrill, coachingTips: e.target.value})}
+                  placeholder="Enter each tip on a new line"
+                  rows={3}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="videoUrl">Video URL (optional)</Label>
+                <Input
+                  id="videoUrl"
+                  value={customDrill.videoUrl}
+                  onChange={(e) => setCustomDrill({...customDrill, videoUrl: e.target.value})}
+                  placeholder="https://youtube.com/..."
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4">
+                <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={handleCreateDrill} disabled={isCreating}>
+                  {isCreating ? 'Creating...' : 'Create Drill'}
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
-      {/* Search and Filters */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5" />
-            Search & Filter
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search drills..."
-                value={filters.searchTerm}
-                onChange={(e) => setFilters({ ...filters, searchTerm: e.target.value })}
-                className="pl-10"
-              />
-            </div>
-
-            <Select
-              value={filters.skillLevel}
-              onValueChange={(value) => setFilters({ ...filters, skillLevel: value === 'all' ? undefined : value as SkillLevel })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Skill Level" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Levels</SelectItem>
-                <SelectItem value="beginner">Beginner</SelectItem>
-                <SelectItem value="intermediate">Intermediate</SelectItem>
-                <SelectItem value="advanced">Advanced</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select
-              value={filters.duration}
-              onValueChange={(value) => setFilters({ ...filters, duration: value === 'all' ? undefined : value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Duration" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Durations</SelectItem>
-                <SelectItem value="5">5 minutes</SelectItem>
-                <SelectItem value="10">10 minutes</SelectItem>
-                <SelectItem value="15">15 minutes</SelectItem>
-                <SelectItem value="20">20+ minutes</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Button 
-              variant="outline" 
-              onClick={() => setFilters({ category: undefined, skillLevel: undefined, searchTerm: '', duration: undefined })}
-            >
-              Clear Filters
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Skill Categories Tabs */}
-      <Tabs value={activeCategory} onValueChange={setActiveCategory} className="w-full">
-        <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8">
-          <TabsTrigger value="all">All Skills</TabsTrigger>
-          {Object.entries(SKILL_CATEGORIES).map(([key, category]) => (
-            <TabsTrigger key={key} value={key} className="flex items-center gap-1">
-              <category.icon className="h-4 w-4" />
-              <span className="hidden sm:inline">{category.name.split(' ')[0]}</span>
+      {/* Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-8 bg-gray-100">
+          <TabsTrigger value="all" className="text-sm">All Skills</TabsTrigger>
+          {SKILL_CATEGORIES.map(category => (
+            <TabsTrigger key={category.id} value={category.id} className="text-sm">
+              {category.name.split(' ')[0]}
             </TabsTrigger>
           ))}
         </TabsList>
 
-        <TabsContent value="all" className="space-y-8">
-          {/* Show all categories */}
-          {Object.entries(SKILL_CATEGORIES).map(([categoryKey, category]) => {
-            const categoryDrills = getDrillsByCategory(categoryKey);
-            if (categoryDrills.length === 0) return null;
-
-            return (
-              <div key={categoryKey} className="space-y-4">
-                <Card className={`${category.bgColor} ${category.borderColor} border-2`}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-full ${category.color}`}>
-                        <category.icon className="h-6 w-6" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-xl">{category.name}</CardTitle>
-                        <CardDescription className="text-gray-600">
-                          {category.description} • {categoryDrills.length} drills
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                </Card>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {categoryDrills.slice(0, 6).map((drill, index) => renderDrillCard(drill, index))}
-                </div>
-                
-                {categoryDrills.length > 6 && (
-                  <div className="text-center">
-                    <Button 
-                      variant="outline" 
-                      onClick={() => setActiveCategory(categoryKey)}
-                      className="mt-4"
-                    >
-                      View All {category.name} Drills ({categoryDrills.length})
-                    </Button>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+        {/* All Skills Tab */}
+        <TabsContent value="all" className="space-y-6">
+          {SKILL_CATEGORIES.map(category => renderCategoryDropdown(category))}
         </TabsContent>
 
-        {/* Individual category tabs */}
-        {Object.entries(SKILL_CATEGORIES).map(([categoryKey, category]) => (
-          <TabsContent key={categoryKey} value={categoryKey} className="space-y-6">
-            <Card className={`${category.bgColor} ${category.borderColor} border-2`}>
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <div className={`p-3 rounded-full ${category.color}`}>
-                    <category.icon className="h-8 w-8" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-2xl">{category.name}</CardTitle>
-                    <CardDescription className="text-gray-600 text-lg">
-                      {category.description}
-                    </CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-            </Card>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredDrills.map((drill, index) => renderDrillCard(drill, index))}
-            </div>
-
-            {filteredDrills.length === 0 && (
-              <Card>
-                <CardContent className="text-center py-8">
-                  <div className="text-gray-500">
-                    <category.icon className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No drills found for the current filters.</p>
-                    <p className="text-sm mt-2">Try adjusting your search criteria.</p>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+        {/* Individual Category Tabs */}
+        {SKILL_CATEGORIES.map(category => (
+          <TabsContent key={category.id} value={category.id} className="space-y-6">
+            {renderCategoryDropdown(category)}
           </TabsContent>
         ))}
       </Tabs>
 
+      {/* Drill Details Dialog */}
+      <Dialog open={!!selectedDrill} onOpenChange={() => setSelectedDrill(null)}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          {selectedDrill && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold">{selectedDrill.name}</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-6">
+                <div className="flex gap-2">
+                  <Badge variant="secondary">{selectedDrill.skillLevel}</Badge>
+                  <Badge variant="outline">{selectedDrill.category}</Badge>
+                  {selectedDrill.isCustom && (
+                    <Badge variant="outline" className="bg-purple-100 text-purple-700">Custom</Badge>
+                  )}
+                </div>
 
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">Description</h3>
+                  <p className="text-gray-700">{selectedDrill.description}</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-medium mb-1">Duration</h4>
+                    <p className="text-gray-600">{selectedDrill.duration} minutes</p>
+                  </div>
+                  {selectedDrill.equipment && selectedDrill.equipment.length > 0 && (
+                    <div>
+                      <h4 className="font-medium mb-1">Equipment</h4>
+                      <p className="text-gray-600">{selectedDrill.equipment.join(', ')}</p>
+                    </div>
+                  )}
+                </div>
+
+                {selectedDrill.stepByStep && selectedDrill.stepByStep.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">Instructions</h3>
+                    <ol className="list-decimal list-inside space-y-1">
+                      {selectedDrill.stepByStep.map((instruction: string, index: number) => (
+                        <li key={index} className="text-gray-700">{instruction}</li>
+                      ))}
+                    </ol>
+                  </div>
+                )}
+
+                {selectedDrill.coachingTips && selectedDrill.coachingTips.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">Coaching Tips</h3>
+                    <ul className="list-disc list-inside space-y-1">
+                      {selectedDrill.coachingTips.map((tip: string, index: number) => (
+                        <li key={index} className="text-gray-700">{tip}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {selectedDrill.videoUrl && (
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">Video</h3>
+                    <a 
+                      href={selectedDrill.videoUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      Watch Video
+                    </a>
+                  </div>
+                )}
+
+                {/* Media Upload Section */}
+                <div className="border-t pt-4">
+                  <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                    <Upload className="w-5 h-5" />
+                    Upload Media
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                      <input
+                        type="file"
+                        accept="image/*,video/*"
+                        onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
+                        className="hidden"
+                        id="media-upload"
+                      />
+                      <label htmlFor="media-upload" className="cursor-pointer">
+                        <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                        <p className="text-gray-600">Click to upload images or videos</p>
+                      </label>
+                    </div>
+                    {uploadFile && (
+                      <div className="flex items-center justify-between bg-gray-50 p-3 rounded">
+                        <span className="text-sm">{uploadFile.name}</span>
+                        <Button size="sm">Upload</Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Comments Section */}
+                <div className="border-t pt-4">
+                  <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5" />
+                    Comments
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                        <User className="w-4 h-4" />
+                      </div>
+                      <div className="flex-1">
+                        <Textarea
+                          placeholder="Add a comment..."
+                          value={newComment}
+                          onChange={(e) => setNewComment(e.target.value)}
+                          rows={3}
+                        />
+                        <Button size="sm" className="mt-2">
+                          Post Comment
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    {comments.map((comment, index) => (
+                      <div key={index} className="flex gap-3 bg-gray-50 p-3 rounded">
+                        <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                          <User className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-sm">{comment.author}</p>
+                          <p className="text-gray-700 text-sm">{comment.content}</p>
+                          <p className="text-xs text-gray-500 mt-1">{comment.createdAt}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
