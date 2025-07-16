@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Saira } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/providers/providers'
 
-const inter = Inter({ subsets: ['latin'] })
+const saira = Saira({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'HoopsQuest - Basketball Training for Kids',
@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={saira.className}>
         <Providers>
           {children}
         </Providers>
