@@ -39,7 +39,6 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Drill, DrillFilters, SkillLevel } from '@/lib/types';
-import MediaUpload from '@/components/media/media-upload';
 
 // Category configuration with icons and descriptions
 const SKILL_CATEGORIES = {
@@ -107,9 +106,7 @@ export default function DrillLibrary() {
   const [loading, setLoading] = useState(true);
   const [selectedDrill, setSelectedDrill] = useState<Drill | null>(null);
   const [showDrillDialog, setShowDrillDialog] = useState(false);
-  const [uploadDrill, setUploadDrill] = useState<Drill | null>(null);
-  const [showUploadDialog, setShowUploadDialog] = useState(false);
-  const [uploading, setUploading] = useState(false);
+
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState('');
@@ -240,48 +237,7 @@ export default function DrillLibrary() {
     }
   };
 
-  const handleUploadMedia = (drill: Drill) => {
-    setUploadDrill(drill);
-    setShowUploadDialog(true);
-  };
 
-  const handleMediaUpload = async (files: any[]) => {
-    if (!uploadDrill) return;
-
-    setUploading(true);
-    try {
-      const uploadPromises = files.map(async (fileUpload) => {
-        const formData = new FormData();
-        formData.append('file', fileUpload.file);
-        formData.append('drillId', uploadDrill.id);
-
-        const response = await fetch('/api/media/upload', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!response.ok) {
-          throw new Error('Upload failed');
-        }
-
-        return response.json();
-      });
-
-      await Promise.all(uploadPromises);
-      
-      // Close dialog after successful upload
-      setShowUploadDialog(false);
-      setUploadDrill(null);
-      
-      // Show success message
-      console.log('Media uploaded successfully');
-
-    } catch (error) {
-      console.error('Error uploading media:', error);
-    } finally {
-      setUploading(false);
-    }
-  };
 
   const fetchComments = async (drillId: string) => {
     try {
@@ -408,60 +364,81 @@ export default function DrillLibrary() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: index * 0.1 }}
     >
-      <Card className="border-orange-100 hover:shadow-lg transition-all duration-300 h-full">
-        <CardHeader className="pb-3">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <CardTitle className="text-lg line-clamp-2">{drill.name}</CardTitle>
-              <CardDescription className="line-clamp-2 mt-1">
-                {drill.description}
-              </CardDescription>
+      <Card className="group border-orange-100 hover:border-orange-200 hover:shadow-xl transition-all duration-300 h-full bg-gradient-to-br from-white to-orange-50/30">
+        <CardHeader className="pb-4 relative">
+          {/* Header with badges */}
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Badge className={getCategoryColor(drill.category)}>
+                {drill.category}
+              </Badge>
+              <Badge className={getSkillLevelColor(drill.skillLevel)}>
+                {drill.skillLevel}
+              </Badge>
+              {(drill as any).isCustom && (
+                <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200">
+                  <Star className="h-3 w-3 mr-1" />
+                  Custom
+                </Badge>
+              )}
             </div>
-            <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 ml-3">
-              <Play className="h-6 w-6 text-orange-600" />
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+              <Play className="h-5 w-5 text-orange-600" />
             </div>
+          </div>
+          
+          {/* Title and description */}
+          <div>
+            <CardTitle className="text-lg font-bold line-clamp-2 text-gray-900 mb-2">
+              {drill.name}
+            </CardTitle>
+            <CardDescription className="line-clamp-3 text-gray-600 text-sm leading-relaxed">
+              {drill.description}
+            </CardDescription>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-2 flex-wrap">
-            <Badge className={getCategoryColor(drill.category)}>
-              {drill.category}
-            </Badge>
-            <Badge className={getSkillLevelColor(drill.skillLevel)}>
-              {drill.skillLevel}
-            </Badge>
-            {(drill as any).isCustom && (
-              <Badge variant="secondary" className="bg-purple-100 text-purple-800">
-                Custom
-              </Badge>
-            )}
+        
+        <CardContent className="pt-0">
+          {/* Stats section */}
+          <div className="bg-gray-50/50 rounded-lg p-3 mb-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Clock className="h-4 w-4 text-blue-600" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 uppercase tracking-wide">Duration</p>
+                  <p className="text-sm font-semibold text-gray-900">{drill.duration}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                  <Target className="h-4 w-4 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 uppercase tracking-wide">Equipment</p>
+                  <p className="text-sm font-semibold text-gray-900">{drill.equipment.length} items</p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Clock className="h-4 w-4" />
-              <span>{drill.duration}</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Target className="h-4 w-4" />
-              <span>{drill.equipment.length} equipment needed</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 pt-2">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="flex-1"
-                  onClick={() => setSelectedDrill(drill)}
-                >
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  View Details
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          {/* Action button */}
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button 
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium py-2.5 rounded-lg transition-all duration-300 group-hover:shadow-lg"
+                onClick={() => {
+                  setSelectedDrill(drill);
+                  fetchComments(drill.id);
+                  fetchMediaUploads(drill.id);
+                }}
+              >
+                <BookOpen className="h-4 w-4 mr-2" />
+                View Details & Start Drill
+              </Button>
+            </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
                     <Play className="h-5 w-5 text-orange-600" />
@@ -481,16 +458,21 @@ export default function DrillLibrary() {
                       <Badge className={getSkillLevelColor(selectedDrill.skillLevel)}>
                         {selectedDrill.skillLevel}
                       </Badge>
+                      {(selectedDrill as any).isCustom && (
+                        <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+                          Custom
+                        </Badge>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <Clock className="h-4 w-4" />
-                        <span>{selectedDrill.duration}</span>
+                        <span>{selectedDrill.duration} minutes</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-gray-600">
                         <Users className="h-4 w-4" />
-                        <span>{selectedDrill.equipment.length} equipment</span>
+                        <span>{selectedDrill.equipment.length} equipment needed</span>
                       </div>
                     </div>
 
@@ -543,6 +525,149 @@ export default function DrillLibrary() {
                       </div>
                     )}
 
+                    {/* Media Upload Section */}
+                    <div className="border-t pt-6">
+                      <h4 className="font-semibold mb-4 flex items-center gap-2">
+                        <Upload className="h-5 w-5" />
+                        Upload Videos & Images
+                      </h4>
+                      
+                      <div className="space-y-4">
+                        {/* File Upload Area */}
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                          <input
+                            type="file"
+                            id="media-upload"
+                            multiple
+                            accept="video/*,image/*"
+                            onChange={(e) => {
+                              const files = Array.from(e.target.files || []);
+                              files.forEach(file => handleFileUpload(file));
+                            }}
+                            className="hidden"
+                          />
+                          <label
+                            htmlFor="media-upload"
+                            className="cursor-pointer flex flex-col items-center gap-2"
+                          >
+                            <div className="p-3 bg-gray-100 rounded-full">
+                              <Upload className="h-6 w-6 text-gray-600" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-gray-700">
+                                Click to upload or drag and drop
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                Videos (MP4, MOV) and Images (PNG, JPG, GIF)
+                              </p>
+                            </div>
+                          </label>
+                        </div>
+
+                        {/* Uploaded Media Display */}
+                        {mediaUploads.length > 0 && (
+                          <div>
+                            <h5 className="font-medium mb-2">Uploaded Media:</h5>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                              {mediaUploads.map((media, index) => (
+                                <div key={index} className="relative group">
+                                  {media.type === 'video' ? (
+                                    <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
+                                      <Video className="h-8 w-8 text-gray-400" />
+                                    </div>
+                                  ) : (
+                                    <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
+                                      <Image className="h-8 w-8 text-gray-400" />
+                                    </div>
+                                  )}
+                                  <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-2 rounded-b-lg">
+                                    {media.filename}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {uploadingMedia && (
+                          <div className="text-center py-4">
+                            <div className="inline-flex items-center gap-2 text-sm text-gray-600">
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-600"></div>
+                              Uploading media...
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Comments Section */}
+                    <div className="border-t pt-6">
+                      <h4 className="font-semibold mb-4 flex items-center gap-2">
+                        <MessageCircle className="h-5 w-5" />
+                        Comments & Discussion
+                      </h4>
+                      
+                      {/* Add Comment */}
+                      <div className="mb-4">
+                        <div className="flex gap-2">
+                          <Textarea
+                            placeholder="Add a comment, ask a question, or share your experience with this drill..."
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            rows={3}
+                            className="flex-1"
+                          />
+                          <Button
+                            onClick={handleAddComment}
+                            disabled={!newComment.trim()}
+                            className="self-end"
+                          >
+                            <Send className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Comments List */}
+                      <ScrollArea className="h-64 pr-4">
+                        {comments.length === 0 ? (
+                          <div className="text-center py-8 text-gray-500">
+                            <MessageCircle className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                            <p>No comments yet. Be the first to share your thoughts!</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            {comments.map((comment, index) => (
+                              <div key={index} className="bg-gray-50 rounded-lg p-4">
+                                <div className="flex items-start justify-between mb-2">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                                      <span className="text-sm font-medium text-orange-600">
+                                        {comment.user?.name?.charAt(0) || 'U'}
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <p className="text-sm font-medium">{comment.user?.name || 'Anonymous'}</p>
+                                      <p className="text-xs text-gray-500">
+                                        {comment.user?.role && (
+                                          <Badge variant="outline" className="mr-2 text-xs">
+                                            {comment.user.role}
+                                          </Badge>
+                                        )}
+                                        {new Date(comment.createdAt).toLocaleDateString()}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                                  {comment.content}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </ScrollArea>
+                    </div>
+
                     <div className="flex gap-2 pt-4">
                       <Button 
                         onClick={() => addToSchedule(selectedDrill.id)}
@@ -551,28 +676,11 @@ export default function DrillLibrary() {
                         <Plus className="h-4 w-4 mr-2" />
                         Add to Schedule
                       </Button>
-                      <Button 
-                        variant="outline"
-                        onClick={() => handleUploadMedia(selectedDrill)}
-                        className="flex-1"
-                      >
-                        <Upload className="h-4 w-4 mr-2" />
-                        Upload Media
-                      </Button>
                     </div>
                   </div>
                 )}
               </DialogContent>
             </Dialog>
-
-            <Button 
-              size="sm" 
-              onClick={() => addToSchedule(drill.id)}
-              className="bg-orange-600 hover:bg-orange-700"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
         </CardContent>
       </Card>
     </motion.div>
@@ -893,24 +1001,7 @@ export default function DrillLibrary() {
         ))}
       </Tabs>
 
-      {/* Upload Dialog */}
-      <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Upload Media for {uploadDrill?.name}</DialogTitle>
-            <DialogDescription>
-              Upload videos or images to demonstrate this drill
-            </DialogDescription>
-          </DialogHeader>
-          
-          <MediaUpload
-            onUpload={handleMediaUpload}
-            disabled={uploading}
-            acceptedTypes={['video/*', 'image/*']}
-            maxFiles={5}
-          />
-        </DialogContent>
-      </Dialog>
+
     </div>
   );
 }
