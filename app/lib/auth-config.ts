@@ -57,7 +57,7 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   session: {
-    strategy: 'jwt' as const
+    strategy: 'database' as const
   },
   callbacks: {
     async jwt({ token, user }: any) {

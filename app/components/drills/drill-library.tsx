@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -23,7 +24,7 @@ import {
   Plus,
   ChevronDown,
   ChevronRight,
-  Clock,
+  Clock, 
   Trophy,
   Calendar,
   Play,
@@ -162,7 +163,7 @@ export default function DrillLibrary() {
       if (response.ok) {
         const data = await response.json();
         setMedia(data);
-      }
+    }
     } catch (error) {
       console.error('Error fetching media:', error);
       setMedia([]);
@@ -408,25 +409,25 @@ export default function DrillLibrary() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="name">Drill Name *</Label>
-                  <Input
+              <Input
                     id="name"
                     value={customDrill.name}
                     onChange={(e) => setCustomDrill({...customDrill, name: e.target.value})}
                     placeholder="Enter drill name"
-                  />
-                </div>
+              />
+            </div>
                 <div>
                   <Label htmlFor="category">Category *</Label>
                   <Select value={customDrill.category} onValueChange={(value) => setCustomDrill({...customDrill, category: value})}>
-                    <SelectTrigger>
+              <SelectTrigger>
                       <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
+              </SelectTrigger>
+              <SelectContent>
                       {SKILL_CATEGORIES.map(cat => (
                         <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
                       ))}
-                    </SelectContent>
-                  </Select>
+              </SelectContent>
+            </Select>
                 </div>
               </div>
               
@@ -445,16 +446,16 @@ export default function DrillLibrary() {
                 <div>
                   <Label htmlFor="skillLevel">Skill Level *</Label>
                   <Select value={customDrill.skillLevel} onValueChange={(value) => setCustomDrill({...customDrill, skillLevel: value})}>
-                    <SelectTrigger>
+              <SelectTrigger>
                       <SelectValue placeholder="Select skill level" />
-                    </SelectTrigger>
-                    <SelectContent>
+              </SelectTrigger>
+              <SelectContent>
                       <SelectItem value="Beginner">Beginner</SelectItem>
                       <SelectItem value="Intermediate">Intermediate</SelectItem>
                       <SelectItem value="Advanced">Advanced</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              </SelectContent>
+            </Select>
+          </div>
                 <div>
                   <Label htmlFor="duration">Duration (minutes)</Label>
                   <Input
@@ -517,10 +518,10 @@ export default function DrillLibrary() {
                   {isCreating ? 'Creating...' : 'Create Drill'}
                 </Button>
               </div>
-            </div>
+                  </div>
           </DialogContent>
         </Dialog>
-      </div>
+                  </div>
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -577,45 +578,45 @@ export default function DrillLibrary() {
                     <div>
                       <h4 className="font-medium mb-1">Equipment</h4>
                       <p className="text-gray-600">{selectedDrill.equipment.join(', ')}</p>
-                    </div>
+                  </div>
                   )}
                 </div>
 
                 {selectedDrill.stepByStep && selectedDrill.stepByStep.length > 0 && (
-                  <div>
+                          <div>
                     <h3 className="font-semibold text-lg mb-2">Instructions</h3>
                     <ol className="list-decimal list-inside space-y-1">
                       {selectedDrill.stepByStep.map((instruction: string, index: number) => (
                         <li key={index} className="text-gray-700">{instruction}</li>
-                      ))}
-                    </ol>
-                  </div>
+                              ))}
+                            </ol>
+                          </div>
                 )}
 
                 {selectedDrill.coachingTips && selectedDrill.coachingTips.length > 0 && (
-                  <div>
+                          <div>
                     <h3 className="font-semibold text-lg mb-2">Coaching Tips</h3>
                     <ul className="list-disc list-inside space-y-1">
                       {selectedDrill.coachingTips.map((tip: string, index: number) => (
                         <li key={index} className="text-gray-700">{tip}</li>
-                      ))}
-                    </ul>
-                  </div>
+                              ))}
+                            </ul>
+                          </div>
                 )}
 
-                {selectedDrill.videoUrl && (
-                  <div>
+                          {selectedDrill.videoUrl && (
+                            <div>
                     <h3 className="font-semibold text-lg mb-2">Video</h3>
-                    <a 
-                      href={selectedDrill.videoUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                                <a 
+                                  href={selectedDrill.videoUrl} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
                       className="text-blue-600 hover:underline"
-                    >
+                                >
                       Watch Video
-                    </a>
-                  </div>
-                )}
+                                </a>
+                            </div>
+                          )}
 
                 {/* Media Upload Section */}
                 <div className="border-t pt-4">
@@ -636,13 +637,13 @@ export default function DrillLibrary() {
                         <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
                         <p className="text-gray-600">Click to upload images or videos</p>
                       </label>
-                    </div>
+                          </div>
                     {uploadFile && (
                       <div className="flex items-center justify-between bg-gray-50 p-3 rounded">
                         <span className="text-sm">{uploadFile.name}</span>
                         <Button size="sm">Upload</Button>
-                      </div>
-                    )}
+                        </div>
+                      )}
                   </div>
                 </div>
 
@@ -652,11 +653,11 @@ export default function DrillLibrary() {
                     <MessageSquare className="w-5 h-5" />
                     Comments
                   </h3>
-                  <div className="space-y-4">
+          <div className="space-y-4">
                     <div className="flex gap-3">
                       <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
                         <User className="w-4 h-4" />
-                      </div>
+              </div>
                       <div className="flex-1">
                         <Textarea
                           placeholder="Add a comment..."
@@ -666,9 +667,9 @@ export default function DrillLibrary() {
                         />
                         <Button size="sm" className="mt-2">
                           Post Comment
-                        </Button>
-                      </div>
-                    </div>
+              </Button>
+            </div>
+          </div>
                     
                     {comments.map((comment, index) => (
                       <div key={index} className="flex gap-3 bg-gray-50 p-3 rounded">
