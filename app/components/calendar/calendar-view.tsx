@@ -266,7 +266,7 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
     const newDate = new Date(currentDate);
     
     if (currentView === 'month') {
-      newDate.setMonth(newDate.getMonth() + direction);
+    newDate.setMonth(newDate.getMonth() + direction);
     } else if (currentView === 'week') {
       newDate.setDate(newDate.getDate() + (direction * 7));
     } else {
@@ -324,9 +324,9 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
       }
       
       return days;
-    };
+  };
 
-    const days = getDaysInMonth(currentDate);
+  const days = getDaysInMonth(currentDate);
 
     return (
       <div className="space-y-4">
@@ -700,28 +700,28 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
 
         {/* Main Calendar Area */}
         <div className="flex-1 space-y-6">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">Practice Calendar</h2>
-              <p className="text-gray-600">Schedule and track your basketball practice sessions</p>
-            </div>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Practice Calendar</h2>
+          <p className="text-gray-600">Schedule and track your basketball practice sessions</p>
+        </div>
             <div className="flex items-center gap-2">
-              <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-                <DialogTrigger asChild>
-                  <Button className="bg-orange-600 hover:bg-orange-700">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Practice
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Schedule New Practice</DialogTitle>
-                    <DialogDescription>
-                      Add a new drill or workout to your practice schedule
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-4">
+        <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+          <DialogTrigger asChild>
+            <Button className="bg-orange-600 hover:bg-orange-700">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Practice
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Schedule New Practice</DialogTitle>
+              <DialogDescription>
+                Add a new drill or workout to your practice schedule
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
                     <Tabs defaultValue="drill">
                       <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="drill">Drill</TabsTrigger>
@@ -729,21 +729,21 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
                       </TabsList>
                       
                       <TabsContent value="drill" className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="drill">Select Drill</Label>
+              <div className="space-y-2">
+                <Label htmlFor="drill">Select Drill</Label>
                           <Select value={newEntry.drillId} onValueChange={(value) => setNewEntry({ ...newEntry, drillId: value, workoutId: '' })}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Choose a drill" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {drills.map(drill => (
-                                <SelectItem key={drill.id} value={drill.id}>
-                                  {drill.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choose a drill" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {drills.map(drill => (
+                      <SelectItem key={drill.id} value={drill.id}>
+                        {drill.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
                       </TabsContent>
                       
                       <TabsContent value="workout" className="space-y-4">
@@ -764,69 +764,69 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
                         </div>
                       </TabsContent>
                     </Tabs>
-                    
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="date">Date</Label>
-                        <Input
-                          id="date"
-                          type="date"
-                          value={newEntry.date}
-                          onChange={(e) => setNewEntry({ ...newEntry, date: e.target.value })}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="time">Time</Label>
-                        <Input
-                          id="time"
-                          type="time"
-                          value={newEntry.startTime}
-                          onChange={(e) => setNewEntry({ ...newEntry, startTime: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="notes">Notes (Optional)</Label>
-                      <Textarea
-                        id="notes"
-                        placeholder="Add any notes about this practice session..."
-                        value={newEntry.notes}
-                        onChange={(e) => setNewEntry({ ...newEntry, notes: e.target.value })}
-                      />
-                    </div>
-                    
-                    <div className="flex items-center gap-2 pt-4">
-                      <Button 
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="date">Date</Label>
+                  <Input
+                    id="date"
+                    type="date"
+                    value={newEntry.date}
+                    onChange={(e) => setNewEntry({ ...newEntry, date: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="time">Time</Label>
+                  <Input
+                    id="time"
+                    type="time"
+                    value={newEntry.startTime}
+                    onChange={(e) => setNewEntry({ ...newEntry, startTime: e.target.value })}
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="notes">Notes (Optional)</Label>
+                <Textarea
+                  id="notes"
+                  placeholder="Add any notes about this practice session..."
+                  value={newEntry.notes}
+                  onChange={(e) => setNewEntry({ ...newEntry, notes: e.target.value })}
+                />
+              </div>
+              
+              <div className="flex items-center gap-2 pt-4">
+                <Button 
                         onClick={() => addScheduleEntry()}
-                        className="flex-1 bg-orange-600 hover:bg-orange-700"
+                  className="flex-1 bg-orange-600 hover:bg-orange-700"
                         disabled={(!newEntry.drillId && !newEntry.workoutId) || !newEntry.date || !newEntry.startTime}
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Schedule Practice
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        onClick={() => setShowAddDialog(false)}
-                        className="flex-1"
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                </DialogContent>
-              </Dialog>
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Schedule Practice
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowAddDialog(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
-          </div>
+          </DialogContent>
+        </Dialog>
+            </div>
+      </div>
 
           {/* Calendar Navigation and View Selector */}
-          <Card className="border-orange-100">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-orange-600" />
+      <Card className="border-orange-100">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5 text-orange-600" />
                   {formatDateHeader()}
-                </CardTitle>
+            </CardTitle>
                 <div className="flex items-center gap-4">
                   {/* View Selector */}
                   <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
@@ -860,30 +860,30 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
                   </div>
                   
                   {/* Navigation */}
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
                       onClick={() => navigateDate(-1)}
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setCurrentDate(new Date())}
-                    >
-                      Today
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentDate(new Date())}
+              >
+                Today
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
                       onClick={() => navigateDate(1)}
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
               </div>
             </CardHeader>
             <CardContent>
@@ -900,52 +900,52 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
                   {currentView === 'day' && renderDayView()}
                 </motion.div>
               </AnimatePresence>
-            </CardContent>
-          </Card>
+        </CardContent>
+      </Card>
 
-          {/* Selected Date Details */}
+      {/* Selected Date Details */}
           {selectedDate && currentView === 'month' && (
-            <Card className="border-orange-100">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-orange-600" />
-                  {selectedDate.toLocaleDateString('default', { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                  })}
-                </CardTitle>
-                <CardDescription>
-                  {getEntriesForDate(selectedDate).length} practice sessions scheduled
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {getEntriesForDate(selectedDate).map(entry => (
-                    <div key={entry.id} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
+        <Card className="border-orange-100">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="h-5 w-5 text-orange-600" />
+              {selectedDate.toLocaleDateString('default', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}
+            </CardTitle>
+            <CardDescription>
+              {getEntriesForDate(selectedDate).length} practice sessions scheduled
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {getEntriesForDate(selectedDate).map(entry => (
+                <div key={entry.id} className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
                           <h4 className="font-medium">{entry.drill?.name || entry.workout?.name || 'Practice'}</h4>
-                          <Badge className={getStatusColor(entry.status)}>
-                            {getStatusIcon(entry.status)}
-                            <span className="ml-1">{entry.status}</span>
-                          </Badge>
-                        </div>
-                        <div className="text-sm text-gray-600 space-y-1">
-                          <div className="flex items-center gap-2">
-                            <Clock className="h-4 w-4" />
-                            <span>{new Date(entry.startTime).toLocaleTimeString([], { 
-                              hour: '2-digit', 
-                              minute: '2-digit' 
-                            })}</span>
-                          </div>
-                          {entry.notes && (
-                            <div className="text-gray-700 mt-2">{entry.notes}</div>
-                          )}
-                        </div>
-                      </div>
+                      <Badge className={getStatusColor(entry.status)}>
+                        {getStatusIcon(entry.status)}
+                        <span className="ml-1">{entry.status}</span>
+                      </Badge>
+                    </div>
+                    <div className="text-sm text-gray-600 space-y-1">
                       <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4" />
+                        <span>{new Date(entry.startTime).toLocaleTimeString([], { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
+                        })}</span>
+                      </div>
+                      {entry.notes && (
+                        <div className="text-gray-700 mt-2">{entry.notes}</div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
                         <Button
                           variant="outline"
                           size="sm"
@@ -956,25 +956,25 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
                         </Button>
                         <Button
                           variant="outline"
-                          size="sm"
-                          onClick={() => deleteScheduleEntry(entry.id)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                  {getEntriesForDate(selectedDate).length === 0 && (
+                      size="sm"
+                      onClick={() => deleteScheduleEntry(entry.id)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+              {getEntriesForDate(selectedDate).length === 0 && (
                     <div className="text-center text-gray-500 py-8">
                       <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
                       <p>No practices scheduled for this day</p>
-                    </div>
-                  )}
                 </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+    </div>
       </div>
     </DragDropContext>
   );

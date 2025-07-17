@@ -89,7 +89,7 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
   };
 
   const currentLevel = user.playerProfile?.currentLevel || 'rookie';
-  const levelData = levelInfo[currentLevel as keyof typeof levelInfo];
+  const levelData = levelInfo[currentLevel as keyof typeof levelInfo] || levelInfo.rookie;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-blue-50">
