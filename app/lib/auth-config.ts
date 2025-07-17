@@ -4,6 +4,10 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/lib/db';
 import bcrypt from 'bcryptjs';
 import { NextAuthOptions } from 'next-auth';
+import { getEnvConfig } from './env-validation';
+import { validatePassword, isCommonWeakPassword } from './password-validation';
+
+const env = getEnvConfig();
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -16,12 +20,18 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          return null;
+          throw new Error('Email and password are required');
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(credentials.email)) {
+          throw new Error('Invalid email format');
         }
 
         const user = await prisma.user.findUnique({
           where: {
-            email: credentials.email
+            email: credentials.email.toLowerCase()
           },
           include: {
             playerProfile: true,
@@ -31,7 +41,7 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user?.password) {
-          return null;
+          throw new Error('Invalid credentials');
         }
 
         const isPasswordValid = await bcrypt.compare(
@@ -40,8 +50,13 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!isPasswordValid) {
-          return null;
+          throw new Error('Invalid credentials');
         }
+
+        // Check if account is locked (you can extend this with a lockout system)
+        // if (user.lockedUntil && user.lockedUntil > new Date()) {
+        //   throw new Error('Account is temporarily locked');
+        // }
 
         return {
           id: user.id,
@@ -51,16 +66,49 @@ export const authOptions: NextAuthOptions = {
           parentId: user.parentId,
           playerProfile: user.playerProfile,
           children: user.children,
-          parent: user.parent
+          parent: user.parent,
+          lastLogin: new Date()
         } as any;
       }
     })
   ],
   session: {
-    strategy: 'jwt' as const
+    strategy: 'jwt' as const,
+    maxAge: env.SESSION_TIMEOUT_MINUTES * 60, // Convert minutes to seconds
+    updateAge: 24 * 60 * 60, // Update session every 24 hours
+  },
+  cookies: {
+    sessionToken: {
+      name: `__Secure-next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'strict',
+        path: '/',
+        secure: env.NODE_ENV === 'production',
+        maxAge: env.SESSION_TIMEOUT_MINUTES * 60,
+      },
+    },
+    callbackUrl: {
+      name: `__Secure-next-auth.callback-url`,
+      options: {
+        httpOnly: true,
+        sameSite: 'strict',
+        path: '/',
+        secure: env.NODE_ENV === 'production',
+      },
+    },
+    csrfToken: {
+      name: `__Host-next-auth.csrf-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'strict',
+        path: '/',
+        secure: env.NODE_ENV === 'production',
+      },
+    },
   },
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user, trigger, session }: any) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
@@ -68,7 +116,20 @@ export const authOptions: NextAuthOptions = {
         token.playerProfile = user.playerProfile;
         token.children = user.children;
         token.parent = user.parent;
+        token.lastLogin = user.lastLogin;
+        token.iat = Math.floor(Date.now() / 1000);
       }
+
+      // Check if session is expired
+      if (token.iat && Date.now() - token.iat * 1000 > env.SESSION_TIMEOUT_MINUTES * 60 * 1000) {
+        return null; // Force logout
+      }
+
+      // Update last activity
+      if (trigger === 'update') {
+        token.lastActivity = Math.floor(Date.now() / 1000);
+      }
+
       return token;
     },
     async session({ session, token }: any) {
@@ -79,11 +140,34 @@ export const authOptions: NextAuthOptions = {
         session.user.playerProfile = token.playerProfile;
         session.user.children = token.children;
         session.user.parent = token.parent;
+        session.user.lastLogin = token.lastLogin;
+        session.user.lastActivity = token.lastActivity;
       }
       return session;
-    }
+    },
+    async signIn({ user, account, profile, email, credentials }) {
+      // Additional sign-in validation can be added here
+      return true;
+    },
   },
   pages: {
-    signIn: '/auth/signin'
-  }
+    signIn: '/auth/signin',
+    error: '/auth/error',
+  },
+  events: {
+    async signIn({ user, account, profile, isNewUser }) {
+      // Log successful sign-in
+      if (env.ENABLE_SECURITY_LOGGING) {
+        console.log(`User signed in: ${user.email} at ${new Date().toISOString()}`);
+      }
+    },
+    async signOut({ session, token }) {
+      // Log sign-out
+      if (env.ENABLE_SECURITY_LOGGING) {
+        console.log(`User signed out: ${session?.user?.email} at ${new Date().toISOString()}`);
+      }
+    },
+  },
+  debug: env.NODE_ENV === 'development',
+  secret: env.NEXTAUTH_SECRET,
 };
