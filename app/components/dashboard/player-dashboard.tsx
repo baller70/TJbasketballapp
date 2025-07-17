@@ -32,6 +32,7 @@ import WorkoutBuilder from '@/components/workout/workout-builder';
 import AchievementsView from '@/components/achievements/achievements-view';
 import AIChat from '@/components/ai/ai-chat';
 import DailyInspiration from '@/components/daily-inspiration/daily-inspiration';
+import RewardSystem from '@/components/rewards/reward-system';
 
 interface PlayerDashboardProps {
   user: User & { playerProfile: PlayerProfile };
@@ -151,7 +152,7 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
               <Play className="h-4 w-4" />
               Workouts
             </TabsTrigger>
-            <TabsTrigger value="achievements" className="flex items-center gap-2">
+            <TabsTrigger value="rewards" className="flex items-center gap-2">
               <Award className="h-4 w-4" />
               Rewards
             </TabsTrigger>
@@ -464,8 +465,8 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
             <WorkoutBuilder />
           </TabsContent>
 
-          <TabsContent value="achievements">
-            <AchievementsView />
+          <TabsContent value="rewards">
+            <RewardSystem />
           </TabsContent>
         </Tabs>
       </div>

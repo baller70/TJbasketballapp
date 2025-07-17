@@ -67,6 +67,12 @@ model User {
   aiInteractions    AIInteraction[]
   progressEntries   ProgressEntry[]
   userChallenges    UserChallenge[]
+  userLevels        UserLevel[]
+  userGoals         UserGoal[]
+  userWeeklyGoals   UserWeeklyGoal[]
+  customLevels      Level[]
+  customGoals       Goal[]
+  customWeeklyGoals WeeklyGoal[]
 }
 
 model PlayerProfile {
@@ -342,6 +348,121 @@ model UserChallenge {
   @@unique([userId, challengeId])
 }
 
+// New comprehensive reward system models
+model Level {
+  id          String   @id @default(cuid())
+  levelNumber Int      @unique
+  name        String   @unique
+  description String
+  pointsRequired Int
+  badgeIcon   String?
+  badgeColor  String?
+  rewards     Json?    // Special rewards for completing the level
+  isCustom    Boolean  @default(false)
+  createdBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  goals       Goal[]
+  userLevels  UserLevel[]
+  creator     User?    @relation(fields: [createdBy], references: [id])
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  levelId     String
+  goalNumber  Int      // 1-10, with 10 being the level test
+  name        String
+  description String
+  type        GoalType
+  criteria    Json     // Specific criteria for completion
+  points      Int      @default(0)
+  isLevelTest Boolean  @default(false) // True for goal #10
+  isCustom    Boolean  @default(false)
+  createdBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  level       Level         @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  userGoals   UserGoal[]
+  creator     User?         @relation(fields: [createdBy], references: [id])
+
+  @@unique([levelId, goalNumber])
+}
+
+model UserLevel {
+  id          String      @id @default(cuid())
+  userId      String
+  levelId     String
+  status      LevelStatus @default(LOCKED)
+  progress    Int         @default(0) // Percentage completion
+  startedAt   DateTime?
+  completedAt DateTime?
+  totalPoints Int         @default(0)
+
+  // Relations
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  level       Level       @relation(fields: [levelId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, levelId])
+}
+
+model UserGoal {
+  id          String     @id @default(cuid())
+  userId      String
+  goalId      String
+  status      GoalStatus @default(LOCKED)
+  progress    Int        @default(0)
+  startedAt   DateTime?
+  completedAt DateTime?
+  pointsEarned Int       @default(0)
+
+  // Relations
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal        Goal       @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, goalId])
+}
+
+model WeeklyGoal {
+  id          String           @id @default(cuid())
+  name        String
+  description String
+  type        WeeklyGoalType
+  criteria    Json
+  points      Int              @default(0)
+  startDate   DateTime
+  endDate     DateTime
+  isActive    Boolean          @default(true)
+  isCustom    Boolean          @default(false)
+  createdBy   String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  // Relations
+  userWeeklyGoals UserWeeklyGoal[]
+  creator         User?            @relation(fields: [createdBy], references: [id])
+}
+
+model UserWeeklyGoal {
+  id          String           @id @default(cuid())
+  userId      String
+  weeklyGoalId String
+  status      WeeklyGoalStatus @default(ACTIVE)
+  progress    Int              @default(0)
+  startedAt   DateTime         @default(now())
+  completedAt DateTime?
+  pointsEarned Int             @default(0)
+
+  // Relations
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weeklyGoal  WeeklyGoal       @relation(fields: [weeklyGoalId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, weeklyGoalId])
+}
+
 model VerificationToken {
   identifier String
   token      String   @unique
@@ -386,14 +507,58 @@ enum ChallengeType {
   DAILY
   WEEKLY
   MONTHLY
-  MILESTONE
+  SPECIAL
 }
 
 enum ChallengeStatus {
   ACTIVE
   COMPLETED
-  FAILED
   EXPIRED
+  ABANDONED
+}
+
+// New enums for reward system
+enum GoalType {
+  DRILL_COMPLETION
+  SKILL_PRACTICE
+  STREAK_MAINTENANCE
+  POINTS_ACCUMULATION
+  LEVEL_TEST
+  CUSTOM_CHALLENGE
+  TEAM_PARTICIPATION
+  IMPROVEMENT_TRACKING
+}
+
+enum LevelStatus {
+  LOCKED
+  UNLOCKED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum GoalStatus {
+  LOCKED
+  UNLOCKED
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+enum WeeklyGoalType {
+  PRACTICE_FREQUENCY
+  SKILL_FOCUS
+  DRILL_VARIETY
+  CONSISTENCY
+  IMPROVEMENT
+  TEAM_ACTIVITY
+  CUSTOM
+}
+
+enum WeeklyGoalStatus {
+  ACTIVE
+  COMPLETED
+  EXPIRED
+  ABANDONED
 }
 
 enum MediaType {
