@@ -6,7 +6,6 @@ import bcrypt from 'bcryptjs';
 import { NextAuthOptions } from 'next-auth';
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -57,7 +56,7 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   session: {
-    strategy: 'database' as const
+    strategy: 'jwt' as const
   },
   callbacks: {
     async jwt({ token, user }: any) {
