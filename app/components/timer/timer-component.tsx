@@ -680,7 +680,7 @@ export default function TimerComponent() {
               <div>
                 <h4 className="font-semibold mb-2">Equipment Needed</h4>
                 <div className="flex flex-wrap gap-2">
-                  {timerState.currentDrill.equipment.map((item, idx) => (
+                  {(Array.isArray(timerState.currentDrill.equipment) ? timerState.currentDrill.equipment : []).map((item, idx) => (
                     <Badge key={idx} variant="outline">
                       {item}
                     </Badge>
@@ -699,7 +699,7 @@ export default function TimerComponent() {
             <div className="mt-6">
               <h4 className="font-semibold mb-2">Instructions</h4>
               <ol className="space-y-2">
-                {timerState.currentDrill.stepByStep.map((step, idx) => (
+                {(Array.isArray(timerState.currentDrill.stepByStep) ? timerState.currentDrill.stepByStep : []).map((step, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <span className="bg-orange-100 text-orange-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium flex-shrink-0">
                       {idx + 1}
@@ -714,7 +714,7 @@ export default function TimerComponent() {
               <div className="mt-6">
                 <h4 className="font-semibold mb-2">Coaching Tips</h4>
                 <ul className="space-y-1">
-                  {timerState.currentDrill.coachingTips.map((tip, idx) => (
+                  {(Array.isArray(timerState.currentDrill.coachingTips) ? timerState.currentDrill.coachingTips : []).map((tip, idx) => (
                     <li key={idx} className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0 mt-0.5" />
                       <span className="text-gray-700">{tip}</span>

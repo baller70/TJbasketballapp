@@ -29,7 +29,7 @@ import {
   AlertCircle,
   Eye
 } from 'lucide-react';
-import { signOut } from 'next-auth/react';
+import { useClerk } from '@clerk/nextjs';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, PlayerProfile, DashboardStats } from '@/lib/types';
 import DrillLibrary from '@/components/drills/drill-library';
@@ -73,6 +73,7 @@ interface PlayerDashboardProps {
 }
 
 export default function PlayerDashboard({ user }: PlayerDashboardProps) {
+  const { signOut } = useClerk();
   const [activeTab, setActiveTab] = useState('overview');
   const [stats, setStats] = useState<DashboardStats>({
     totalDrills: 0,

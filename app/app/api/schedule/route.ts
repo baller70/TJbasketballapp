@@ -1,15 +1,14 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
-import { authOptions } from '@/lib/auth-config';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -18,7 +17,7 @@ export async function GET(request: NextRequest) {
     const end = searchParams.get('end');
 
     const whereClause: any = {
-      userId: session.user.id,
+      userId: userId,
     };
 
     if (start && end) {
@@ -51,8 +50,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -60,7 +59,7 @@ export async function POST(request: NextRequest) {
 
     const scheduleEntry = await prisma.scheduleEntry.create({
       data: {
-        userId: session.user.id,
+        userId: userId,
         drillId: drillId || null,
         workoutId: workoutId || null,
         date: new Date(date),

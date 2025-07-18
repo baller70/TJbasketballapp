@@ -9,6 +9,7 @@ import { Play, Users, Trophy, Calendar, Timer, Star, ArrowRight, CheckCircle } f
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { SignInButton, SignUpButton } from '@clerk/nextjs';
 
 export default function LandingPage() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -102,20 +103,22 @@ export default function LandingPage() {
               <Link href="#testimonials" className="text-gray-600 hover:text-orange-600 transition-colors">
                 Testimonials
               </Link>
-              <Link href="/auth/signin" className="text-gray-600 hover:text-orange-600 transition-colors">
-                Sign In
-              </Link>
-              <Link href="/auth/signup">
+              <SignInButton>
+                <button className="text-gray-600 hover:text-orange-600 transition-colors">
+                  Sign In
+                </button>
+              </SignInButton>
+              <SignUpButton>
                 <Button className="bg-orange-600 hover:bg-orange-700">
                   Get Started
                 </Button>
-              </Link>
+              </SignUpButton>
             </nav>
             
             <div className="md:hidden">
-              <Link href="/auth/signin">
+              <SignInButton>
                 <Button variant="outline" size="sm">Sign In</Button>
-              </Link>
+              </SignInButton>
             </div>
           </div>
         </div>
@@ -146,17 +149,17 @@ export default function LandingPage() {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/auth/signup">
+                <SignUpButton>
                   <Button size="lg" className="bg-orange-600 hover:bg-orange-700 text-lg px-8 py-6">
                     Start Free Trial
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
-                </Link>
-                <Link href="/auth/signin">
+                </SignUpButton>
+                <SignInButton>
                   <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-orange-200">
                     Sign In
                   </Button>
-                </Link>
+                </SignInButton>
               </div>
               
               <div className="flex items-center gap-6 pt-4">
@@ -317,17 +320,17 @@ export default function LandingPage() {
             Join thousands of families who have made basketball practice fun, engaging, and effective with HoopsQuest.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/signup">
+            <SignUpButton>
               <Button size="lg" className="bg-white text-orange-600 hover:bg-gray-100 text-lg px-8 py-6">
                 Start Your Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-            </Link>
-            <Link href="/auth/signin">
+            </SignUpButton>
+            <SignInButton>
               <Button size="lg" variant="outline" className="text-white border-white hover:bg-white hover:text-orange-600 text-lg px-8 py-6">
                 Sign In
               </Button>
-            </Link>
+            </SignInButton>
           </div>
         </div>
       </section>
@@ -351,8 +354,8 @@ export default function LandingPage() {
             <div>
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="/auth/signin" className="hover:text-white transition-colors">Sign In</Link></li>
-                <li><Link href="/auth/signup" className="hover:text-white transition-colors">Get Started</Link></li>
+                <li><SignInButton><button className="hover:text-white transition-colors">Sign In</button></SignInButton></li>
+                <li><SignUpButton><button className="hover:text-white transition-colors">Get Started</button></SignUpButton></li>
               </ul>
             </div>
             

@@ -1361,7 +1361,7 @@ export default function UserProfile({ userId, onBack }: UserProfileProps) {
   }, [userData, filterType, searchTerm, sortBy]);
 
   // Test individual tools
-  const testIndividualTool = (tool: string) => {
+  const testIndividualTool = (tool: 'pencil' | 'arrow' | 'circle' | 'rectangle' | 'text' | 'eraser') => {
     console.log(`=== TESTING INDIVIDUAL TOOL: ${tool} ===`);
     
     const canvas = document.getElementById('drawing-canvas') as HTMLCanvasElement;
@@ -1430,7 +1430,7 @@ export default function UserProfile({ userId, onBack }: UserProfileProps) {
   };
 
   // Enhanced tool selection with visual feedback
-  const selectTool = (tool: string) => {
+  const selectTool = (tool: 'pencil' | 'arrow' | 'circle' | 'rectangle' | 'text' | 'eraser') => {
     console.log(`=== SELECTING TOOL: ${tool} ===`);
     setDrawingTool(tool);
     

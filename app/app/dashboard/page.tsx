@@ -1,10 +1,9 @@
 
-import { getServerSession } from 'next-auth/next';
 import { redirect } from 'next/navigation';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
 import PlayerDashboard from '@/components/dashboard/player-dashboard';
 import ParentDashboard from '@/components/dashboard/parent-dashboard';
-import { authOptions } from '@/lib/auth-config';
 import DashboardSwitcher from '@/components/dashboard/dashboard-switcher';
 
 export const dynamic = 'force-dynamic';
@@ -14,11 +13,11 @@ export default async function DashboardPage({
 }: {
   searchParams: { view?: string };
 }) {
-  // TEMPORARILY BYPASS AUTHENTICATION FOR TESTING
-  // const session = await getServerSession(authOptions);
-  // if (!session?.user) {
-  //   redirect('/auth/signin');
-  // }
+  const { userId } = await auth();
+  
+  if (!userId) {
+    redirect('/sign-in');
+  }
 
   // Try to get an existing user from database, or create a mock user
   let user;
@@ -33,70 +32,122 @@ export default async function DashboardPage({
       },
       parent: true,
     },
-  });
+    });
   } catch (error) {
-    console.log('Database error, using mock user:', error);
-  }
-
-  // If no user found or database error, create a mock user for testing
-  if (!user) {
+    console.error('Database error:', error);
+    // Create a mock user for development
     user = {
-      id: 'mock-user-id',
-      email: 'test@example.com',
-      name: 'Test User',
-      role: 'PARENT', // Default to PARENT role
-      playerProfile: {
-        id: 'mock-profile-id',
-        userId: 'mock-user-id',
-        dateOfBirth: new Date('2000-01-01'),
-        position: 'Guard',
-        skillLevel: 'INTERMEDIATE',
-        height: 72,
-        weight: 180,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+      id: userId,
+      email: 'mock@example.com',
+      name: 'Mock User',
+      role: 'PARENT',
+      playerProfile: null,
       children: [
         {
-          id: 'mock-child-id',
-          email: 'child@example.com',
-          name: 'Test Child',
+          id: 'child-1',
+          name: 'Alex Johnson',
+          email: 'alex@example.com',
           role: 'PLAYER',
-          parentId: 'mock-user-id',
           playerProfile: {
-            id: 'mock-child-profile-id',
-            userId: 'mock-child-id',
-            dateOfBirth: new Date('2010-01-01'),
-            position: 'Point Guard',
+            id: 'profile-1',
+            userId: 'child-1',
+            age: 10,
+            position: 'Guard',
             skillLevel: 'BEGINNER',
-            height: 60,
-            weight: 120,
+            parentId: userId,
             createdAt: new Date(),
             updatedAt: new Date(),
           },
-          children: [],
-          parent: null,
-          createdAt: new Date(),
-          updatedAt: new Date(),
         },
       ],
       parent: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
   }
 
-  // Get the view preference from search params (default to user's role)
-  const viewMode = searchParams.view || user.role.toLowerCase();
+  // If no user found, create a default mock user
+  if (!user) {
+    user = {
+      id: userId,
+      email: 'mock@example.com',
+      name: 'Mock User',
+      role: 'PARENT',
+      playerProfile: null,
+      children: [
+        {
+          id: 'child-1',
+          name: 'Alex Johnson',
+          email: 'alex@example.com',
+          role: 'PLAYER',
+          playerProfile: {
+            id: 'profile-1',
+            userId: 'child-1',
+            age: 10,
+            position: 'Guard',
+            skillLevel: 'BEGINNER',
+            parentId: userId,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        },
+      ],
+      parent: null,
+    };
+  }
 
-  return (
-    <div>
-      <DashboardSwitcher currentView={viewMode} userRole={user.role} />
-      {viewMode === 'parent' ? (
+  const view = searchParams.view;
+
+  // Determine if user is a parent or player
+  const isParent = user.role === 'PARENT' || user.children?.length > 0;
+  const isPlayer = user.role === 'PLAYER' || user.playerProfile;
+
+  // For development: Always allow access to both views
+  // If both parent and player, show switcher
+  if (isParent && isPlayer) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <DashboardSwitcher currentView={view || 'parent'} userRole={user.role} />
+      </div>
+    );
+  }
+
+  // Show appropriate dashboard based on view parameter (development mode)
+  if (view === 'parent') {
+    return (
+      <div className="min-h-screen bg-gray-50">
         <ParentDashboard user={user as any} />
-      ) : (
+      </div>
+    );
+  }
+
+  if (view === 'player') {
+    return (
+      <div className="min-h-screen bg-gray-50">
         <PlayerDashboard user={user as any} />
-      )}
+      </div>
+    );
+  }
+
+  // Default based on user role
+  if (isParent && !isPlayer) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <ParentDashboard user={user as any} />
+      </div>
+    );
+  }
+
+  if (isPlayer && !isParent) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <PlayerDashboard user={user as any} />
+      </div>
+    );
+  }
+
+  // Default to parent dashboard
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <ParentDashboard user={user as any} />
     </div>
   );
 }

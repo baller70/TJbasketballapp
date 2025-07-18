@@ -42,7 +42,7 @@ import {
   Bot,
   CheckCircle2
 } from 'lucide-react';
-import { signOut } from 'next-auth/react';
+import { useClerk } from '@clerk/nextjs';
 import { motion } from 'framer-motion';
 import { User, DrillCompletion, Notification, ParentDashboardData, MediaUpload } from '@/lib/types';
 import MediaViewer from '@/components/media/media-viewer';
@@ -55,6 +55,7 @@ interface ParentDashboardProps {
 }
 
 export default function ParentDashboard({ user }: ParentDashboardProps) {
+  const { signOut } = useClerk();
   const [activeTab, setActiveTab] = useState('overview');
   const [dashboardData, setDashboardData] = useState<ParentDashboardData>({
     children: [],
