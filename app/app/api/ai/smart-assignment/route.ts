@@ -1,23 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { generateSmartAssignment } from '@/lib/openai';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  let playerId: string | undefined = undefined;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const requestBody = await request.json();
     const { 
-      playerId, 
+      playerId: requestPlayerId, 
       assignmentType, 
       settings,
       mode = 'manual'
-    } = await request.json();
+    } = requestBody;
+    
+    playerId = requestPlayerId;
 
     if (!playerId || !assignmentType) {
       return NextResponse.json({ error: 'Player ID and assignment type are required' }, { status: 400 });
@@ -38,7 +45,7 @@ export async function POST(request: NextRequest) {
     // Save assignment to database
     const assignment = await saveAssignment({
       playerId,
-      assignedBy: session.user.id,
+      assignedBy: userId,
       type: assignmentType,
       title: smartAssignment.title,
       description: smartAssignment.description,
@@ -56,7 +63,10 @@ export async function POST(request: NextRequest) {
       aiInsights: smartAssignment.insights
     });
   } catch (error) {
-    console.error('Error creating smart assignment:', error);
+    logger.error('Error creating smart assignment', error as Error, { 
+      userId: userId || undefined, 
+      playerId: playerId || undefined 
+    });
     return NextResponse.json({ error: 'Failed to create smart assignment' }, { status: 500 });
   }
 }
@@ -89,4 +99,4 @@ async function saveAssignment(assignmentData: any) {
     createdAt: new Date().toISOString(),
     status: 'pending'
   };
-} 
+}          

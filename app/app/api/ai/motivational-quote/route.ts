@@ -1,12 +1,16 @@
 
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  let userId: string | null = null;
+  
   try {
-    const { userId } = await auth();
+    const authResult = await auth();
+    userId = authResult.userId;
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -43,7 +47,7 @@ export async function GET() {
 
     return NextResponse.json({ quote });
   } catch (error) {
-    console.error('Error generating motivational quote:', error);
+    logger.error('Error generating motivational quote', error as Error, { userId: userId || undefined });
     
     // Fallback quotes if AI fails
     const fallbackQuotes = [

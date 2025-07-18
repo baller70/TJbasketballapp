@@ -1,8 +1,8 @@
 
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -212,11 +212,11 @@ function getCurrentLevel(totalPoints: number) {
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = await auth();
     
     // Handle case where there's no session (mock mode)
-    if (!session?.user?.id) {
-      console.log('No session found, using mock achievements data');
+    if (!userId) {
+      logger.info('No session found, using mock achievements data');
       
       const mockTotalPoints = 890; // Example: Level 3 player
       const currentLevel = getCurrentLevel(mockTotalPoints);
@@ -422,7 +422,7 @@ export async function GET() {
     return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
 
   } catch (error) {
-    console.error('Error fetching achievements:', error);
+    logger.error('Error fetching achievements', error as Error);
     return NextResponse.json({ error: 'Failed to fetch achievements' }, { status: 500 });
   }
 }
