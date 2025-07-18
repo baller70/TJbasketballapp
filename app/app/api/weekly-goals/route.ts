@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
+  const requestContext = logger.createRequestContext(request);
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      console.log('No session found, using mock weekly goals data');
+    const { userId } = await auth();
+    if (!userId) {
+      logger.info('No session found, using mock weekly goals data', requestContext);
       // Return mock data when no session
       const mockWeeklyGoals = [
         {
@@ -53,7 +55,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(mockWeeklyGoals);
     }
 
-    const userId = session.user.id;
     const { searchParams } = new URL(request.url);
     const active = searchParams.get('active') === 'true';
 
@@ -97,7 +98,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(weeklyGoalsWithProgress);
   } catch (error) {
-    console.error('Error fetching weekly goals:', error);
+    logger.error('Error fetching weekly goals', error as Error, requestContext);
     return NextResponse.json(
       { error: 'Failed to fetch weekly goals' },
       { status: 500 }
@@ -106,9 +107,11 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const requestContext = logger.createRequestContext(request);
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -144,16 +147,16 @@ export async function POST(request: NextRequest) {
         startDate: start,
         endDate: end,
         isCustom: true,
-        createdBy: session.user.id,
+        createdBy: userId,
       },
     });
 
     return NextResponse.json(weeklyGoal, { status: 201 });
   } catch (error) {
-    console.error('Error creating weekly goal:', error);
+    logger.error('Error creating weekly goal', error as Error, requestContext);
     return NextResponse.json(
       { error: 'Failed to create weekly goal' },
       { status: 500 }
     );
   }
-} 
+}        

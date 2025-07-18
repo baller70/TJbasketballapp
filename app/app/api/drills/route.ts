@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,7 +11,7 @@ export async function GET() {
     const { userId } = await auth();
     
     if (!userId) {
-      console.log('No session found, using mock drills data');
+      logger.info('No session found, using mock drills data');
       // Return mock data for development
       return NextResponse.json([
         {
@@ -67,7 +68,7 @@ export async function GET() {
 
     return NextResponse.json(parsedDrills);
   } catch (error) {
-    console.error('Error fetching drills:', error);
+    logger.error('Error fetching drills', error as Error);
     return NextResponse.json(
       { error: 'Failed to fetch drills' },
       { status: 500 }

@@ -1,19 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const userId = session.user.id;
     const levelId = params.id;
 
     const level = await prisma.level.findUnique({
@@ -66,7 +67,10 @@ export async function GET(
 
     return NextResponse.json(levelWithProgress);
   } catch (error) {
-    console.error('Error fetching level:', error);
+    logger.error('Error fetching level', error as Error, { 
+      userId: userId || undefined, 
+      levelId: params.id 
+    });
     return NextResponse.json(
       { error: 'Failed to fetch level' },
       { status: 500 }
@@ -78,9 +82,12 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -96,7 +103,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Level not found' }, { status: 404 });
     }
 
-    if (existingLevel.isCustom && existingLevel.createdBy !== session.user.id) {
+    if (existingLevel.isCustom && existingLevel.createdBy !== userId) {
       return NextResponse.json({ error: 'Unauthorized to edit this level' }, { status: 403 });
     }
 
@@ -118,7 +125,10 @@ export async function PUT(
 
     return NextResponse.json(updatedLevel);
   } catch (error) {
-    console.error('Error updating level:', error);
+    logger.error('Error updating level', error as Error, { 
+      userId: userId || undefined, 
+      levelId: params.id 
+    });
     return NextResponse.json(
       { error: 'Failed to update level' },
       { status: 500 }
@@ -130,9 +140,12 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -147,7 +160,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Level not found' }, { status: 404 });
     }
 
-    if (existingLevel.isCustom && existingLevel.createdBy !== session.user.id) {
+    if (existingLevel.isCustom && existingLevel.createdBy !== userId) {
       return NextResponse.json({ error: 'Unauthorized to delete this level' }, { status: 403 });
     }
 
@@ -161,10 +174,13 @@ export async function DELETE(
 
     return NextResponse.json({ message: 'Level deleted successfully' });
   } catch (error) {
-    console.error('Error deleting level:', error);
+    logger.error('Error deleting level', error as Error, { 
+      userId: userId || undefined, 
+      levelId: params.id 
+    });
     return NextResponse.json(
       { error: 'Failed to delete level' },
       { status: 500 }
     );
   }
-} 
+}              

@@ -1,6 +1,17 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resend: Resend | null = null;
+
+function getResendClient(): Resend {
+  if (!resend) {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      throw new Error('RESEND_API_KEY environment variable is required');
+    }
+    resend = new Resend(apiKey);
+  }
+  return resend;
+}
 
 // Check if email service is properly configured
 const isEmailConfigured = () => {
@@ -164,7 +175,8 @@ export const sendParentNotification = async (
         throw new Error(`Unknown notification type: ${notificationType}`);
     }
 
-    const response = await resend.emails.send({
+    const client = getResendClient();
+    const response = await client.emails.send({
       from: 'HoopsQuest <notifications@hoopsquest.com>',
       to: parentEmail,
       subject,
@@ -239,7 +251,8 @@ export const sendWelcomeEmail = async (parentEmail: string, parentName: string) 
       </div>
     `;
 
-    const response = await resend.emails.send({
+    const client = getResendClient();
+    const response = await client.emails.send({
       from: 'HoopsQuest <welcome@hoopsquest.com>',
       to: parentEmail,
       subject: 'Welcome to HoopsQuest - Let\'s Get Started!',
@@ -257,4 +270,4 @@ export const sendWelcomeEmail = async (parentEmail: string, parentName: string) 
 };
 
 // Export email configuration check
-export { isEmailConfigured }; 
+export { isEmailConfigured };    

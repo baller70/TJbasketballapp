@@ -1,18 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  let body: any = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json();
+    body = await request.json();
     const { drillId, completionId } = body;
 
     if (!drillId || !completionId) {
@@ -23,7 +27,7 @@ export async function POST(request: NextRequest) {
     const completion = await prisma.drillCompletion.findFirst({
       where: {
         id: completionId,
-        userId: session.user.id,
+        userId: userId,
       },
     });
 
@@ -35,7 +39,7 @@ export async function POST(request: NextRequest) {
     const updatedMedia = await prisma.mediaUpload.updateMany({
       where: {
         drillId,
-        userId: session.user.id,
+        userId: userId,
         drillCompletionId: null,
         // Only update media uploaded in the last hour to avoid updating old media
         createdAt: {
@@ -52,10 +56,14 @@ export async function POST(request: NextRequest) {
       updatedCount: updatedMedia.count,
     });
   } catch (error) {
-    console.error('Error updating media with completion ID:', error);
+    logger.error('Error updating media with completion ID', error as Error, {
+      userId: userId || undefined,
+      drillId: body?.drillId,
+      completionId: body?.completionId
+    });
     return NextResponse.json(
       { error: 'Failed to update media' },
       { status: 500 }
     );
   }
-} 
+}          

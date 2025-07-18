@@ -1,8 +1,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,10 +11,10 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       // For demo purposes, return success without session
-      console.log('No session found, but marking notification as read (mock)');
+      logger.info('No session found, but marking notification as read (mock)');
       return NextResponse.json({ success: true });
     }
 
@@ -24,7 +24,7 @@ export async function PATCH(
     const notification = await prisma.notification.findFirst({
       where: {
         id: notificationId,
-        userId: session.user.id,
+        userId: userId,
       },
     });
 
@@ -43,7 +43,7 @@ export async function PATCH(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error marking notification as read:', error);
+    logger.error('Error marking notification as read', error as Error);
     return NextResponse.json(
       { error: 'Failed to mark notification as read' },
       { status: 500 }

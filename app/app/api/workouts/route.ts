@@ -1,18 +1,18 @@
 
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = await auth();
     
     // Handle case where there's no session (mock mode)
-    if (!session?.user?.id) {
-      console.log('No session found, using mock workouts data');
+    if (!userId) {
+      logger.info('No session found, using mock workouts data');
       
       // Return mock workouts data for testing
       const mockWorkouts = [
@@ -128,7 +128,7 @@ export async function GET() {
     const workouts = await prisma.workout.findMany({
       where: {
         OR: [
-          { userId: session.user.id },
+          { userId: userId },
           { isPublic: true },
         ],
       },
@@ -149,7 +149,7 @@ export async function GET() {
 
     return NextResponse.json(workouts);
   } catch (error) {
-    console.error('Error fetching workouts:', error);
+    logger.error('Error fetching workouts', error as Error);
     return NextResponse.json(
       { error: 'Failed to fetch workouts' },
       { status: 500 }
@@ -159,8 +159,8 @@ export async function GET() {
 
 export async function POST(request: any) {
   try {
-    const session = await getServerSession();
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -176,7 +176,7 @@ export async function POST(request: any) {
         description,
         totalDuration,
         isPublic: isPublic || false,
-        userId: session.user.id,
+        userId: userId,
       },
     });
 
@@ -197,7 +197,7 @@ export async function POST(request: any) {
 
     return NextResponse.json({ ...workout, workoutDrills }, { status: 201 });
   } catch (error) {
-    console.error('Error creating workout:', error);
+    logger.error('Error creating workout', error as Error);
     return NextResponse.json(
       { error: 'Failed to create workout' },
       { status: 500 }

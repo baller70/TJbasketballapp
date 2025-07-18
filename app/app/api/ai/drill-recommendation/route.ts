@@ -1,19 +1,20 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
-import { authOptions } from '@/lib/auth-config';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
+  const requestContext = logger.createRequestContext(request);
+  
+  const { userId } = await auth();
+  if (!userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const { preferences } = await request.json();
-  const userId = session.user.id;
 
   try {
 
@@ -127,7 +128,10 @@ export async function POST(request: NextRequest) {
       recommendations: enrichedRecommendations.filter(rec => rec.drill !== null),
     });
   } catch (error) {
-    console.error('Error getting drill recommendations:', error);
+    logger.error('Error getting drill recommendations', error as Error, {
+      ...requestContext,
+      userId
+    });
     
     // Fallback to simple recommendation logic
     const fallbackRecommendations = await getFallbackRecommendations(userId);
@@ -174,7 +178,9 @@ async function getFallbackRecommendations(userId: string) {
       motivationalMessage: 'Keep practicing and you\'ll see improvement!',
     };
   } catch (error) {
-    console.error('Error in fallback recommendations:', error);
+    logger.error('Error in fallback recommendations', error as Error, {
+      userId
+    });
     return {
       recommendations: [],
       focusArea: 'Practice',

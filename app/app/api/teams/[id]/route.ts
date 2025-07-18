@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = await auth();
     
     // For demo purposes, allow updates without session (using mock data)
-    if (!session) {
-      console.log('No session found, using mock team update');
+    if (!userId) {
+      logger.info('No session found, using mock team update');
       // In a real app, you'd return 401 here
       // return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -24,7 +24,7 @@ export async function PATCH(
     // In a real app, you'd check if the user has permission to edit this team
     
     // For demo purposes, return mock data when no session
-    if (!session) {
+    if (!userId) {
       return NextResponse.json({
         id: teamId,
         name: name || 'Updated Team',
@@ -61,10 +61,10 @@ export async function PATCH(
 
     return NextResponse.json(updatedTeam);
   } catch (error) {
-    console.error('Error updating team:', error);
+    logger.error('Error updating team', error as Error);
     return NextResponse.json(
       { error: 'Failed to update team' },
       { status: 500 }
     );
   }
-} 
+}      

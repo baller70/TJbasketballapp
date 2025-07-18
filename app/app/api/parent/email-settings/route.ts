@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       // Return mock settings for demonstration
-      console.log('No session found, using mock email settings');
+      logger.info('No session found, using mock email settings');
       return NextResponse.json({
         notificationEmail: 'parent@example.com',
         receiveAllCompletions: true,
@@ -20,7 +20,6 @@ export async function GET() {
       });
     }
 
-    const userId = session.user.id;
 
     // Get user's email settings
     const emailSettings = await prisma.parentEmailSettings.findUnique({
@@ -30,7 +29,7 @@ export async function GET() {
     if (!emailSettings) {
       // Return default settings if none exist
       return NextResponse.json({
-        notificationEmail: session.user.email || '',
+        notificationEmail: '',
         receiveAllCompletions: false,
         receiveAchievements: true,
         receiveWeeklyReports: true,
@@ -46,7 +45,7 @@ export async function GET() {
       receiveMediaUploads: emailSettings.receiveMediaUploads,
     });
   } catch (error) {
-    console.error('Error fetching email settings:', error);
+    logger.error('Error fetching email settings', error as Error);
     return NextResponse.json(
       { error: 'Failed to fetch email settings' },
       { status: 500 }
@@ -56,14 +55,13 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       // For demo purposes, return success without session
-      console.log('No session found, but saving email settings (mock)');
+      logger.info('No session found, but saving email settings (mock)');
       return NextResponse.json({ success: true });
     }
 
-    const userId = session.user.id;
     const body = await request.json();
 
     const {
@@ -105,10 +103,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, emailSettings });
   } catch (error) {
-    console.error('Error saving email settings:', error);
+    logger.error('Error saving email settings', error as Error);
     return NextResponse.json(
       { error: 'Failed to save email settings' },
       { status: 500 }
     );
   }
-} 
+}        

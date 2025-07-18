@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = await auth();
     
-    if (!session) {
-      console.log('No session found, using mock available drills');
+    if (!userId) {
+      logger.info('No session found, using mock available drills');
       // Mock drills data
       const mockDrills = [
         { id: 'drill1', name: 'Ball Handling Basics', difficulty: 'Beginner', duration: 15 },
@@ -33,10 +33,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(drills);
 
   } catch (error) {
-    console.error('Error fetching available drills:', error);
+    logger.error('Error fetching available drills', error as Error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
-} 
+}      

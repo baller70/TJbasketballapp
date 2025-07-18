@@ -1,23 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { generateBulkAssessment } from '@/lib/openai';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  let playerId: string | undefined = undefined;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const requestBody = await request.json();
     const { 
-      playerId, 
+      playerId: requestPlayerId, 
       includeSkillAnalysis = true, 
       includeRecommendations = true, 
       includeGoals = true 
-    } = await request.json();
+    } = requestBody;
+    
+    playerId = requestPlayerId;
 
     if (!playerId) {
       return NextResponse.json({ error: 'Player ID is required' }, { status: 400 });
@@ -39,7 +46,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Save assessment to database
-    await saveAssessment(playerId, assessment, session.user.id);
+    await saveAssessment(playerId, assessment, userId);
 
     return NextResponse.json({
       success: true,
@@ -49,7 +56,10 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error in bulk assessment:', error);
+    logger.error('Error in bulk assessment', error as Error, { 
+      userId: userId || undefined, 
+      playerId: playerId || undefined 
+    });
     return NextResponse.json(
       { error: 'Failed to generate assessment' },
       { status: 500 }
@@ -94,7 +104,7 @@ async function fetchPlayerData(playerId: string) {
       ]
     };
   } catch (error) {
-    console.error('Error fetching player data:', error);
+    logger.error('Error fetching player data', error as Error, { playerId });
     return null;
   }
 }
@@ -176,7 +186,7 @@ async function generateAIAssessment(playerData: any, options: any) {
 
     return assessment;
   } catch (error) {
-    console.error('Error generating AI assessment:', error);
+    logger.error('Error generating AI assessment', error as Error, { playerId: playerData?.id });
     
     // Fallback assessment
     return {
@@ -231,14 +241,12 @@ async function generateAIAssessment(playerData: any, options: any) {
 async function saveAssessment(playerId: string, assessment: any, assessorId: string) {
   try {
     // Mock save - replace with actual database save
-    console.log('Saving assessment for player:', playerId);
-    console.log('Assessment data:', assessment);
-    console.log('Assessor ID:', assessorId);
+    logger.info('Saving assessment for player', { playerId, assessorId, hasAssessment: !!assessment });
     
     // In real implementation, save to database
     return true;
   } catch (error) {
-    console.error('Error saving assessment:', error);
+    logger.error('Error saving assessment', error as Error, { playerId, assessorId });
     return false;
   }
-} 
+}        

@@ -1,18 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
+  let authUserId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
+    const authResult = await auth();
+    authUserId = authResult.userId;
     
-    if (!session) {
+    if (!authUserId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId') || session.user.id;
+    const userId = searchParams.get('userId') || authUserId;
 
     // Get the latest report card for the user
     const reportCard = await prisma.reportCard.findFirst({
@@ -49,16 +52,19 @@ export async function GET(request: NextRequest) {
       history: allReportCards,
     });
   } catch (error) {
-    console.error('Error fetching report card:', error);
+    logger.error('Error fetching report card', error as Error, { userId: authUserId || undefined });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
+  let authUserId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
+    const authResult = await auth();
+    authUserId = authResult.userId;
     
-    if (!session) {
+    if (!authUserId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -111,7 +117,7 @@ export async function POST(request: NextRequest) {
     const reportCard = await prisma.reportCard.create({
       data: {
         userId,
-        assessorId: session.user.id,
+        assessorId: authUserId,
         ballHandling: ballHandling || 1,
         shooting: shooting || 1,
         passing: passing || 1,
@@ -148,7 +154,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(reportCard);
   } catch (error) {
-    console.error('Error creating report card:', error);
+    logger.error('Error creating report card', error as Error, { userId: authUserId || undefined });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-} 
+}            

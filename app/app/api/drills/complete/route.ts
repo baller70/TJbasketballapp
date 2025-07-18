@@ -1,15 +1,20 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
 import { sendParentNotification } from '@/lib/resend';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  let drillId: string | undefined = undefined;
+  
   try {
-    const session = await getServerSession();
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -18,7 +23,7 @@ export async function POST(request: NextRequest) {
     // Create drill completion record
     const drillCompletion = await prisma.drillCompletion.create({
       data: {
-        userId: session.user.id,
+        userId: userId,
         drillId,
         duration,
         rating,
@@ -29,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     // Update player profile - add points and update streak
     const playerProfile = await prisma.playerProfile.findUnique({
-      where: { userId: session.user.id },
+      where: { userId: userId },
     });
 
     let pointsToAdd = 10; // Base points for completing a drill
@@ -44,7 +49,7 @@ export async function POST(request: NextRequest) {
       
       const todayCompletions = await prisma.drillCompletion.count({
         where: {
-          userId: session.user.id,
+          userId: userId,
           completedAt: {
             gte: today,
           },
@@ -59,7 +64,7 @@ export async function POST(request: NextRequest) {
         
         const yesterdayCompletions = await prisma.drillCompletion.count({
           where: {
-            userId: session.user.id,
+            userId: userId,
             completedAt: {
               gte: yesterday,
               lt: today,
@@ -76,7 +81,7 @@ export async function POST(request: NextRequest) {
       }
 
       await prisma.playerProfile.update({
-        where: { userId: session.user.id },
+        where: { userId: userId },
         data: {
           totalPoints: playerProfile.totalPoints + pointsToAdd,
           currentStreak: newStreak,
@@ -89,7 +94,7 @@ export async function POST(request: NextRequest) {
     // Send email notification to centralized parent email
     try {
       const user = await prisma.user.findUnique({
-        where: { id: session.user.id },
+        where: { id: userId },
         include: {
           parent: {
             include: {
@@ -170,13 +175,16 @@ export async function POST(request: NextRequest) {
         });
       }
     } catch (emailError) {
-      console.error('Error sending parent notification:', emailError);
+      logger.error('Error sending parent notification', emailError as Error, { userId, drillId });
       // Don't fail the drill completion if email fails
     }
 
     return NextResponse.json(drillCompletion);
   } catch (error) {
-    console.error('Error completing drill:', error);
+    logger.error('Error completing drill', error as Error, { 
+      userId: userId || undefined, 
+      drillId: drillId || undefined 
+    });
     return NextResponse.json(
       { error: 'Failed to complete drill' },
       { status: 500 }

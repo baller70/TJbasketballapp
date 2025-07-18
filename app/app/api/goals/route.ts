@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const userId = session.user.id;
     const { searchParams } = new URL(request.url);
     const levelId = searchParams.get('levelId');
 
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(goalsWithProgress);
   } catch (error) {
-    console.error('Error fetching goals:', error);
+    logger.error('Error fetching goals', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to fetch goals' },
       { status: 500 }
@@ -53,9 +54,13 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  let levelId: string | undefined = undefined;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -84,7 +89,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Level not found' }, { status: 404 });
     }
 
-    if (level.isCustom && level.createdBy !== session.user.id) {
+    if (level.isCustom && level.createdBy !== userId) {
       return NextResponse.json({ error: 'Unauthorized to add goals to this level' }, { status: 403 });
     }
 
@@ -114,16 +119,19 @@ export async function POST(request: NextRequest) {
         points,
         isLevelTest: isTest,
         isCustom: level.isCustom,
-        createdBy: level.isCustom ? session.user.id : null,
+        createdBy: level.isCustom ? userId : null,
       },
     });
 
     return NextResponse.json(goal, { status: 201 });
   } catch (error) {
-    console.error('Error creating goal:', error);
+    logger.error('Error creating goal', error as Error, { 
+      userId: userId || undefined, 
+      levelId: levelId || undefined 
+    });
     return NextResponse.json(
       { error: 'Failed to create goal' },
       { status: 500 }
     );
   }
-} 
+}            

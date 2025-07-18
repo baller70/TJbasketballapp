@@ -1,8 +1,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,9 +10,12 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -25,7 +28,7 @@ export async function POST(
 
     // Get current user
     const currentUser = await prisma.user.findUnique({
-      where: { id: session.user.id },
+      where: { id: userId },
       select: {
         id: true,
         role: true,
@@ -114,7 +117,10 @@ export async function POST(
 
     return NextResponse.json(updatedUpload);
   } catch (error) {
-    console.error('Error providing feedback:', error);
+    logger.error('Error providing feedback', error as Error, {
+      userId: userId || undefined,
+      mediaId: params.id
+    });
     return NextResponse.json(
       { error: 'Failed to provide feedback' },
       { status: 500 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, readFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join } from 'path';
+import { logger } from '@/lib/logger';
 
 // File-based storage for analysis data
 const STORAGE_DIR = join(process.cwd(), 'tmp', 'media-analysis');
@@ -24,7 +25,7 @@ async function readAnalysisStorage(): Promise<any[]> {
     }
     return [];
   } catch (error) {
-    console.error('Error reading analysis storage:', error);
+    logger.error('Error reading analysis storage', error as Error);
     return [];
   }
 }
@@ -35,7 +36,7 @@ async function writeAnalysisStorage(data: any[]): Promise<void> {
     await ensureStorageDir();
     await writeFile(STORAGE_FILE, JSON.stringify(data, null, 2));
   } catch (error) {
-    console.error('Error writing analysis storage:', error);
+    logger.error('Error writing analysis storage', error as Error);
     throw error;
   }
 }
@@ -81,7 +82,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error saving analysis:', error);
+    logger.error('Error saving analysis', error as Error);
     return NextResponse.json(
       { success: false, error: 'Failed to save analysis' },
       { status: 500 }
@@ -112,10 +113,10 @@ export async function GET(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Error fetching analysis:', error);
+    logger.error('Error fetching analysis', error as Error);
     return NextResponse.json(
       { success: false, error: 'Failed to fetch analysis' },
       { status: 500 }
     );
   }
-} 
+}  

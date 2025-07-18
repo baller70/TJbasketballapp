@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { generateCustomDrill } from '@/lib/openai';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -41,7 +44,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Save drill to database
-    await saveDrill(drill, session.user.id);
+    await saveDrill(drill, userId);
 
     return NextResponse.json({
       success: true,
@@ -51,7 +54,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error in custom drill creation:', error);
+    logger.error('Error in custom drill creation', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to create custom drill' },
       { status: 500 }
@@ -81,7 +84,7 @@ async function fetchPlayerData(playerId: string) {
       availableEquipment: ['basketball', 'cones', 'ladder']
     };
   } catch (error) {
-    console.error('Error fetching player data:', error);
+    logger.error('Error fetching player data', error as Error, { playerId });
     return null;
   }
 }
@@ -98,12 +101,12 @@ async function saveDrill(drill: any, creatorId: string) {
       isPublic: false
     };
     
-    console.log('Saving custom drill:', savedDrill);
+    logger.info('Saving custom drill', { drillId: savedDrill.id, creatorId });
     
     // In real implementation, save to database
     return savedDrill;
   } catch (error) {
-    console.error('Error saving drill:', error);
+    logger.error('Error saving drill', error as Error, { creatorId });
     throw error;
   }
-} 
+}        

@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      console.log('No session found, using mock levels data');
+    const { userId } = await auth();
+    if (!userId) {
+      logger.info('No session found, using mock levels data');
       // Return comprehensive mock data with detailed basketball goals
       const mockLevels = [
         {
@@ -3806,7 +3806,6 @@ export async function GET() {
     }
 
     // Real database implementation would go here
-    const userId = session.user.id;
     
     // Fetch levels from database
     const levels = await prisma.level.findMany({
@@ -3829,7 +3828,7 @@ export async function GET() {
 
     return NextResponse.json(levels);
   } catch (error) {
-    console.error('Error fetching levels:', error);
+    logger.error('Error fetching levels', error as Error);
     return NextResponse.json(
       { error: 'Failed to fetch levels' },
       { status: 500 }
@@ -3840,8 +3839,8 @@ export async function GET() {
 // POST endpoint for updating goals
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -3864,10 +3863,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(updatedGoal);
   } catch (error) {
-    console.error('Error updating goal:', error);
+    logger.error('Error updating goal', error as Error);
     return NextResponse.json(
       { error: 'Failed to update goal' },
       { status: 500 }
     );
   }
-} 
+}          

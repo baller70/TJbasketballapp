@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
+  const requestContext = logger.createRequestContext(request);
+  
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = await auth();
     
-    if (!session) {
-      console.log('No session found, using mock notification save');
+    if (!userId) {
+      logger.info('No session found, using mock notification save', requestContext);
       // Mock response for development
       const body = await request.json();
       
-      console.log('Mock notification save:', body);
+      logger.info('Mock notification save', { ...requestContext, body });
       
       return NextResponse.json({ 
         success: true, 
@@ -20,7 +22,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const { userId, type, title, message, data } = await request.json();
+    const { userId: requestUserId, type, title, message, data } = await request.json();
 
     // In a real app, this would save to database and send push notifications
     // For now, return mock success
@@ -28,7 +30,7 @@ export async function POST(request: NextRequest) {
       success: true, 
       message: 'Notification sent successfully',
       notificationId: `notification_${Date.now()}`,
-      userId,
+      userId: requestUserId,
       type,
       title,
       notificationMessage: message,
@@ -37,10 +39,10 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error sending notification:', error);
+    logger.error('Error sending notification', error as Error, requestContext);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
-} 
+}        

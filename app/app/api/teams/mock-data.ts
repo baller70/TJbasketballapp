@@ -1,3 +1,5 @@
+import { logger } from '@/lib/logger';
+
 // Use global to persist data across requests in development
 declare global {
   var mockTeamsData: any[] | undefined;
@@ -72,7 +74,7 @@ export const addMemberToMockTeam = (teamId: string, userId: string, userName: st
         role: 'member',
         joinedAt: new Date().toISOString(),
       });
-      console.log(`Added user ${userName} to team ${team.name}`);
+      logger.info(`Added user to team`, { userId, userName, teamId, teamName: team.name });
     }
   }
 };
@@ -82,7 +84,7 @@ export const removeMemberFromMockTeam = (teamId: string, userId: string) => {
   const team = teams.find((t: any) => t.id === teamId);
   if (team) {
     team.members = team.members.filter((m: any) => m.user.id !== userId);
-    console.log(`Removed user ${userId} from team ${team.name}`);
+    logger.info(`Removed user from team`, { userId, teamId, teamName: team.name });
   }
 };
 
@@ -91,6 +93,6 @@ export const updateMockTeamName = (teamId: string, newName: string) => {
   const team = teams.find((t: any) => t.id === teamId);
   if (team) {
     team.name = newName;
-    console.log(`Updated team ${teamId} name to ${newName}`);
+    logger.info(`Updated team name`, { teamId, oldName: team.name, newName });
   }
-}; 
+};  

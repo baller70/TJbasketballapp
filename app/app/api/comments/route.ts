@@ -1,22 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 // GET - Fetch comments for a drill completion or media upload
 export async function GET(request: NextRequest) {
+  let userId: string | null = null;
+  let drillCompletionId: string | null = null;
+  let mediaUploadId: string | null = null;
+  let drillId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
-    const drillCompletionId = searchParams.get('drillCompletionId');
-    const mediaUploadId = searchParams.get('mediaUploadId');
-    const drillId = searchParams.get('drillId');
+    drillCompletionId = searchParams.get('drillCompletionId');
+    mediaUploadId = searchParams.get('mediaUploadId');
+    drillId = searchParams.get('drillId');
 
     if (!drillCompletionId && !mediaUploadId && !drillId) {
       return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 });
@@ -46,7 +52,12 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(comments);
   } catch (error) {
-    console.error('Error fetching comments:', error);
+    logger.error('Error fetching comments', error as Error, {
+      userId: userId || undefined,
+      drillCompletionId: drillCompletionId || undefined,
+      mediaUploadId: mediaUploadId || undefined,
+      drillId: drillId || undefined
+    });
     return NextResponse.json(
       { error: 'Failed to fetch comments' },
       { status: 500 }
@@ -56,14 +67,26 @@ export async function GET(request: NextRequest) {
 
 // POST - Create a new comment
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  let drillId: string | undefined = undefined;
+  let drillCompletionId: string | undefined = undefined;
+  let mediaUploadId: string | undefined = undefined;
+  let parentCommentId: string | undefined = undefined;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const body = await request.json();
-    const { content, drillId, drillCompletionId, mediaUploadId, parentCommentId } = body;
+    const { content, drillId: requestDrillId, drillCompletionId: requestDrillCompletionId, mediaUploadId: requestMediaUploadId, parentCommentId: requestParentCommentId } = body;
+    
+    drillId = requestDrillId;
+    drillCompletionId = requestDrillCompletionId;
+    mediaUploadId = requestMediaUploadId;
+    parentCommentId = requestParentCommentId;
 
     if (!content || !content.trim()) {
       return NextResponse.json({ error: 'Comment content is required' }, { status: 400 });
@@ -89,8 +112,8 @@ export async function POST(request: NextRequest) {
       }
 
       // Allow comment if user is the player or the player's parent
-      const canComment = completion.userId === session.user.id || 
-                        completion.user.parentId === session.user.id;
+      const canComment = completion.userId === userId || 
+                        completion.user.parentId === userId;
 
       if (!canComment) {
         return NextResponse.json({ error: 'Unauthorized to comment on this drill' }, { status: 403 });
@@ -100,7 +123,7 @@ export async function POST(request: NextRequest) {
     const comment = await prisma.drillComment.create({
       data: {
         content: content.trim(),
-        userId: session.user.id,
+        userId: userId,
         drillId,
       },
       include: {
@@ -130,7 +153,7 @@ export async function POST(request: NextRequest) {
       });
 
       if (completion) {
-        const isPlayerCommenting = completion.userId === session.user.id;
+        const isPlayerCommenting = completion.userId === userId;
         const notificationUserId = isPlayerCommenting ? 
           completion.user.parentId : completion.userId;
 
@@ -140,7 +163,7 @@ export async function POST(request: NextRequest) {
               userId: notificationUserId,
               type: 'AI_FEEDBACK',
               title: 'New Comment on Drill',
-              message: `${session.user.name} commented on ${completion.drill.name}`,
+              message: `User commented on ${completion.drill.name}`,
               data: {
                 drillCompletionId,
                 commentId: comment.id,
@@ -154,10 +177,16 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(comment);
   } catch (error) {
-    console.error('Error creating comment:', error);
+    logger.error('Error creating comment', error as Error, {
+      userId: userId || undefined,
+      drillId: drillId || undefined,
+      drillCompletionId: drillCompletionId || undefined,
+      mediaUploadId: mediaUploadId || undefined,
+      parentCommentId: parentCommentId || undefined
+    });
     return NextResponse.json(
       { error: 'Failed to create comment' },
       { status: 500 }
     );
   }
-} 
+}            

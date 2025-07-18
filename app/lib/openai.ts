@@ -1,8 +1,19 @@
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let openai: OpenAI | null = null;
+
+function getOpenAIClient(): OpenAI {
+  if (!openai) {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      throw new Error('OPENAI_API_KEY environment variable is required');
+    }
+    openai = new OpenAI({
+      apiKey,
+    });
+  }
+  return openai;
+}
 
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
@@ -16,7 +27,8 @@ export async function generateChatCompletion(
   maxTokens: number = 1000
 ): Promise<string> {
   try {
-    const completion = await openai.chat.completions.create({
+    const client = getOpenAIClient();
+    const completion = await client.chat.completions.create({
       model,
       messages,
       temperature,
@@ -464,4 +476,4 @@ Format as JSON with fields: skillTrends, consistencyAnalysis, improvementRate, p
   }
 }
 
-export default openai; 
+export default getOpenAIClient;   

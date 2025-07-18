@@ -1,20 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { generateAutoComment } from '@/lib/openai';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  let playerId: string | undefined = undefined;
+  let contentType: string | undefined = undefined;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const requestBody = await request.json();
     const { 
-      playerId, 
-      contentType, 
+      playerId: requestPlayerId, 
+      contentType: requestContentType, 
       contentData,
       generateEncouragement = true,
       generateTechnicalFeedback = true,
@@ -22,7 +28,10 @@ export async function POST(request: NextRequest) {
       commentType = 'encouragement',
       generateMultiple = false,
       count = 1
-    } = await request.json();
+    } = requestBody;
+    
+    playerId = requestPlayerId;
+    contentType = requestContentType;
 
     if (!playerId || !contentType) {
       return NextResponse.json({ error: 'Player ID and content type are required' }, { status: 400 });
@@ -70,7 +79,7 @@ export async function POST(request: NextRequest) {
       });
 
       // Save comments to database
-      await saveComments(playerId, contentType, comment, session.user.id);
+      await saveComments(playerId, contentType, comment, userId);
 
       return NextResponse.json({
         success: true,
@@ -82,7 +91,11 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Error in auto comment:', error);
+    logger.error('Error in auto comment', error as Error, { 
+      userId: userId || undefined, 
+      playerId: playerId || undefined,
+      contentType: contentType || undefined
+    });
     return NextResponse.json(
       { error: 'Failed to generate comment' },
       { status: 500 }
@@ -113,7 +126,7 @@ async function fetchPlayerData(playerId: string) {
       }
     };
   } catch (error) {
-    console.error('Error fetching player data:', error);
+    logger.error('Error fetching player data', error as Error, { playerId });
     return null;
   }
 }
@@ -195,7 +208,7 @@ async function generateAIComments(playerData: any, options: any) {
 
     return comments;
   } catch (error) {
-    console.error('Error generating AI comments:', error);
+    logger.error('Error generating AI comments', error as Error, { playerId: playerData?.id, contentType: options?.contentType });
     
     // Fallback comments based on content type
     return generateFallbackComments(playerData, options);
@@ -257,12 +270,12 @@ async function saveComments(playerId: string, contentType: string, comments: any
       isAIGenerated: true
     };
     
-    console.log('Saving AI comment:', savedComment);
+    logger.info('Saving AI comment', { commentId: savedComment.id, playerId, contentType, commenterId });
     
     // In real implementation, save to database
     return savedComment;
   } catch (error) {
-    console.error('Error saving comments:', error);
+    logger.error('Error saving comments', error as Error, { playerId, contentType, commenterId });
     return false;
   }
-} 
+}        

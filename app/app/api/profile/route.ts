@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 import { z } from 'zod';
 
 export const dynamic = 'force-dynamic';
@@ -22,13 +22,14 @@ const profileUpdateSchema = z.object({
 });
 
 export async function GET() {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const userId = session.user.id;
 
     // Get user with player profile
     const user = await prisma.user.findUnique({
@@ -68,7 +69,7 @@ export async function GET() {
 
     return NextResponse.json(playerProfile);
   } catch (error) {
-    console.error('Error fetching profile:', error);
+    logger.error('Error fetching profile', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to fetch profile' },
       { status: 500 }
@@ -77,13 +78,14 @@ export async function GET() {
 }
 
 export async function PUT(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const userId = session.user.id;
     const body = await request.json();
 
     // Validate the request body
@@ -162,10 +164,10 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json(updatedProfile);
   } catch (error) {
-    console.error('Error updating profile:', error);
+    logger.error('Error updating profile', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to update profile' },
       { status: 500 }
     );
   }
-} 
+}          

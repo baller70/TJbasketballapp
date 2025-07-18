@@ -1,15 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 // GET - Fetch comments for a workout completion
 export async function GET(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -68,16 +71,19 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(comments);
   } catch (error) {
-    console.error('Error fetching workout comments:', error);
+    logger.error('Error fetching workout comments', error as Error, { userId: userId || undefined });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 // POST - Create a new comment
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -113,7 +119,7 @@ export async function POST(request: NextRequest) {
     // Create the comment
     const comment = await prisma.workoutComment.create({
       data: {
-        userId: session.user.id,
+        userId: userId,
         workoutId: workoutId || null,
         workoutCompletionId: workoutCompletionId || null,
         content,
@@ -148,16 +154,19 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(comment);
   } catch (error) {
-    console.error('Error creating workout comment:', error);
+    logger.error('Error creating workout comment', error as Error, { userId: userId || undefined });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 // DELETE - Delete a comment
 export async function DELETE(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -177,7 +186,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Comment not found' }, { status: 404 });
     }
 
-    if (comment.userId !== session.user.id) {
+    if (comment.userId !== userId) {
       return NextResponse.json({ error: 'Unauthorized to delete this comment' }, { status: 403 });
     }
 
@@ -193,7 +202,7 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ message: 'Comment deleted successfully' });
   } catch (error) {
-    console.error('Error deleting workout comment:', error);
+    logger.error('Error deleting workout comment', error as Error, { userId: userId || undefined });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-} 
+}            

@@ -1,22 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { generateAssignmentEvaluation } from '@/lib/openai';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  let assignmentId: string | undefined = undefined;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const requestBody = await request.json();
     const { 
-      assignmentId, 
+      assignmentId: requestAssignmentId, 
       includeProgressTracking = true,
       generateFeedback = true
-    } = await request.json();
+    } = requestBody;
+    
+    assignmentId = requestAssignmentId;
 
     if (!assignmentId) {
       return NextResponse.json({ error: 'Assignment ID is required' }, { status: 400 });
@@ -42,7 +49,10 @@ export async function POST(request: NextRequest) {
       assignment: updatedAssignment
     });
   } catch (error) {
-    console.error('Error evaluating assignment:', error);
+    logger.error('Error evaluating assignment', error as Error, { 
+      userId: userId || undefined, 
+      assignmentId: assignmentId || undefined 
+    });
     return NextResponse.json({ error: 'Failed to evaluate assignment' }, { status: 500 });
   }
 }
@@ -76,4 +86,4 @@ async function updateAssignmentWithEvaluation(assignmentId: string, evaluation: 
     aiRecommendations: evaluation.recommendations,
     evaluatedAt: new Date().toISOString()
   };
-} 
+}          
