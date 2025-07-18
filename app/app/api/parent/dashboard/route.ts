@@ -270,43 +270,55 @@ export async function GET() {
 
     const weeklyProgress: { [childId: string]: { completed: number; scheduled: number; points: number } } = {};
 
-    for (const child of user.children) {
-      const completed = await prisma.drillCompletion.count({
+    // Optimize: Use aggregated queries instead of individual queries for each child
+    const [completedStats, scheduledStats] = await Promise.all([
+      prisma.drillCompletion.groupBy({
+        by: ['userId'],
         where: {
-          userId: child.id,
+          userId: {
+            in: childrenIds,
+          },
           completedAt: {
             gte: weekStart,
             lte: weekEnd,
           },
         },
-      });
-
-      const scheduled = await prisma.scheduleEntry.count({
+        _count: {
+          id: true,
+        },
+      }),
+      prisma.scheduleEntry.groupBy({
+        by: ['userId'],
         where: {
-          userId: child.id,
+          userId: {
+            in: childrenIds,
+          },
           date: {
             gte: weekStart,
             lte: weekEnd,
           },
         },
-      });
-
-      const weeklyPointsResult = await prisma.drillCompletion.aggregate({
-        where: {
-          userId: child.id,
-          completedAt: {
-            gte: weekStart,
-            lte: weekEnd,
-          },
+        _count: {
+          id: true,
         },
-        _count: true,
-      });
+      }),
+    ]);
 
-      const weeklyPoints = weeklyPointsResult._count * 10; // Base points per drill
+    const completedMap = new Map(
+      completedStats.map((stat: any) => [stat.userId, stat._count.id])
+    );
+    const scheduledMap = new Map(
+      scheduledStats.map((stat: any) => [stat.userId, stat._count.id])
+    );
+
+    for (const child of user.children) {
+      const completed = completedMap.get(child.id) || 0;
+      const scheduled = scheduledMap.get(child.id) || 0;
+      const weeklyPoints = (completed as number) * 10; // Base points per drill
 
       weeklyProgress[child.id] = {
-        completed,
-        scheduled,
+        completed: completed as number,
+        scheduled: scheduled as number,
         points: weeklyPoints,
       };
     }
