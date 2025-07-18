@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
         stepByStep: stepByStepArray,
         coachingTips: coachingTipsArray,
         videoUrl: videoUrl || null,
-        alternativeVideos: videoUrl ? [videoUrl] : [],
+        alternativeVideos: videoUrl || '',
         isCustom: true,
         createdBy: user.id,
       },

@@ -32,11 +32,11 @@ export interface Drill {
   category: string;
   skillLevel: string;
   duration: string;
-  equipment: string[];
-  stepByStep: string[];
-  coachingTips: string[];
+  equipment: string;
+  stepByStep: string;
+  coachingTips: string;
   videoUrl: string | null;
-  alternativeVideos: string[];
+  alternativeVideos: string;
   isCustom?: boolean;
   createdBy?: string;
 }

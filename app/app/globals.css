@@ -81,4 +81,24 @@
   .title {
     @apply uppercase;
   }
+
+  /* Drag and Drop Styles */
+  .drop-zone {
+    transition: all 0.2s ease;
+  }
+  
+  .drop-zone.drag-over {
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    border-style: dashed !important;
+    border-width: 3px !important;
+    background-color: rgba(59, 130, 246, 0.05);
+  }
+  
+  .dragging {
+    opacity: 0.5;
+    transform: rotate(5deg) scale(0.95);
+    z-index: 1000;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
 }

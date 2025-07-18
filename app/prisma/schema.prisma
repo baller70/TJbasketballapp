@@ -74,6 +74,12 @@ model User {
   customLevels      Level[]
   customGoals       Goal[]
   customWeeklyGoals WeeklyGoal[]
+  reportCards       ReportCard[]
+  assessedReportCards ReportCard[] @relation("ReportCardAssessor")
+  emailSettings     ParentEmailSettings?
+  createdTeams      Team[]
+  teamMemberships   TeamMember[]
+  workoutComments   WorkoutComment[]
 }
 
 model PlayerProfile {
@@ -89,6 +95,19 @@ model PlayerProfile {
   avatarItems     Json?
   goals           Json?
   preferences     Json?
+  
+  // Basketball-specific measurements
+  height          Int?     // in inches
+  weight          Int?     // in pounds  
+  wingspan        Int?     // in inches
+  verticalJump    Int?     // in inches
+  team            String?
+  jerseyNumber    Int?
+  yearsPlaying    Int?
+  dominantHand    String?
+  dateOfBirth     DateTime?
+  avatar          String?
+  
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -137,6 +156,7 @@ model Workout {
   workoutDrills   WorkoutDrill[]
   scheduleEntries ScheduleEntry[]
   workoutCompletions WorkoutCompletion[]
+  workoutComments WorkoutComment[]
 }
 
 model WorkoutDrill {
@@ -208,6 +228,7 @@ model WorkoutCompletion {
   // Relations
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   workout Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  workoutComments WorkoutComment[]
 }
 
 model VoiceNote {
@@ -261,6 +282,24 @@ model DrillComment {
   // Relations
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   drill Drill @relation(fields: [drillId], references: [id], onDelete: Cascade)
+}
+
+model WorkoutComment {
+  id                    String   @id @default(cuid())
+  userId                String
+  workoutId             String
+  workoutCompletionId   String?
+  content               String
+  parentCommentId       String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout           Workout           @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  workoutCompletion WorkoutCompletion? @relation(fields: [workoutCompletionId], references: [id])
+  parentComment     WorkoutComment?   @relation("WorkoutCommentReplies", fields: [parentCommentId], references: [id])
+  replies           WorkoutComment[]  @relation("WorkoutCommentReplies")
 }
 
 model Achievement {
@@ -582,4 +621,105 @@ enum WeeklyGoalStatus {
 enum MediaType {
   VIDEO
   IMAGE
+}
+
+model ParentEmailSettings {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  notificationEmail     String
+  receiveAllCompletions Boolean  @default(false)
+  receiveAchievements   Boolean  @default(true)
+  receiveWeeklyReports  Boolean  @default(true)
+  receiveMediaUploads   Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Team {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  color       String   @default("#3B82F6")
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  createdBy User           @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  members   TeamMember[]
+}
+
+model TeamMember {
+  id     String @id @default(cuid())
+  teamId String
+  userId String
+  role   String @default("member") // member, captain, coach
+  joinedAt DateTime @default(now())
+
+  // Relations
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+}
+
+model ReportCard {
+  id                    String   @id @default(cuid())
+  userId                String
+  assessorId            String   // Parent or coach who filled out the report
+  assessmentDate        DateTime @default(now())
+  
+  // Basketball Skills (1-10 scale)
+  ballHandling          Int      @default(1)
+  ballHandlingNotes     String?
+  shooting              Int      @default(1)
+  shootingNotes         String?
+  passing               Int      @default(1)
+  passingNotes          String?
+  defense               Int      @default(1)
+  defenseNotes          String?
+  rebounding            Int      @default(1)
+  reboundingNotes       String?
+  footwork              Int      @default(1)
+  footworkNotes         String?
+  conditioning          Int      @default(1)
+  conditioningNotes     String?
+  teamwork              Int      @default(1)
+  teamworkNotes         String?
+  leadership            Int      @default(1)
+  leadershipNotes       String?
+  basketballIQ          Int      @default(1)
+  basketballIQNotes     String?
+  
+  // Additional assessments
+  effort                Int      @default(1)
+  effortNotes           String?
+  attitude              Int      @default(1)
+  attitudeNotes         String?
+  coachability          Int      @default(1)
+  coachabilityNotes     String?
+  consistency           Int      @default(1)
+  consistencyNotes      String?
+  improvement           Int      @default(1)
+  improvementNotes      String?
+  
+  // Written feedback
+  strengths             String?
+  areasForImprovement   String?
+  specificGoals         String?
+  parentNotes           String?
+  
+  // Overall ratings
+  overallRating         Int      @default(1)
+  recommendedFocus      String?
+  nextLevelReadiness    Int      @default(1)
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assessor              User     @relation("ReportCardAssessor", fields: [assessorId], references: [id], onDelete: Cascade)
 }

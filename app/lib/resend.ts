@@ -12,7 +12,7 @@ const isEmailConfigured = () => {
 export const sendParentNotification = async (
   parentEmail: string,
   childName: string,
-  notificationType: 'DRILL_COMPLETED' | 'ACHIEVEMENT_UNLOCKED' | 'MEDIA_UPLOADED' | 'STREAK_MILESTONE',
+  notificationType: 'DRILL_COMPLETED' | 'WORKOUT_COMPLETED' | 'ACHIEVEMENT_UNLOCKED' | 'MEDIA_UPLOADED' | 'STREAK_MILESTONE',
   data: any
 ) => {
   // If email is not configured, log the notification instead of failing
@@ -51,6 +51,34 @@ export const sendParentNotification = async (
                   <strong>Points Earned:</strong> ${data.pointsEarned || 10} points
                 </p>
               </div>
+              ${data.studentName ? `<div style="margin-top: 15px; padding: 10px; background: #f1f5f9; border-radius: 6px; font-size: 14px; color: #475569;"><strong>Student:</strong> ${data.studentName}</div>` : ''}
+            </div>
+          </div>
+        `;
+        break;
+        
+      case 'WORKOUT_COMPLETED':
+        subject = `${childName} completed a workout - HoopsQuest`;
+        htmlContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: linear-gradient(135deg, #059669, #10b981); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+              <h1 style="margin: 0; font-size: 24px;">💪 Workout Complete!</h1>
+              <p style="margin: 10px 0 0 0; opacity: 0.9;">Your child crushed their workout!</p>
+            </div>
+            <div style="background: #f8fafc; padding: 20px; border-radius: 0 0 8px 8px;">
+              <h2 style="color: #1e293b; margin: 0 0 15px 0;">${childName} completed a workout!</h2>
+              <div style="background: white; padding: 15px; border-radius: 6px; border-left: 4px solid #059669;">
+                <p><strong>Workout:</strong> ${data.workoutName}</p>
+                <p><strong>Duration:</strong> ${data.duration || 'N/A'}</p>
+                <p><strong>Drills Completed:</strong> ${data.drillsCompleted}</p>
+                <p><strong>Current Streak:</strong> ${data.currentStreak || 0} days</p>
+              </div>
+              <div style="margin-top: 20px; padding: 15px; background: #d1fae5; border-radius: 6px;">
+                <p style="margin: 0; color: #065f46;">
+                  <strong>Points Earned:</strong> ${data.pointsEarned || 50} points
+                </p>
+              </div>
+              ${data.studentName ? `<div style="margin-top: 15px; padding: 10px; background: #f1f5f9; border-radius: 6px; font-size: 14px; color: #475569;"><strong>Student:</strong> ${data.studentName}</div>` : ''}
             </div>
           </div>
         `;

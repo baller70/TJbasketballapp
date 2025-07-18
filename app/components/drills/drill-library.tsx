@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -301,7 +302,7 @@ export default function DrillLibrary() {
             {drill.equipment && drill.equipment.length > 0 && (
               <div className="flex items-center gap-1">
                 <Trophy className="w-4 h-4" />
-                <span>{drill.equipment.join(', ')}</span>
+                <span>{drill.equipment}</span>
               </div>
             )}
           </div>
@@ -576,7 +577,7 @@ export default function DrillLibrary() {
                   {selectedDrill.equipment && selectedDrill.equipment.length > 0 && (
                     <div>
                       <h4 className="font-medium mb-1">Equipment</h4>
-                      <p className="text-gray-600">{selectedDrill.equipment.join(', ')}</p>
+                      <p className="text-gray-600">{selectedDrill.equipment}</p>
                   </div>
                   )}
                 </div>
@@ -585,10 +586,10 @@ export default function DrillLibrary() {
                           <div>
                     <h3 className="font-semibold text-lg mb-2">Instructions</h3>
                     <ol className="list-decimal list-inside space-y-1">
-                      {selectedDrill.stepByStep.map((instruction: string, index: number) => (
-                        <li key={index} className="text-gray-700">{instruction}</li>
-                              ))}
-                            </ol>
+                      {selectedDrill.stepByStep.split(',').map((instruction: string, index: number) => (
+                        <li key={index} className="text-gray-700">{instruction.trim()}</li>
+                      ))}
+                    </ol>
                           </div>
                 )}
 
@@ -596,10 +597,10 @@ export default function DrillLibrary() {
                           <div>
                     <h3 className="font-semibold text-lg mb-2">Coaching Tips</h3>
                     <ul className="list-disc list-inside space-y-1">
-                      {selectedDrill.coachingTips.map((tip: string, index: number) => (
-                        <li key={index} className="text-gray-700">{tip}</li>
-                              ))}
-                            </ul>
+                      {selectedDrill.coachingTips.split(',').map((tip: string, index: number) => (
+                        <li key={index} className="text-gray-700">{tip.trim()}</li>
+                      ))}
+                    </ul>
                           </div>
                 )}
 

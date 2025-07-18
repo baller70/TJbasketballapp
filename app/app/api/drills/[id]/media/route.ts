@@ -71,14 +71,13 @@ export async function POST(
       );
     }
 
-    // For now, we'll just store the file information
     // In a real app, you'd upload to cloud storage (S3, Cloudinary, etc.)
     const mediaUpload = await prisma.mediaUpload.create({
       data: {
         filename: file.name,
-        fileType: file.type,
+        mediaType: file.type.startsWith('video/') ? 'VIDEO' : 'IMAGE',
         fileSize: file.size,
-        url: `/uploads/${file.name}`, // Placeholder URL
+        fileUrl: `/uploads/${file.name}`, // Placeholder URL
         drillId: params.id,
         userId: user.id,
       },

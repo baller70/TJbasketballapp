@@ -58,10 +58,9 @@ export async function POST(request: NextRequest) {
         stepByStep: stepByStep || [],
         coachingTips: coachingTips || [],
         videoUrl,
-        alternativeVideos: [],
+        alternativeVideos: '',
         isCustom: true,
-        userId: session.user.id,
-        isPublic: isPublic || false,
+        createdBy: session.user.id,
       },
     });
 
@@ -103,7 +102,7 @@ export async function GET(request: NextRequest) {
     const customDrills = await prisma.drill.findMany({
       where: whereClause,
       include: {
-        user: {
+        creator: {
           select: {
             id: true,
             name: true,
@@ -146,7 +145,7 @@ export async function DELETE(request: NextRequest) {
     const drill = await prisma.drill.findFirst({
       where: {
         id: drillId,
-        userId: session.user.id,
+        createdBy: session.user.id,
         isCustom: true,
       },
     });

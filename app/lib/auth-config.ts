@@ -10,7 +10,6 @@ import { validatePassword, isCommonWeakPassword } from './password-validation';
 const env = getEnvConfig();
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
   session: {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -108,7 +107,6 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/auth/signin',
-    signUp: '/auth/signup',
   },
   secret: env.NEXTAUTH_SECRET,
   debug: env.NODE_ENV === 'development',

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
+import { sendParentNotification } from '@/lib/resend';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,9 +31,11 @@ export async function POST(request: NextRequest) {
       where: { userId: session.user.id },
     });
 
+    let pointsToAdd = completedDrills.length * 15; // Base points per drill in workout
+    pointsToAdd += 50; // Bonus for completing full workout
+    let newStreak = 0;
+
     if (playerProfile) {
-      let pointsToAdd = completedDrills.length * 15; // Base points per drill in workout
-      pointsToAdd += 50; // Bonus for completing full workout
 
       // Check if this is a daily streak
       const today = new Date();
@@ -47,7 +50,7 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      let newStreak = playerProfile.currentStreak;
+      newStreak = playerProfile.currentStreak;
       if (todayCompletions === 1) {
         // First completion today
         const yesterday = new Date(today);
@@ -80,6 +83,92 @@ export async function POST(request: NextRequest) {
           lastActiveDate: new Date(),
         },
       });
+    }
+
+    // Send email notification to centralized parent email
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        include: {
+          parent: {
+            include: {
+              emailSettings: true,
+            },
+          },
+        },
+      });
+
+      // Get workout information
+      const workout = await prisma.workout.findUnique({
+        where: { id: workoutId },
+      });
+
+      // Check if there are any parent email settings configured for all completions
+      const globalEmailSettings = await prisma.parentEmailSettings.findMany({
+        where: {
+          receiveAllCompletions: true,
+        },
+        include: {
+          user: true,
+        },
+      });
+
+      // Send to user's parent if they have email settings
+      if (user?.parent?.emailSettings?.receiveAllCompletions) {
+        await sendParentNotification(
+          user.parent.emailSettings.notificationEmail,
+          user.name || 'Your child',
+          'WORKOUT_COMPLETED',
+          {
+            workoutName: workout?.name || 'Unknown Workout',
+            duration: totalDuration ? `${Math.floor(totalDuration / 60)}:${(totalDuration % 60).toString().padStart(2, '0')}` : null,
+            drillsCompleted: completedDrills.length,
+            pointsEarned: pointsToAdd,
+            currentStreak: newStreak,
+          }
+        );
+      }
+
+      // Send to all parents who want to receive all completions
+      for (const emailSetting of globalEmailSettings) {
+        await sendParentNotification(
+          emailSetting.notificationEmail,
+          user?.name || 'A student',
+          'WORKOUT_COMPLETED',
+          {
+            workoutName: workout?.name || 'Unknown Workout',
+            duration: totalDuration ? `${Math.floor(totalDuration / 60)}:${(totalDuration % 60).toString().padStart(2, '0')}` : null,
+            drillsCompleted: completedDrills.length,
+            pointsEarned: pointsToAdd,
+            currentStreak: newStreak,
+            studentName: user?.name || 'A student',
+          }
+        );
+      }
+
+      // Create notification for parent if they exist
+      if (user?.parent) {
+        await prisma.notification.create({
+          data: {
+            userId: user.parent.id,
+            type: 'PARENT_NOTIFICATION',
+            title: 'Workout Completed',
+            message: `${user.name || 'Your child'} completed "${workout?.name || 'Unknown Workout'}" with ${completedDrills.length} drills and earned ${pointsToAdd} points!`,
+            read: false,
+            data: {
+              workoutCompletionId: workoutCompletion.id,
+              childName: user.name,
+              workoutName: workout?.name,
+              drillsCompleted: completedDrills.length,
+              pointsEarned: pointsToAdd,
+              totalDuration: totalDuration,
+            },
+          },
+        });
+      }
+    } catch (emailError) {
+      console.error('Error sending parent notification:', emailError);
+      // Don't fail the workout completion if email fails
     }
 
     return NextResponse.json(workoutCompletion);

@@ -193,7 +193,7 @@ export default function MediaViewer({
                   </div>
                   <div className="flex items-center gap-2 text-xs text-gray-600">
                     <Calendar className="h-3 w-3" />
-                    <span>{format(new Date(upload.createdAt), 'MMM d, yyyy')}</span>
+                    <span>{upload.createdAt && !isNaN(new Date(upload.createdAt).getTime()) ? format(new Date(upload.createdAt), 'MMM d, yyyy') : 'Date not available'}</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-gray-600">
                     <span>{formatFileSize(upload.fileSize)}</span>
@@ -235,7 +235,7 @@ export default function MediaViewer({
                   {selectedMedia.filename}
                 </DialogTitle>
                 <DialogDescription>
-                  Drill: {selectedMedia.drill.name} • Uploaded by {selectedMedia.user.name} • {format(new Date(selectedMedia.createdAt), 'MMM d, yyyy')}
+                  Drill: {selectedMedia.drill.name} • Uploaded by {selectedMedia.user.name} • {selectedMedia.createdAt && !isNaN(new Date(selectedMedia.createdAt).getTime()) ? format(new Date(selectedMedia.createdAt), 'MMM d, yyyy') : 'Date not available'}
                 </DialogDescription>
               </DialogHeader>
 
@@ -273,7 +273,7 @@ export default function MediaViewer({
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm">{selectedMedia.feedback}</p>
-                      {selectedMedia.reviewedAt && (
+                      {selectedMedia.reviewedAt && !isNaN(new Date(selectedMedia.reviewedAt).getTime()) && (
                         <p className="text-xs text-gray-500 mt-2">
                           Reviewed on {format(new Date(selectedMedia.reviewedAt), 'MMM d, yyyy')}
                         </p>
