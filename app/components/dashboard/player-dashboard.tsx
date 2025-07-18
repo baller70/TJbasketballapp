@@ -32,7 +32,7 @@ import WorkoutBuilder from '@/components/workout/workout-builder';
 import AchievementsView from '@/components/achievements/achievements-view';
 import AIChat from '@/components/ai/ai-chat';
 import DailyInspiration from '@/components/daily-inspiration/daily-inspiration';
-import RewardSystem from '@/components/rewards/reward-system';
+import { RewardSystem } from '@/components/rewards/reward-system';
 
 interface PlayerDashboardProps {
   user: User & { playerProfile: PlayerProfile };
