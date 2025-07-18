@@ -3,6 +3,9 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { BasketballCard } from '@/components/ui/basketball-card';
+import { StatDisplay } from '@/components/ui/stat-display';
+import { BasketballProgress } from '@/components/ui/basketball-progress';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -409,33 +412,40 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <Card className="bg-gradient-to-r from-orange-600 to-orange-700 text-white border-0">
-                <CardContent className="p-6">
+              <BasketballCard variant="highlight" className="border-0 text-white">
+                <CardContent className="p-8">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h2 className="text-2xl font-bold mb-2">
-                        Hey {user.name?.split(' ')[0]}! 🏀
+                      <h2 className="text-3xl font-bold mb-2 flex items-center gap-3">
+                        <span className="animate-basketball-bounce">🏀</span>
+                        Hey {user.name?.split(' ')[0]}!
                       </h2>
-                      <p className="text-orange-100 mb-4">
+                      <p className="text-orange-100 mb-4 text-lg">
                         {motivationalQuote || "Ready to take your game to the next level?"}
                       </p>
-                      <div className="flex items-center gap-4">
-                        <Badge className="bg-white text-orange-600 font-semibold">
+                      <div className="flex items-center gap-6">
+                        <Badge className="bg-white/20 text-white font-semibold px-4 py-2 backdrop-blur-sm">
+                          <Trophy className="h-4 w-4 mr-2" />
                           {currentLevel.charAt(0).toUpperCase() + currentLevel.slice(1)}
                         </Badge>
-                        <div className="flex items-center gap-2">
-                          <Target className="h-4 w-4" />
-                          <span className="text-sm">Streak: {stats.currentStreak} days</span>
+                        <div className="flex items-center gap-2 text-white/90">
+                          <Target className="h-5 w-5" />
+                          <span className="font-medium">Streak: {stats.currentStreak} days</span>
                         </div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-3xl font-bold">{stats.totalPoints}</div>
-                      <div className="text-orange-100 text-sm">Total Points</div>
+                      <div className="text-4xl font-bold text-white mb-1">{stats.totalPoints}</div>
+                      <div className="text-orange-100 text-sm font-medium">Total Points</div>
+                      <div className="mt-2">
+                        <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                          <Trophy className="h-8 w-8 text-yellow-300" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
-              </Card>
+              </BasketballCard>
             </motion.div>
 
             {/* Daily Inspiration Section */}
