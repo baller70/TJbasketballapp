@@ -171,7 +171,6 @@ export default function PlayerDashboard({ user }: PlayerDashboardProps) {
         setNewAssessmentNotification(hasNewAssessment);
       } else {
         // Fallback to mock data if API fails
-        console.log('Assessment API not available, using mock data');
         const mockAssessments: SkillAssessment[] = [
           {
             id: 'mock-assessment1',

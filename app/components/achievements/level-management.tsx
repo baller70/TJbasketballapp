@@ -105,7 +105,6 @@ export default function LevelManagement() {
         throw new Error('Failed to fetch levels');
       }
     } catch (error) {
-      console.error('Error fetching levels:', error);
       toast({
         title: "Error",
         description: "Failed to load levels",
@@ -143,7 +142,6 @@ export default function LevelManagement() {
         description: "Level order updated successfully",
       });
     } catch (error) {
-      console.error('Error updating level order:', error);
       toast({
         title: "Error",
         description: "Failed to update level order",
@@ -197,7 +195,6 @@ export default function LevelManagement() {
         throw new Error('Failed to create level');
       }
     } catch (error) {
-      console.error('Error creating level:', error);
       toast({
         title: "Error",
         description: "Failed to create level",
@@ -222,7 +219,6 @@ export default function LevelManagement() {
         throw new Error('Failed to delete level');
       }
     } catch (error) {
-      console.error('Error deleting level:', error);
       toast({
         title: "Error",
         description: "Failed to delete level",
@@ -597,4 +593,4 @@ export default function LevelManagement() {
       </Card>
     </div>
   );
-} 
+}  

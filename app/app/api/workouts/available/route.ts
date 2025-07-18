@@ -1,27 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    
-    if (!session) {
-      console.log('No session found, using mock available workouts');
-      // Mock workouts data
-      const mockWorkouts = [
-        { id: 'workout1', name: 'Morning Practice', difficulty: 'Intermediate', duration: 60 },
-        { id: 'workout2', name: 'Shooting Session', difficulty: 'Beginner', duration: 45 },
-        { id: 'workout3', name: 'Conditioning Workout', difficulty: 'Advanced', duration: 90 },
-        { id: 'workout4', name: 'Ball Handling Focus', difficulty: 'Intermediate', duration: 30 },
-        { id: 'workout5', name: 'Game Simulation', difficulty: 'Advanced', duration: 120 }
-      ];
-      
-      return NextResponse.json(mockWorkouts);
-    }
-
-    // In a real app, this would fetch from database
-    // For now, return mock data
+    // Mock workouts data for demonstration
     const workouts = [
       { id: 'workout1', name: 'Morning Practice', difficulty: 'Intermediate', duration: 60 },
       { id: 'workout2', name: 'Shooting Session', difficulty: 'Beginner', duration: 45 },
@@ -39,4 +22,4 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-} 
+}  

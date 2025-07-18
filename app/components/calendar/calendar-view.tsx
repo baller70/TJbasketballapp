@@ -82,7 +82,6 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
         }));
         setScheduleEntries(entriesWithDates);
       } catch (error) {
-        console.error('Error loading schedule entries from localStorage:', error);
       }
     }
   }, []);
@@ -116,13 +115,11 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
           setScheduleEntries(data);
         }
       } else {
-        // Handle non-200 responses gracefully
-        console.log('Schedule API not available, using localStorage data');
+        // Handle non-200 responses gracefully - using localStorage data
         // Don't clear scheduleEntries here, keep localStorage data
       }
     } catch (error) {
-      console.error('Error fetching schedule entries:', error);
-      // Don't clear scheduleEntries here, keep localStorage data
+      // API unavailable - keep localStorage data
     } finally {
       setLoading(false);
     }
@@ -145,7 +142,6 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
         ]);
       }
     } catch (error) {
-      console.error('Error fetching drills:', error);
       setDrills([]);
     }
   };
@@ -165,7 +161,6 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
         ]);
       }
     } catch (error) {
-      console.error('Error fetching workouts:', error);
       setWorkouts([]);
     }
   };
@@ -324,14 +319,12 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
           );
         }
       } catch (error) {
-        console.log('API not available, using local storage');
       }
       
       setShowAddDialog(false);
       setNewEntry({ drillId: '', workoutId: '', date: '', startTime: '', notes: '' });
       
     } catch (error) {
-      console.error('Error adding schedule entry:', error);
       toast({
         title: "Error",
         description: "Failed to schedule the activity. Please try again.",
@@ -364,10 +357,8 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
           body: JSON.stringify({ status }),
         });
       } catch (error) {
-        console.log('API not available for update');
       }
     } catch (error) {
-      console.error('Error updating schedule entry:', error);
     }
   };
 
@@ -387,10 +378,8 @@ export default function CalendarView({ showDragSidebar = true }: CalendarViewPro
           method: 'DELETE',
         });
       } catch (error) {
-        console.log('API not available for deletion');
       }
     } catch (error) {
-      console.error('Error deleting schedule entry:', error);
     }
   };
 

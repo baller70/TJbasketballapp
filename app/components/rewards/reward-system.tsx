@@ -380,7 +380,6 @@ export function RewardSystem() {
         setReportCardHistory(data.history);
       } else {
         // If no session found, use mock data for demonstration
-        console.log('No session found, using mock report card data');
         setReportCard({
           id: 'mock-report-1',
           userId: 'mock-user',
@@ -1687,4 +1686,4 @@ export function RewardSystem() {
       />
     </div>
   );
-} 
+}  

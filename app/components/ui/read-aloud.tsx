@@ -112,7 +112,6 @@ export default function ReadAloud({
     }
 
     utterance.onerror = (event) => {
-      console.error('Speech synthesis error:', event.error)
       setIsPlaying(false)
       setIsPaused(false)
       setCurrentWordIndex(0)
@@ -261,4 +260,4 @@ export default function ReadAloud({
       </CardContent>
     </Card>
   )
-} 
+}  

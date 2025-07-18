@@ -130,7 +130,6 @@ export default function MediaUpload({
 
     if (errors.length > 0) {
       // Show error toast or alert
-      console.error('File upload errors:', errors);
     }
 
     setFiles(prev => [...prev, ...validFiles]);
@@ -183,7 +182,6 @@ export default function MediaUpload({
       await onUpload(files);
       setFiles([]);
     } catch (error) {
-      console.error('Upload failed:', error);
     } finally {
       setUploading(false);
     }

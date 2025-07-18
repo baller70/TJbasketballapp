@@ -109,7 +109,6 @@ export default function WorkoutBuilder() {
         setDrills(data);
       }
     } catch (error) {
-      console.error('Error fetching drills:', error);
     }
   };
 
@@ -121,7 +120,6 @@ export default function WorkoutBuilder() {
         setWorkouts(data);
       }
     } catch (error) {
-      console.error('Error fetching workouts:', error);
     } finally {
       setLoading(false);
     }
@@ -147,7 +145,6 @@ export default function WorkoutBuilder() {
         });
       }
     } catch (error) {
-      console.error('Error creating workout:', error);
       toast({
         title: "Error",
         description: "Failed to create workout",
@@ -178,7 +175,6 @@ export default function WorkoutBuilder() {
         });
       }
     } catch (error) {
-      console.error('Error updating workout:', error);
       toast({
         title: "Error",
         description: "Failed to update workout",
@@ -205,7 +201,6 @@ export default function WorkoutBuilder() {
         });
       }
     } catch (error) {
-      console.error('Error deleting workout:', error);
       toast({
         title: "Error",
         description: "Failed to delete workout",
@@ -319,7 +314,6 @@ export default function WorkoutBuilder() {
         }));
       }
     } catch (error) {
-      console.error('Error fetching media uploads:', error);
     }
   };
 
@@ -349,7 +343,6 @@ export default function WorkoutBuilder() {
         throw new Error('Upload failed');
       }
     } catch (error) {
-      console.error('Error uploading media:', error);
       toast({
         title: "Error",
         description: "Failed to upload media",
@@ -458,7 +451,6 @@ export default function WorkoutBuilder() {
         throw new Error('Failed to update drill');
       }
     } catch (error) {
-      console.error('Error updating drill:', error);
       toast({
         title: "Error",
         description: "Failed to update drill",
