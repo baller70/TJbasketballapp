@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -35,7 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -69,10 +72,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(customDrill);
   } catch (error) {
-    console.error('Error creating custom drill:', error);
+    logger.error('Error creating custom drill', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to create custom drill' },
       { status: 500 }
     );
   }
-} 
+}          

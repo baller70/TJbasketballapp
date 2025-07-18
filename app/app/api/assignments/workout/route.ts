@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = await auth();
     
-    if (!session) {
-      console.log('No session found, using mock workout assignment');
+    if (!userId) {
+      logger.info('No session found, using mock workout assignment');
       // Mock response for development
       const body = await request.json();
       
-      console.log('Mock workout assignment:', body);
+      logger.info('Mock workout assignment', { body });
       
       return NextResponse.json({ 
         success: true, 
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const { userId, workoutId, note, assignedBy } = await request.json();
+    const { userId: targetUserId, workoutId, note, assignedBy } = await request.json();
 
     // In a real app, this would save to database
     // For now, return mock success
@@ -36,10 +36,10 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error in workout assignment:', error);
+    logger.error('Error in workout assignment', error as Error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
-} 
+}        

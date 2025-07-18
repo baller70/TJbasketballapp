@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       // Return mock users for demonstration
-      console.log('No session found, using mock users data');
+      logger.info('No session found, using mock users data');
       return NextResponse.json([
         {
           id: 'user1',
@@ -110,7 +110,7 @@ export async function GET() {
 
     return NextResponse.json(users);
   } catch (error) {
-    console.error('Error fetching users:', error);
+    logger.error('Error fetching users', error as Error);
     return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
   }
-} 
+}      

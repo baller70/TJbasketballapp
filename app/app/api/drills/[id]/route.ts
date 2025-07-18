@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
-import { authOptions } from '@/lib/auth-config';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,10 +9,13 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
+    const authResult = await auth();
+    userId = authResult.userId;
     
-    if (!session) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -48,7 +51,7 @@ export async function PUT(
     }
 
     // Only allow editing if it's a custom drill created by the user or if user is admin
-    if (existingDrill.createdBy !== session.user.id && !existingDrill.isCustom) {
+    if (existingDrill.createdBy !== userId && !existingDrill.isCustom) {
       return NextResponse.json({ error: 'Not authorized to edit this drill' }, { status: 403 });
     }
 
@@ -70,7 +73,7 @@ export async function PUT(
 
     return NextResponse.json(updatedDrill);
   } catch (error) {
-    console.error('Error updating drill:', error);
+    logger.error('Error updating drill', error as Error, { drillId: params.id, userId: userId || undefined });
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -95,10 +98,10 @@ export async function GET(
 
     return NextResponse.json(drill);
   } catch (error) {
-    console.error('Error fetching drill:', error);
+    logger.error('Error fetching drill', error as Error, { drillId: params.id });
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
-} 
+}          

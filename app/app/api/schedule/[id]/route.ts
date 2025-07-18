@@ -1,7 +1,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,9 +10,12 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession();
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -20,7 +24,7 @@ export async function PATCH(
     const scheduleEntry = await prisma.scheduleEntry.findFirst({
       where: {
         id: params.id,
-        userId: session.user.id,
+        userId: userId,
       },
     });
 
@@ -47,7 +51,7 @@ export async function PATCH(
     if (status === 'COMPLETED' && scheduleEntry.drillId) {
       await prisma.drillCompletion.create({
         data: {
-          userId: session.user.id,
+          userId: userId,
           drillId: scheduleEntry.drillId,
           scheduleEntryId: scheduleEntry.id,
           duration: 0, // Will be updated by timer
@@ -58,7 +62,7 @@ export async function PATCH(
 
     return NextResponse.json(updatedEntry);
   } catch (error) {
-    console.error('Error updating schedule entry:', error);
+    logger.error('Error updating schedule entry', error as Error, { userId: userId || undefined, scheduleId: params.id });
     return NextResponse.json(
       { error: 'Failed to update schedule entry' },
       { status: 500 }
@@ -70,16 +74,19 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession();
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const scheduleEntry = await prisma.scheduleEntry.findFirst({
       where: {
         id: params.id,
-        userId: session.user.id,
+        userId: userId,
       },
     });
 
@@ -96,7 +103,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: 'Schedule entry deleted' });
   } catch (error) {
-    console.error('Error deleting schedule entry:', error);
+    logger.error('Error deleting schedule entry', error as Error, { userId: userId || undefined, scheduleId: params.id });
     return NextResponse.json(
       { error: 'Failed to delete schedule entry' },
       { status: 500 }

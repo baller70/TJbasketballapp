@@ -1,14 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -27,7 +30,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'Workout not found' }, { status: 404 });
     }
 
-    if (existingWorkout.userId !== session.user.id) {
+    if (existingWorkout.userId !== userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
@@ -67,7 +70,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
     return NextResponse.json({ ...updatedWorkout, workoutDrills });
   } catch (error) {
-    console.error('Error updating workout:', error);
+    logger.error('Error updating workout', error as Error, { userId: userId || undefined, workoutId: params.id });
     return NextResponse.json(
       { error: 'Failed to update workout' },
       { status: 500 }
@@ -76,9 +79,12 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -93,7 +99,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ error: 'Workout not found' }, { status: 404 });
     }
 
-    if (existingWorkout.userId !== session.user.id) {
+    if (existingWorkout.userId !== userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
@@ -109,10 +115,10 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
     return NextResponse.json({ message: 'Workout deleted successfully' });
   } catch (error) {
-    console.error('Error deleting workout:', error);
+    logger.error('Error deleting workout', error as Error, { userId: userId || undefined, workoutId: params.id });
     return NextResponse.json(
       { error: 'Failed to delete workout' },
       { status: 500 }
     );
   }
-} 
+}          

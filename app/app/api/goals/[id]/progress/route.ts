@@ -1,19 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const userId = session.user.id;
     const goalId = params.id;
     const { progress, completed = false } = await request.json();
 
@@ -146,10 +147,13 @@ export async function POST(
 
     return NextResponse.json(updatedUserGoal);
   } catch (error) {
-    console.error('Error updating goal progress:', error);
+    logger.error('Error updating goal progress', error as Error, { 
+      userId: userId || undefined, 
+      goalId: params.id 
+    });
     return NextResponse.json(
       { error: 'Failed to update goal progress' },
       { status: 500 }
     );
   }
-} 
+}          

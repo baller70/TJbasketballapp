@@ -1,18 +1,18 @@
 
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = await auth();
     
     // Handle case where there's no session (mock mode)
-    if (!session?.user?.id) {
-      console.log('No session found, using mock challenges data');
+    if (!userId) {
+      logger.info('No session found, using mock challenges data');
       
       // Return 10 comprehensive basketball challenges
       const mockChallenges = {
@@ -441,7 +441,7 @@ export async function GET() {
     return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
 
   } catch (error) {
-    console.error('Error fetching challenges:', error);
+    logger.error('Error fetching challenges', error as Error);
     return NextResponse.json({ error: 'Failed to fetch challenges' }, { status: 500 });
   }
 }

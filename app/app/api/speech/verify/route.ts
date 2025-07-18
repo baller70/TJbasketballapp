@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, unlink } from 'fs/promises';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { logger } from '@/lib/logger';
 
 // Simple text similarity calculation using Levenshtein distance
 function calculateSimilarity(text1: string, text2: string): number {
@@ -129,7 +130,7 @@ async function whisperSpeechToText(audioFilePath: string, targetText: string): P
     // Mock implementation - replace with real service
     return await mockSpeechToText(targetText);
   } catch (error) {
-    console.error('Speech-to-text error:', error);
+    logger.error('Speech-to-text error', error as Error);
     throw new Error('Failed to transcribe audio');
   }
 }
@@ -188,12 +189,12 @@ export async function POST(request: NextRequest) {
       try {
         await unlink(filePath);
       } catch (error) {
-        console.error('Error deleting temporary file:', error);
+        logger.error('Error deleting temporary file', error as Error);
       }
     }
 
   } catch (error) {
-    console.error('Speech verification error:', error);
+    logger.error('Speech verification error', error as Error);
     return NextResponse.json(
       { error: 'Failed to verify speech' },
       { status: 500 }
@@ -214,4 +215,4 @@ export async function GET() {
       'Proper cleanup of temporary files'
     ]
   });
-} 
+}  

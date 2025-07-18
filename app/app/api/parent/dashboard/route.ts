@@ -1,17 +1,17 @@
 
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
-import { authOptions } from '@/lib/auth-config';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       // Return mock data for demonstration
-      console.log('No session found, using mock parent dashboard data');
+      logger.info('No session found, using mock parent dashboard data');
       return NextResponse.json({
         children: [
           {
@@ -184,7 +184,6 @@ export async function GET() {
       });
     }
 
-    const userId = session.user.id;
 
     // Get user to check if they're a parent
     const user = await prisma.user.findUnique({
@@ -321,7 +320,7 @@ export async function GET() {
 
     return NextResponse.json(dashboardData);
   } catch (error) {
-    console.error('Error fetching parent dashboard data:', error);
+    logger.error('Error fetching parent dashboard data', error as Error);
     return NextResponse.json(
       { error: 'Failed to fetch dashboard data' },
       { status: 500 }

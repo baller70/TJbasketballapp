@@ -2,12 +2,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const { userId } = await auth();
+    const authResult = await auth();
+    userId = authResult.userId;
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -40,7 +44,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(scheduleEntries);
   } catch (error) {
-    console.error('Error fetching schedule entries:', error);
+    logger.error('Error fetching schedule entries', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to fetch schedule entries' },
       { status: 500 }
@@ -49,8 +53,11 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const { userId } = await auth();
+    const authResult = await auth();
+    userId = authResult.userId;
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -75,7 +82,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(scheduleEntry, { status: 201 });
   } catch (error) {
-    console.error('Error creating schedule entry:', error);
+    logger.error('Error creating schedule entry', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to create schedule entry' },
       { status: 500 }

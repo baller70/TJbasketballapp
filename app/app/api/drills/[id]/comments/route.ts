@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = await auth();
     
-    if (!session) {
-      console.log('No session found, using mock drill comment save');
+    if (!userId) {
+      logger.info('No session found, using mock drill comment save');
       // Mock response for development
       const body = await request.json();
       
-      console.log('Mock drill comment save for drill:', params.id, body);
+      logger.info('Mock drill comment save for drill', { drillId: params.id, body });
       
       return NextResponse.json({ 
         success: true, 
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       });
     }
 
-    const { userId, comment, commentBy } = await request.json();
+    const { userId: targetUserId, comment, commentBy } = await request.json();
 
     // In a real app, this would save to database
     // For now, return mock success
@@ -36,10 +36,10 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     });
 
   } catch (error) {
-    console.error('Error saving drill comment:', error);
+    logger.error('Error saving drill comment', error as Error, { drillId: params.id });
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
-} 
+}        

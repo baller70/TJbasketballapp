@@ -1,21 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = await auth();
     
-    if (!session?.user?.id) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const userId = params.id;
+    const targetUserId = params.id;
 
     // Fetch all media uploads for this user
     const mediaUploads = await prisma.mediaUpload.findMany({
-      where: { userId: userId },
+      where: { userId: targetUserId },
       include: {
         drill: {
           select: {
@@ -63,10 +63,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     });
 
   } catch (error) {
-    console.error('Error fetching media uploads:', error);
+    logger.error('Error fetching media uploads', error as Error, {
+      userId: params.id,
+      endpoint: '/api/users/[id]/media'
+    });
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
-} 
+}        

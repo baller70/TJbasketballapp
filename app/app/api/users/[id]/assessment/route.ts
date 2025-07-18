@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+  const requestContext = logger.createRequestContext(request);
+  
   try {
     // Skip authentication for development
-    console.log('Assessment request received for user:', params.id);
+    logger.info('Assessment request received for user', { ...requestContext, targetUserId: params.id });
 
     const { 
       skillRatings, 
@@ -15,7 +18,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     const userId = params.id;
 
-    console.log('Processing assessment for user:', userId);
+    logger.info('Processing assessment for user', { ...requestContext, userId });
 
     // For development, return mock data instead of saving to database
     const mockAssessment = {
@@ -31,7 +34,7 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
       createdAt: new Date().toISOString()
     };
 
-    console.log('Mock assessment created:', mockAssessment.id);
+    logger.info('Mock assessment created', { ...requestContext, assessmentId: mockAssessment.id, userId });
 
     return NextResponse.json({ 
       success: true, 
@@ -40,10 +43,10 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     });
 
   } catch (error) {
-    console.error('Assessment error:', error);
+    logger.error('Assessment error', error as Error, requestContext);
     return NextResponse.json({ 
       error: 'Failed to save assessment',
       details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 });
   }
-} 
+}  

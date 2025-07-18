@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { LEVEL_PROGRESSION, LevelTier } from '@/lib/level-progression';
+import { logger } from '@/lib/logger';
 import fs from 'fs';
 import path from 'path';
 
@@ -10,14 +10,14 @@ export const dynamic = 'force-dynamic';
 // Get all levels
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     return NextResponse.json(LEVEL_PROGRESSION);
   } catch (error) {
-    console.error('Error fetching levels:', error);
+    logger.error('Error fetching levels', error as Error);
     return NextResponse.json({ error: 'Failed to fetch levels' }, { status: 500 });
   }
 }
@@ -25,8 +25,8 @@ export async function GET() {
 // Create a new level
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(newLevel, { status: 201 });
   } catch (error) {
-    console.error('Error creating level:', error);
+    logger.error('Error creating level', error as Error);
     return NextResponse.json({ error: 'Failed to create level' }, { status: 500 });
   }
 }
@@ -53,8 +53,8 @@ export async function POST(request: Request) {
 // Update level order (for drag and drop)
 export async function PUT(request: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -71,7 +71,7 @@ export async function PUT(request: Request) {
 
     return NextResponse.json(updatedLevels);
   } catch (error) {
-    console.error('Error updating level order:', error);
+    logger.error('Error updating level order', error as Error);
     return NextResponse.json({ error: 'Failed to update level order' }, { status: 500 });
   }
 }
@@ -79,8 +79,8 @@ export async function PUT(request: Request) {
 // Delete a level
 export async function DELETE(request: Request) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -104,7 +104,7 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ message: 'Level deleted successfully' });
   } catch (error) {
-    console.error('Error deleting level:', error);
+    logger.error('Error deleting level', error as Error);
     return NextResponse.json({ error: 'Failed to delete level' }, { status: 500 });
   }
 }
@@ -113,5 +113,5 @@ async function updateLevelProgressionFile(levels: LevelTier[]) {
   // In a real application, you would update a database
   // For now, we'll just return the updated levels
   // This is a placeholder for the actual file update logic
-  console.log('Level progression updated:', levels);
-} 
+  logger.info('Level progression updated', { levelsCount: levels.length });
+}      

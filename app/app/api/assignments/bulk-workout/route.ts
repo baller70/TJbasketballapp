@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
+  const requestContext = logger.createRequestContext(request);
+  
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = await auth();
     
-    if (!session) {
-      console.log('No session found, using mock bulk workout assignment');
+    if (!userId) {
+      logger.info('No session found, using mock bulk workout assignment', requestContext);
       // Mock response for development
       const body = await request.json();
       
-      console.log('Mock bulk workout assignment:', body);
+      logger.info('Mock bulk workout assignment', { ...requestContext, body });
       
       return NextResponse.json({ 
         success: true, 
@@ -44,10 +46,10 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error in bulk workout assignment:', error);
+    logger.error('Error in bulk workout assignment', error as Error, requestContext);
     return NextResponse.json(
       { success: false, message: 'Failed to assign workout to players' },
       { status: 500 }
     );
   }
-} 
+}      

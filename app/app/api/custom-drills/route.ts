@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -35,7 +38,7 @@ export async function POST(request: NextRequest) {
     const existingDrill = await prisma.drill.findFirst({
       where: {
         name,
-        createdBy: session.user.id,
+        createdBy: userId,
       },
     });
 
@@ -60,13 +63,13 @@ export async function POST(request: NextRequest) {
         videoUrl,
         alternativeVideos: '',
         isCustom: true,
-        createdBy: session.user.id,
+        createdBy: userId,
       },
     });
 
     return NextResponse.json(customDrill, { status: 201 });
   } catch (error) {
-    console.error('Error creating custom drill:', error);
+    logger.error('Error creating custom drill', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to create custom drill' },
       { status: 500 }
@@ -75,9 +78,12 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -90,13 +96,13 @@ export async function GET(request: NextRequest) {
       // Get user's custom drills AND public custom drills from other users
       whereClause = {
         OR: [
-          { userId: session.user.id },
+          { userId: userId },
           { isPublic: true, isCustom: true }
         ]
       };
     } else {
       // Get only user's custom drills
-      whereClause = { userId: session.user.id };
+      whereClause = { userId: userId };
     }
 
     const customDrills = await prisma.drill.findMany({
@@ -116,7 +122,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(customDrills);
   } catch (error) {
-    console.error('Error fetching custom drills:', error);
+    logger.error('Error fetching custom drills', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to fetch custom drills' },
       { status: 500 }
@@ -125,14 +131,18 @@ export async function GET(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  let userId: string | null = null;
+  let drillId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
-    const drillId = searchParams.get('id');
+    drillId = searchParams.get('id');
 
     if (!drillId) {
       return NextResponse.json(
@@ -145,7 +155,7 @@ export async function DELETE(request: NextRequest) {
     const drill = await prisma.drill.findFirst({
       where: {
         id: drillId,
-        createdBy: session.user.id,
+        createdBy: userId,
         isCustom: true,
       },
     });
@@ -164,10 +174,13 @@ export async function DELETE(request: NextRequest) {
 
     return NextResponse.json({ message: 'Custom drill deleted successfully' });
   } catch (error) {
-    console.error('Error deleting custom drill:', error);
+    logger.error('Error deleting custom drill', error as Error, { 
+      userId: userId || undefined, 
+      drillId: drillId || undefined 
+    });
     return NextResponse.json(
       { error: 'Failed to delete custom drill' },
       { status: 500 }
     );
   }
-} 
+}            

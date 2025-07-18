@@ -1,16 +1,16 @@
 
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
-import { authOptions } from '@/lib/auth-config';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      console.log('No session found, using mock dashboard stats data');
+    const { userId } = await auth();
+    if (!userId) {
+      logger.info('No session found, using mock dashboard stats data');
       // Return mock data when no session
       const mockStats = {
         totalPoints: 150,
@@ -26,8 +26,6 @@ export async function GET() {
       };
       return NextResponse.json(mockStats);
     }
-
-    const userId = session.user.id;
 
     // Get total drills count
     const totalDrills = await prisma.drill.count();
@@ -87,7 +85,7 @@ export async function GET() {
 
     return NextResponse.json(stats);
   } catch (error) {
-    console.error('Error fetching dashboard stats:', error);
+    logger.error('Error fetching dashboard stats', error as Error);
     return NextResponse.json(
       { error: 'Failed to fetch dashboard stats' },
       { status: 500 }

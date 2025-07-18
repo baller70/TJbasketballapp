@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
+    const authResult = await auth();
+    userId = authResult.userId;
     
-    if (!session?.user?.id) {
+    if (!userId) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -26,7 +29,7 @@ export async function POST(request: NextRequest) {
     // Get all attempts for today
     const todayAttempts = await prisma.progressEntry.findMany({
       where: {
-        userId: session.user.id,
+        userId: userId,
         skillType: 'daily_motivation',
         skillName: 'voice_verification',
         date: {
@@ -57,7 +60,7 @@ export async function POST(request: NextRequest) {
     // Create progress entry for this attempt
     await prisma.progressEntry.create({
       data: {
-        userId: session.user.id,
+        userId: userId,
         skillType: 'daily_motivation',
         skillName: 'voice_verification',
         value: accuracy,
@@ -80,7 +83,7 @@ export async function POST(request: NextRequest) {
         const bonusPoints = 20; // Fixed bonus for completing 3 repetitions
         
         await prisma.playerProfile.update({
-          where: { userId: session.user.id },
+          where: { userId: userId },
           data: {
             totalPoints: {
               increment: bonusPoints,
@@ -123,7 +126,7 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Daily motivation completion error:', error);
+    logger.error('Daily motivation completion error', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to record daily motivation completion' },
       { status: 500 }
@@ -132,10 +135,13 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
+    const authResult = await auth();
+    userId = authResult.userId;
     
-    if (!session?.user?.id) {
+    if (!userId) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -151,7 +157,7 @@ export async function GET(request: NextRequest) {
 
     const todayAttempts = await prisma.progressEntry.findMany({
       where: {
-        userId: session.user.id,
+        userId: userId,
         skillType: 'daily_motivation',
         skillName: 'voice_verification',
         date: {
@@ -186,10 +192,10 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Daily motivation status error:', error);
+    logger.error('Daily motivation status error', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to get daily motivation status' },
       { status: 500 }
     );
   }
-} 
+}            

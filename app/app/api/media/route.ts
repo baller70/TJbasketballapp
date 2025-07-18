@@ -2,18 +2,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const { userId } = await auth();
+    const authResult = await auth();
+    userId = authResult.userId;
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
+    const queryUserId = searchParams.get('userId');
     const drillId = searchParams.get('drillId');
     const drillCompletionId = searchParams.get('drillCompletionId');
     const mediaType = searchParams.get('mediaType');
@@ -23,9 +27,9 @@ export async function GET(request: NextRequest) {
     // Build where clause
     const where: any = {};
     
-    // If userId is provided, filter by that user
-    if (userId) {
-      where.userId = userId;
+    // If queryUserId is provided, filter by that user
+    if (queryUserId) {
+      where.userId = queryUserId;
     }
     
     // If drillId is provided, filter by that drill
@@ -111,7 +115,11 @@ export async function GET(request: NextRequest) {
       offset,
     });
   } catch (error) {
-    console.error('Error fetching media uploads:', error);
+    logger.error('Error fetching media uploads', error as Error, {
+      userId: userId || undefined,
+      endpoint: request.nextUrl.pathname,
+      method: request.method
+    });
     return NextResponse.json(
       { error: 'Failed to fetch media uploads' },
       { status: 500 }

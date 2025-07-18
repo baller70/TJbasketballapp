@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function GET(
   request: NextRequest,
@@ -29,7 +29,9 @@ export async function GET(
 
     return NextResponse.json(mediaUploads);
   } catch (error) {
-    console.error('Error fetching media uploads:', error);
+    logger.error('Error fetching media uploads', error as Error, {
+      drillId: params.id
+    });
     return NextResponse.json(
       { error: 'Failed to fetch media uploads' },
       { status: 500 }
@@ -41,9 +43,12 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -61,7 +66,7 @@ export async function POST(
     }
 
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -95,10 +100,13 @@ export async function POST(
 
     return NextResponse.json(mediaUpload);
   } catch (error) {
-    console.error('Error uploading media:', error);
+    logger.error('Error uploading media', error as Error, {
+      drillId: params.id,
+      userId: userId || undefined
+    });
     return NextResponse.json(
       { error: 'Failed to upload media' },
       { status: 500 }
     );
   }
-} 
+}          

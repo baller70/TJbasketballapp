@@ -1,19 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const userId = session.user.id;
     const goalId = params.id;
 
     const goal = await prisma.goal.findUnique({
@@ -41,7 +42,10 @@ export async function GET(
 
     return NextResponse.json(goalWithProgress);
   } catch (error) {
-    console.error('Error fetching goal:', error);
+    logger.error('Error fetching goal', error as Error, { 
+      goalId: params.id, 
+      userId: userId || undefined 
+    });
     return NextResponse.json(
       { error: 'Failed to fetch goal' },
       { status: 500 }
@@ -53,9 +57,12 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -74,7 +81,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Goal not found' }, { status: 404 });
     }
 
-    if (existingGoal.isCustom && existingGoal.createdBy !== session.user.id) {
+    if (existingGoal.isCustom && existingGoal.createdBy !== userId) {
       return NextResponse.json({ error: 'Unauthorized to edit this goal' }, { status: 403 });
     }
 
@@ -99,7 +106,10 @@ export async function PUT(
 
     return NextResponse.json(updatedGoal);
   } catch (error) {
-    console.error('Error updating goal:', error);
+    logger.error('Error updating goal', error as Error, { 
+      goalId: params.id, 
+      userId: userId || undefined 
+    });
     return NextResponse.json(
       { error: 'Failed to update goal' },
       { status: 500 }
@@ -111,9 +121,12 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -131,7 +144,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Goal not found' }, { status: 404 });
     }
 
-    if (existingGoal.isCustom && existingGoal.createdBy !== session.user.id) {
+    if (existingGoal.isCustom && existingGoal.createdBy !== userId) {
       return NextResponse.json({ error: 'Unauthorized to delete this goal' }, { status: 403 });
     }
 
@@ -145,10 +158,13 @@ export async function DELETE(
 
     return NextResponse.json({ message: 'Goal deleted successfully' });
   } catch (error) {
-    console.error('Error deleting goal:', error);
+    logger.error('Error deleting goal', error as Error, { 
+      goalId: params.id, 
+      userId: userId || undefined 
+    });
     return NextResponse.json(
       { error: 'Failed to delete goal' },
       { status: 500 }
     );
   }
-} 
+}              

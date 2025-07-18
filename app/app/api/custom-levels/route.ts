@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { LEVEL_PROGRESSION, LevelTier, LevelGoal } from '@/lib/level-progression';
+import { logger } from '@/lib/logger';
 import fs from 'fs';
 import path from 'path';
 
@@ -13,9 +13,12 @@ interface ExtendedLevelTier extends LevelTier {
 
 // Get all levels (both default and custom)
 export async function GET() {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -29,7 +32,7 @@ export async function GET() {
         customLevels = JSON.parse(customLevelsData);
       }
     } catch (error) {
-      console.error('Error reading custom levels:', error);
+      logger.error('Error reading custom levels', error as Error, { userId });
     }
 
     // Combine default levels with custom levels
@@ -57,7 +60,7 @@ export async function GET() {
 
     return NextResponse.json({ levels: allLevels });
   } catch (error) {
-    console.error('Error fetching levels:', error);
+    logger.error('Error fetching levels', error as Error, { userId: userId || undefined });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
@@ -146,9 +149,12 @@ function createDefaultGoals(levelNumber: number, overrideGoals?: LevelGoal[]): L
 
 // Create a new custom level
 export async function POST(request: Request) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -172,7 +178,7 @@ export async function POST(request: Request) {
         customLevels = JSON.parse(customLevelsData);
       }
     } catch (error) {
-      console.error('Error reading custom levels:', error);
+      logger.error('Error reading custom levels', error as Error, { userId });
     }
 
     // Determine the next level number
@@ -203,16 +209,19 @@ export async function POST(request: Request) {
 
     return NextResponse.json(newLevel);
   } catch (error) {
-    console.error('Error creating level:', error);
+    logger.error('Error creating level', error as Error, { userId: userId || undefined });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 // Edit a level (both default and custom)
 export async function PATCH(request: Request) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -232,7 +241,7 @@ export async function PATCH(request: Request) {
           allLevels = [...allLevels, ...customLevels];
         }
       } catch (error) {
-        console.error('Error reading custom levels:', error);
+        logger.error('Error reading custom levels', error as Error, { userId });
       }
 
       // Ensure goals are exactly 10 with the last one being a test
@@ -292,16 +301,19 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
   } catch (error) {
-    console.error('Error updating level:', error);
+    logger.error('Error updating level', error as Error, { userId: userId || undefined });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
 // Update level order (drag and drop)
 export async function PUT(request: Request) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -333,16 +345,19 @@ export async function PUT(request: Request) {
 
     return NextResponse.json({ message: 'Levels reordered successfully' });
   } catch (error) {
-    console.error('Error reordering levels:', error);
+    logger.error('Error reordering levels', error as Error, { userId: userId || undefined });
     return NextResponse.json({ error: 'Failed to reorder levels' }, { status: 500 });
   }
 }
 
 // Delete a custom level
 export async function DELETE(request: Request) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -370,7 +385,7 @@ export async function DELETE(request: Request) {
         customLevels = JSON.parse(customLevelsData);
       }
     } catch (error) {
-      console.error('Error reading custom levels:', error);
+      logger.error('Error reading custom levels', error as Error, { userId });
       return NextResponse.json({ error: 'Failed to read custom levels' }, { status: 500 });
     }
 
@@ -387,7 +402,7 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error deleting level:', error);
+    logger.error('Error deleting level', error as Error, { userId: userId || undefined });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-} 
+}            

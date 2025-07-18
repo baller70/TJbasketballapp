@@ -1,21 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 import { getMockTeams } from './mock-data';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       // Return mock teams for demonstration
-      console.log('No session found, using mock teams data');
+      logger.info('No session found, using mock teams data');
       return NextResponse.json(getMockTeams());
     }
-
-    const userId = session.user.id;
 
     // Get all teams created by this user
     const teams = await (prisma as any).team.findMany({
@@ -42,15 +40,15 @@ export async function GET() {
 
     return NextResponse.json(teams);
   } catch (error) {
-    console.error('Error fetching teams:', error);
+    logger.error('Error fetching teams', error as Error);
     return NextResponse.json({ error: 'Failed to fetch teams' }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const { userId } = await auth();
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -65,7 +63,7 @@ export async function POST(request: NextRequest) {
         name,
         description,
         color: color || '#3B82F6',
-        createdById: session.user.id,
+        createdById: userId,
       },
       include: {
         members: {
@@ -84,7 +82,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(team);
   } catch (error) {
-    console.error('Error creating team:', error);
+    logger.error('Error creating team', error as Error);
     return NextResponse.json({ error: 'Failed to create team' }, { status: 500 });
   }
-} 
+}      

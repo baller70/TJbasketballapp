@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 
 export async function POST() {
   try {
@@ -28,10 +29,10 @@ export async function POST() {
       message: 'Default drill created successfully' 
     });
   } catch (error) {
-    console.error('Error creating default drill:', error);
+    logger.error('Error creating default drill', error as Error);
     return NextResponse.json(
       { error: 'Failed to create default drill' },
       { status: 500 }
     );
   }
-} 
+}  

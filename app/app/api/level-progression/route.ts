@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { logger } from '@/lib/logger';
 import { 
   LEVEL_PROGRESSION, 
   getCurrentLevel, 
@@ -13,13 +13,14 @@ import {
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    const userId = session.user.id;
 
     // Get player profile
     const playerProfile = await prisma.playerProfile.findUnique({
@@ -99,10 +100,10 @@ export async function GET() {
     });
 
   } catch (error) {
-    console.error('Error fetching level progression:', error);
+    logger.error('Error fetching level progression', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to fetch level progression' },
       { status: 500 }
     );
   }
-} 
+}          

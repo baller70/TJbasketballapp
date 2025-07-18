@@ -1,17 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
+import { logger } from '@/lib/logger';
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+  const requestContext = logger.createRequestContext(request);
+  
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = await auth();
     
-    if (!session) {
-      console.log('No session found, using mock bulk drill assignment');
+    if (!userId) {
+      logger.info('No session found, using mock bulk drill assignment', requestContext);
       // Mock response for development
       const body = await request.json();
       
-      console.log('Mock bulk drill assignment for team:', params.id, body);
+      logger.info('Mock bulk drill assignment for team', {
+        ...requestContext,
+        teamId: params.id,
+        body
+      });
       
       return NextResponse.json({ 
         success: true, 
@@ -40,10 +46,10 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     });
 
   } catch (error) {
-    console.error('Error in bulk drill assignment:', error);
+    logger.error('Error in bulk drill assignment', error as Error, requestContext);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
-} 
+}      

@@ -1,15 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth-config';
+import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
 import { sendParentNotification } from '@/lib/resend';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -18,7 +21,7 @@ export async function POST(request: NextRequest) {
     // Create workout completion record
     const workoutCompletion = await prisma.workoutCompletion.create({
       data: {
-        userId: session.user.id,
+        userId: userId,
         workoutId,
         completedAt: new Date(),
         totalDuration,
@@ -28,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     // Update player profile - add points for workout completion
     const playerProfile = await prisma.playerProfile.findUnique({
-      where: { userId: session.user.id },
+      where: { userId: userId },
     });
 
     let pointsToAdd = completedDrills.length * 15; // Base points per drill in workout
@@ -43,7 +46,7 @@ export async function POST(request: NextRequest) {
       
       const todayCompletions = await prisma.workoutCompletion.count({
         where: {
-          userId: session.user.id,
+          userId: userId,
           completedAt: {
             gte: today,
           },
@@ -58,7 +61,7 @@ export async function POST(request: NextRequest) {
         
         const yesterdayCompletions = await prisma.workoutCompletion.count({
           where: {
-            userId: session.user.id,
+            userId: userId,
             completedAt: {
               gte: yesterday,
               lt: today,
@@ -75,7 +78,7 @@ export async function POST(request: NextRequest) {
       }
 
       await prisma.playerProfile.update({
-        where: { userId: session.user.id },
+        where: { userId: userId },
         data: {
           totalPoints: playerProfile.totalPoints + pointsToAdd,
           currentStreak: newStreak,
@@ -88,7 +91,7 @@ export async function POST(request: NextRequest) {
     // Send email notification to centralized parent email
     try {
       const user = await prisma.user.findUnique({
-        where: { id: session.user.id },
+        where: { id: userId },
         include: {
           parent: {
             include: {
@@ -167,13 +170,13 @@ export async function POST(request: NextRequest) {
         });
       }
     } catch (emailError) {
-      console.error('Error sending parent notification:', emailError);
+      logger.error('Error sending parent notification', emailError as Error, { userId, workoutId });
       // Don't fail the workout completion if email fails
     }
 
     return NextResponse.json(workoutCompletion);
   } catch (error) {
-    console.error('Error completing workout:', error);
+    logger.error('Error completing workout', error as Error, { userId: userId || undefined });
     return NextResponse.json(
       { error: 'Failed to complete workout' },
       { status: 500 }
@@ -182,18 +185,21 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
+  let userId: string | null = null;
+  
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    const authResult = await auth();
+    userId = authResult.userId;
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
     const workoutId = searchParams.get('workoutId');
-    const userId = searchParams.get('userId') || session.user.id;
+    const queryUserId = searchParams.get('userId') || userId;
 
     let whereClause: any = {
-      userId
+      userId: queryUserId
     };
 
     if (workoutId) {
@@ -232,7 +238,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(completions);
   } catch (error) {
-    console.error('Error fetching workout completions:', error);
+    logger.error('Error fetching workout completions', error as Error, { userId: userId || undefined });
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-} 
+}          
