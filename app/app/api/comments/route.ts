@@ -24,7 +24,6 @@ export async function GET(request: NextRequest) {
 
     const comments = await prisma.drillComment.findMany({
       where: {
-        parentCommentId: null, // Only get top-level comments
         ...(drillCompletionId && { drillCompletionId }),
         ...(mediaUploadId && { mediaUploadId }),
         ...(drillId && { drillId }),
@@ -38,21 +37,7 @@ export async function GET(request: NextRequest) {
             image: true,
           },
         },
-        replies: {
-          include: {
-            user: {
-              select: {
-                id: true,
-                name: true,
-                role: true,
-                image: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: 'asc',
-          },
-        },
+
       },
       orderBy: {
         createdAt: 'desc',
@@ -117,9 +102,6 @@ export async function POST(request: NextRequest) {
         content: content.trim(),
         userId: session.user.id,
         drillId,
-        drillCompletionId,
-        mediaUploadId,
-        parentCommentId,
       },
       include: {
         user: {

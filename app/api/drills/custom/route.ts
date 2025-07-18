@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
         description,
         category,
         skillLevel: skillLevel as any,
-        duration: duration ? parseInt(duration) : 15,
+        duration: duration ? parseInt(duration).toString() : '15',
         equipment: JSON.stringify(equipmentArray),
         stepByStep: JSON.stringify(stepByStepArray),
         coachingTips: JSON.stringify(coachingTipsArray),

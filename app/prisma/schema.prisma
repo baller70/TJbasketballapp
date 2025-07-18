@@ -58,6 +58,7 @@ model User {
   scheduleEntries   ScheduleEntry[]
   workouts          Workout[]
   drillCompletions  DrillCompletion[]
+  workoutCompletions WorkoutCompletion[]
   voiceNotes        VoiceNote[]
   mediaUploads      MediaUpload[]
   drillComments     DrillComment[]
@@ -135,6 +136,7 @@ model Workout {
   user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   workoutDrills   WorkoutDrill[]
   scheduleEntries ScheduleEntry[]
+  workoutCompletions WorkoutCompletion[]
 }
 
 model WorkoutDrill {
@@ -190,6 +192,22 @@ model DrillCompletion {
   scheduleEntry ScheduleEntry? @relation(fields: [scheduleEntryId], references: [id])
   voiceNotes    VoiceNote[]
   mediaUploads  MediaUpload[]
+}
+
+model WorkoutCompletion {
+  id              String    @id @default(cuid())
+  userId          String
+  workoutId       String
+  completedAt     DateTime  @default(now())
+  totalDuration   Int       // in seconds
+  completedDrills Int       // number of drills completed
+  rating          Int?      // 1-5 stars
+  feedback        String?
+  performance     Json?     // stores performance metrics
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workout Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
 }
 
 model VoiceNote {

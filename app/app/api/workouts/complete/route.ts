@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
 
@@ -12,89 +12,83 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { workoutId, duration, rating, feedback, scheduleEntryId } = body;
+    const { workoutId, completedDrills, totalDuration } = await request.json();
 
-    if (!workoutId || !duration) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
-
-    // Verify the workout exists
-    const workout = await prisma.workout.findUnique({
-      where: { id: workoutId },
-      include: {
-        workoutDrills: {
-          include: {
-            drill: true
-          }
-        }
-      }
-    });
-
-    if (!workout) {
-      return NextResponse.json({ error: 'Workout not found' }, { status: 404 });
-    }
-
-    // Create workout completion
-    const completion = await prisma.workoutCompletion.create({
+    // Create workout completion record
+    const workoutCompletion = await prisma.workoutCompletion.create({
       data: {
         userId: session.user.id,
         workoutId,
-        duration,
-        rating: rating || null,
-        feedback: feedback || null,
-        scheduleEntryId: scheduleEntryId || null,
-        performance: {
-          totalDrills: workout.workoutDrills.length,
-          completedAt: new Date().toISOString()
-        }
+        completedAt: new Date(),
+        totalDuration,
+        completedDrills: completedDrills.length,
       },
-      include: {
-        workout: {
-          include: {
-            workoutDrills: {
-              include: {
-                drill: true
-              }
-            }
-          }
-        }
-      }
     });
 
-    // Update schedule entry if provided
-    if (scheduleEntryId) {
-      await prisma.scheduleEntry.update({
-        where: { id: scheduleEntryId },
-        data: {
-          status: 'COMPLETED',
-          completedAt: new Date()
-        }
-      });
-    }
+    // Update player profile - add points for workout completion
+    const playerProfile = await prisma.playerProfile.findUnique({
+      where: { userId: session.user.id },
+    });
 
-    // Create notification for parent/coach
-    if (session.user.role === 'PLAYER') {
-      await prisma.notification.create({
-        data: {
+    if (playerProfile) {
+      let pointsToAdd = completedDrills.length * 15; // Base points per drill in workout
+      pointsToAdd += 50; // Bonus for completing full workout
+
+      // Check if this is a daily streak
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const todayCompletions = await prisma.workoutCompletion.count({
+        where: {
           userId: session.user.id,
-          type: 'WORKOUT_COMPLETED',
-          title: 'Workout Completed',
-          message: `Your player completed the workout "${workout.name}"`,
-          data: {
-            workoutId,
-            completionId: completion.id,
-            duration,
-            rating
-          }
+          completedAt: {
+            gte: today,
+          },
+        },
+      });
+
+      let newStreak = playerProfile.currentStreak;
+      if (todayCompletions === 1) {
+        // First completion today
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        const yesterdayCompletions = await prisma.workoutCompletion.count({
+          where: {
+            userId: session.user.id,
+            completedAt: {
+              gte: yesterday,
+              lt: today,
+            },
+          },
+        });
+        
+        if (yesterdayCompletions > 0) {
+          newStreak += 1;
+          pointsToAdd += 30; // Streak bonus
+        } else {
+          newStreak = 1;
         }
+      }
+
+      await prisma.playerProfile.update({
+        where: { userId: session.user.id },
+        data: {
+          totalPoints: playerProfile.totalPoints + pointsToAdd,
+          currentStreak: newStreak,
+          longestStreak: Math.max(playerProfile.longestStreak, newStreak),
+          lastActiveDate: new Date(),
+        },
       });
     }
 
-    return NextResponse.json(completion);
+    return NextResponse.json(workoutCompletion);
   } catch (error) {
     console.error('Error completing workout:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to complete workout' },
+      { status: 500 }
+    );
   }
 }
 

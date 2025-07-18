@@ -10,6 +10,11 @@ import { validatePassword, isCommonWeakPassword } from './password-validation';
 const env = getEnvConfig();
 
 export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -43,19 +48,26 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Invalid credentials');
         }
 
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
+        // Validate password strength for new users
+        if (!validatePassword(credentials.password)) {
+          throw new Error('Password does not meet security requirements');
+        }
 
-        if (!isPasswordValid) {
+        // Check for common weak passwords
+        if (isCommonWeakPassword(credentials.password)) {
+          throw new Error('Password is too common. Please choose a stronger password.');
+        }
+
+        const isValid = await bcrypt.compare(credentials.password, user.password);
+        if (!isValid) {
           throw new Error('Invalid credentials');
         }
 
-        // Check if account is locked (you can extend this with a lockout system)
-        // if (user.lockedUntil && user.lockedUntil > new Date()) {
-        //   throw new Error('Account is temporarily locked');
-        // }
+        // Update last login
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { updatedAt: new Date() }
+        });
 
         return {
           id: user.id,
@@ -66,107 +78,38 @@ export const authOptions: NextAuthOptions = {
           playerProfile: user.playerProfile,
           children: user.children,
           parent: user.parent,
-          lastLogin: new Date()
+          lastLogin: new Date(),
         } as any;
       }
     })
   ],
-  session: {
-    strategy: 'jwt' as const,
-    maxAge: env.SESSION_TIMEOUT_MINUTES * 60, // Convert minutes to seconds
-    updateAge: 24 * 60 * 60, // Update session every 24 hours
-  },
-  cookies: {
-    sessionToken: {
-      name: `__Secure-next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: 'strict',
-        path: '/',
-        secure: env.NODE_ENV === 'production',
-        maxAge: env.SESSION_TIMEOUT_MINUTES * 60,
-      },
-    },
-    callbackUrl: {
-      name: `__Secure-next-auth.callback-url`,
-      options: {
-        httpOnly: true,
-        sameSite: 'strict',
-        path: '/',
-        secure: env.NODE_ENV === 'production',
-      },
-    },
-    csrfToken: {
-      name: `__Host-next-auth.csrf-token`,
-      options: {
-        httpOnly: true,
-        sameSite: 'strict',
-        path: '/',
-        secure: env.NODE_ENV === 'production',
-      },
-    },
-  },
   callbacks: {
-    async jwt({ token, user, trigger, session }: any) {
+    async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
         token.role = user.role;
         token.parentId = user.parentId;
         token.playerProfile = user.playerProfile;
         token.children = user.children;
         token.parent = user.parent;
-        token.lastLogin = user.lastLogin;
-        token.iat = Math.floor(Date.now() / 1000);
       }
-
-      // Check if session is expired
-      if (token.iat && Date.now() - token.iat * 1000 > env.SESSION_TIMEOUT_MINUTES * 60 * 1000) {
-        return null; // Force logout
-      }
-
-      // Update last activity
-      if (trigger === 'update') {
-        token.lastActivity = Math.floor(Date.now() / 1000);
-      }
-
       return token;
     },
-    async session({ session, token }: any) {
+    async session({ session, token }) {
       if (token) {
-        session.user.id = token.id as string;
-        session.user.role = token.role;
-        session.user.parentId = token.parentId;
-        session.user.playerProfile = token.playerProfile;
-        session.user.children = token.children;
-        session.user.parent = token.parent;
-        session.user.lastLogin = token.lastLogin;
-        session.user.lastActivity = token.lastActivity;
+        session.user.id = token.sub!;
+        session.user.role = token.role as any;
+        session.user.parentId = token.parentId as string;
+        session.user.playerProfile = token.playerProfile as any;
+        session.user.children = token.children as any;
+        session.user.parent = token.parent as any;
       }
       return session;
-    },
-    async signIn({ user, account, profile, email, credentials }) {
-      // Additional sign-in validation can be added here
-      return true;
     },
   },
   pages: {
     signIn: '/auth/signin',
-    error: '/auth/error',
+    signUp: '/auth/signup',
   },
-  events: {
-    async signIn({ user, account, profile, isNewUser }) {
-      // Log successful sign-in
-      if (env.ENABLE_SECURITY_LOGGING) {
-        console.log(`User signed in: ${user.email} at ${new Date().toISOString()}`);
-      }
-    },
-    async signOut({ session, token }) {
-      // Log sign-out
-      if (env.ENABLE_SECURITY_LOGGING) {
-        console.log(`User signed out: ${session?.user?.email} at ${new Date().toISOString()}`);
-      }
-    },
-  },
-  debug: env.NODE_ENV === 'development',
   secret: env.NEXTAUTH_SECRET,
+  debug: env.NODE_ENV === 'development',
 };

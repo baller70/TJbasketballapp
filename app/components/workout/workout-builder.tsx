@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Plus, 
   Trash2, 
@@ -24,11 +25,44 @@ import {
   BookOpen,
   Target,
   Trophy,
-  Users
+  Users,
+  Upload,
+  MessageCircle,
+  Video,
+  Image,
+  Camera,
+  FileText,
+  ChevronDown,
+  ChevronUp,
+  Settings,
+  Pencil
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Drill, Workout, WorkoutDrill, WorkoutBuilderState } from '@/lib/types';
+import MediaUpload from '@/components/media/media-upload';
+import MediaViewer from '@/components/media/media-viewer';
+import Comments from '@/components/ui/comments';
+import { useToast } from '@/components/ui/use-toast';
+
+interface FileUpload {
+  file: File;
+  preview?: string;
+  progress: number;
+  status: 'pending' | 'uploading' | 'success' | 'error';
+  error?: string;
+}
+
+interface DrillEditState {
+  name: string;
+  description: string;
+  category: string;
+  skillLevel: string;
+  equipment: string;
+  stepByStep: string[];
+  coachingTips: string[];
+  duration: string;
+}
 
 export default function WorkoutBuilder() {
   const [drills, setDrills] = useState<Drill[]>([]);
@@ -37,12 +71,29 @@ export default function WorkoutBuilder() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showAddDrillDialog, setShowAddDrillDialog] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [expandedDrills, setExpandedDrills] = useState<Set<string>>(new Set());
+  const [activeTab, setActiveTab] = useState<Record<string, string>>({});
+  const [mediaUploads, setMediaUploads] = useState<Record<string, any[]>>({});
+  const { toast } = useToast();
+  
   const [workoutState, setWorkoutState] = useState<WorkoutBuilderState>({
     name: '',
     description: '',
     drills: [],
     totalDuration: 0,
     isPublic: false,
+  });
+
+  const [editingDrill, setEditingDrill] = useState<string | null>(null);
+  const [drillEditState, setDrillEditState] = useState<DrillEditState>({
+    name: '',
+    description: '',
+    category: '',
+    skillLevel: '',
+    equipment: '',
+    stepByStep: [],
+    coachingTips: [],
+    duration: ''
   });
 
   useEffect(() => {
@@ -90,9 +141,18 @@ export default function WorkoutBuilder() {
         setShowCreateDialog(false);
         resetWorkoutState();
         fetchWorkouts();
+        toast({
+          title: "Success",
+          description: "Workout created successfully!",
+        });
       }
     } catch (error) {
       console.error('Error creating workout:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create workout",
+        variant: "destructive",
+      });
     }
   };
 
@@ -112,9 +172,18 @@ export default function WorkoutBuilder() {
         fetchWorkouts();
         setSelectedWorkout(null);
         resetWorkoutState();
+        toast({
+          title: "Success",
+          description: "Workout updated successfully!",
+        });
       }
     } catch (error) {
       console.error('Error updating workout:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update workout",
+        variant: "destructive",
+      });
     }
   };
 
@@ -130,9 +199,18 @@ export default function WorkoutBuilder() {
           setSelectedWorkout(null);
           resetWorkoutState();
         }
+        toast({
+          title: "Success",
+          description: "Workout deleted successfully!",
+        });
       }
     } catch (error) {
       console.error('Error deleting workout:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete workout",
+        variant: "destructive",
+      });
     }
   };
 
@@ -216,6 +294,70 @@ export default function WorkoutBuilder() {
     });
   };
 
+  const toggleDrillExpansion = (drillId: string) => {
+    setExpandedDrills(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(drillId)) {
+        newSet.delete(drillId);
+      } else {
+        newSet.add(drillId);
+        // Fetch media uploads when expanding
+        fetchMediaUploads(drillId);
+      }
+      return newSet;
+    });
+  };
+
+  const fetchMediaUploads = async (drillId: string) => {
+    try {
+      const response = await fetch(`/api/media/upload?drillId=${drillId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setMediaUploads(prev => ({
+          ...prev,
+          [drillId]: data,
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching media uploads:', error);
+    }
+  };
+
+  const handleMediaUpload = async (drillId: string, files: FileUpload[]) => {
+    try {
+      const formData = new FormData();
+      
+      files.forEach((fileUpload, index) => {
+        formData.append(`files`, fileUpload.file);
+      });
+      
+      formData.append('drillId', drillId);
+
+      const response = await fetch('/api/media/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description: "Media uploaded successfully!",
+        });
+        // Refresh media uploads for this drill
+        fetchMediaUploads(drillId);
+      } else {
+        throw new Error('Upload failed');
+      }
+    } catch (error) {
+      console.error('Error uploading media:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload media",
+        variant: "destructive",
+      });
+    }
+  };
+
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -235,6 +377,159 @@ export default function WorkoutBuilder() {
     return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
 
+  const startDrillEdit = (drill: Drill) => {
+    setEditingDrill(drill.id);
+    
+    // Helper function to parse step-by-step instructions
+    const parseStepByStep = (stepByStep: any): string[] => {
+      if (Array.isArray(stepByStep)) {
+        return stepByStep;
+      }
+      if (typeof stepByStep === 'string') {
+        return stepByStep.split('\n').filter(step => step.trim() !== '');
+      }
+      return [];
+    };
+    
+    // Helper function to parse coaching tips
+    const parseCoachingTips = (coachingTips: any): string[] => {
+      if (Array.isArray(coachingTips)) {
+        return coachingTips;
+      }
+      if (typeof coachingTips === 'string') {
+        return coachingTips.split('\n').filter(tip => tip.trim() !== '');
+      }
+      return [];
+    };
+    
+    setDrillEditState({
+      name: drill.name,
+      description: drill.description,
+      category: drill.category,
+      skillLevel: drill.skillLevel,
+      equipment: drill.equipment,
+      stepByStep: parseStepByStep(drill.stepByStep),
+      coachingTips: parseCoachingTips(drill.coachingTips),
+      duration: drill.duration
+    });
+  };
+
+  const saveDrillEdit = async () => {
+    if (!editingDrill) return;
+
+    try {
+      const response = await fetch(`/api/drills/${editingDrill}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...drillEditState,
+          stepByStep: drillEditState.stepByStep.join('\n'),
+          coachingTips: drillEditState.coachingTips.join('\n'),
+        }),
+      });
+
+      if (response.ok) {
+        const updatedDrill = await response.json();
+        
+                 // Update the drill in the available drills list
+         setDrills(prev => 
+           prev.map(drill => drill.id === editingDrill ? updatedDrill : drill)
+         );
+        
+        // Update the drill in the current workout
+        setWorkoutState(prev => ({
+          ...prev,
+          drills: prev.drills.map(workoutDrill => 
+            workoutDrill.drill.id === editingDrill 
+              ? { ...workoutDrill, drill: updatedDrill }
+              : workoutDrill
+          )
+        }));
+
+        toast({
+          title: "Success",
+          description: "Drill updated successfully!",
+        });
+        
+        setEditingDrill(null);
+      } else {
+        throw new Error('Failed to update drill');
+      }
+    } catch (error) {
+      console.error('Error updating drill:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update drill",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const cancelDrillEdit = () => {
+    setEditingDrill(null);
+    setDrillEditState({
+      name: '',
+      description: '',
+      category: '',
+      skillLevel: '',
+      equipment: '',
+      stepByStep: [],
+      coachingTips: [],
+      duration: ''
+    });
+  };
+
+  const updateDrillEditField = (field: keyof DrillEditState, value: string | string[]) => {
+    setDrillEditState(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const addStepToEdit = () => {
+    setDrillEditState(prev => ({
+      ...prev,
+      stepByStep: [...prev.stepByStep, '']
+    }));
+  };
+
+  const updateStepInEdit = (index: number, value: string) => {
+    setDrillEditState(prev => ({
+      ...prev,
+      stepByStep: prev.stepByStep.map((step, i) => i === index ? value : step)
+    }));
+  };
+
+  const removeStepFromEdit = (index: number) => {
+    setDrillEditState(prev => ({
+      ...prev,
+      stepByStep: prev.stepByStep.filter((_, i) => i !== index)
+    }));
+  };
+
+  const addTipToEdit = () => {
+    setDrillEditState(prev => ({
+      ...prev,
+      coachingTips: [...prev.coachingTips, '']
+    }));
+  };
+
+  const updateTipInEdit = (index: number, value: string) => {
+    setDrillEditState(prev => ({
+      ...prev,
+      coachingTips: prev.coachingTips.map((tip, i) => i === index ? value : tip)
+    }));
+  };
+
+  const removeTipFromEdit = (index: number) => {
+    setDrillEditState(prev => ({
+      ...prev,
+      coachingTips: prev.coachingTips.filter((_, i) => i !== index)
+    }));
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -249,7 +544,7 @@ export default function WorkoutBuilder() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Workout Builder</h2>
-          <p className="text-gray-600">Create custom workout routines by combining drills</p>
+          <p className="text-gray-600">Create custom workout routines with media uploads and coaching feedback</p>
         </div>
         <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
           <DialogTrigger asChild>
@@ -291,18 +586,18 @@ export default function WorkoutBuilder() {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
-                  placeholder="Describe the workout and its goals"
+                  placeholder="Describe your workout..."
                   value={workoutState.description}
                   onChange={(e) => setWorkoutState(prev => ({ ...prev, description: e.target.value }))}
                   rows={3}
                 />
               </div>
-              
+
               <div className="flex items-center space-x-2">
                 <Switch
                   id="public"
@@ -311,30 +606,33 @@ export default function WorkoutBuilder() {
                 />
                 <Label htmlFor="public">Make this workout public</Label>
               </div>
-              
-              {/* Drills List */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">Drills ({workoutState.drills.length})</h3>
-                  <Dialog open={showAddDrillDialog} onOpenChange={setShowAddDrillDialog}>
-                    <DialogTrigger asChild>
-                      <Button variant="outline" size="sm">
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add Drill
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl">
-                      <DialogHeader>
-                        <DialogTitle>Add Drill to Workout</DialogTitle>
-                        <DialogDescription>
-                          Select a drill to add to your workout
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="grid grid-cols-1 gap-4 max-h-96 overflow-y-auto">
-                        {drills.map(drill => (
-                          <Card key={drill.id} className="cursor-pointer hover:bg-gray-50" onClick={() => addDrillToWorkout(drill)}>
+
+              {/* Add Drill Button */}
+              <div className="flex items-center gap-2">
+                <Dialog open={showAddDrillDialog} onOpenChange={setShowAddDrillDialog}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="flex-1">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Drill
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Add Drill to Workout</DialogTitle>
+                      <DialogDescription>
+                        Choose a drill to add to your workout
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="max-h-96 overflow-y-auto">
+                      <div className="space-y-2">
+                        {drills.map((drill) => (
+                          <Card 
+                            key={drill.id} 
+                            className="cursor-pointer hover:bg-gray-50 transition-colors"
+                            onClick={() => addDrillToWorkout(drill)}
+                          >
                             <CardContent className="p-4">
-                              <div className="flex items-start justify-between">
+                              <div className="flex items-center justify-between">
                                 <div className="flex-1">
                                   <h4 className="font-medium">{drill.name}</h4>
                                   <p className="text-sm text-gray-600 mt-1">{drill.description}</p>
@@ -342,22 +640,23 @@ export default function WorkoutBuilder() {
                                     <Badge className={getCategoryColor(drill.category)}>
                                       {drill.category}
                                     </Badge>
-                                    <Badge variant="outline">
-                                      {drill.skillLevel}
-                                    </Badge>
+                                    <Badge variant="outline">{drill.skillLevel}</Badge>
                                   </div>
                                 </div>
-                                <Button size="sm" variant="ghost">
-                                  <Plus className="h-4 w-4" />
-                                </Button>
+                                <Plus className="h-5 w-5 text-gray-400" />
                               </div>
                             </CardContent>
                           </Card>
                         ))}
                       </div>
-                    </DialogContent>
-                  </Dialog>
-                </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+
+              {/* Drills List */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Workout Drills</h3>
                 
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="drills">
@@ -369,42 +668,219 @@ export default function WorkoutBuilder() {
                               <div
                                 ref={provided.innerRef}
                                 {...provided.draggableProps}
-                                className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg bg-white"
+                                className="border border-gray-200 rounded-lg bg-white overflow-hidden"
                               >
-                                <div {...provided.dragHandleProps}>
-                                  <GripVertical className="h-5 w-5 text-gray-400" />
-                                </div>
-                                
-                                <div className="flex-1">
-                                  <div className="flex items-center gap-2">
-                                    <span className="font-medium">{index + 1}.</span>
-                                    <h4 className="font-medium">{workoutDrill.drill.name}</h4>
-                                    <Badge className={getCategoryColor(workoutDrill.drill.category)}>
-                                      {workoutDrill.drill.category}
-                                    </Badge>
+                                {/* Drill Header */}
+                                <div className="flex items-center gap-4 p-4">
+                                  <div {...provided.dragHandleProps}>
+                                    <GripVertical className="h-5 w-5 text-gray-400" />
                                   </div>
-                                  <p className="text-sm text-gray-600 mt-1">
-                                    {workoutDrill.drill.description}
-                                  </p>
+                                  
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-2">
+                                      <span className="font-medium">{index + 1}.</span>
+                                      <h4 className="font-medium">{workoutDrill.drill.name}</h4>
+                                      <Badge className={getCategoryColor(workoutDrill.drill.category)}>
+                                        {workoutDrill.drill.category}
+                                      </Badge>
+                                    </div>
+                                    <p className="text-sm text-gray-600 mt-1">
+                                      {workoutDrill.drill.description}
+                                    </p>
+                                  </div>
+                                  
+                                  <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-2">
+                                      <Label htmlFor={`duration-${index}`} className="text-sm">Duration (min):</Label>
+                                      <Input
+                                        id={`duration-${index}`}
+                                        type="number"
+                                        min="1"
+                                        value={Math.floor((workoutDrill.duration || 0) / 60)}
+                                        onChange={(e) => updateDrillDuration(index, parseInt(e.target.value) * 60)}
+                                        className="w-20"
+                                      />
+                                    </div>
+                                    
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => startDrillEdit(workoutDrill.drill)}
+                                      className="bg-green-50 hover:bg-green-100 text-green-700"
+                                    >
+                                      <Pencil className="h-4 w-4 mr-1" />
+                                      Edit Drill
+                                    </Button>
+                                    
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => toggleDrillExpansion(workoutDrill.id)}
+                                      className="bg-blue-50 hover:bg-blue-100 text-blue-700"
+                                    >
+                                      {expandedDrills.has(workoutDrill.id) ? (
+                                        <>
+                                          <ChevronUp className="h-4 w-4 mr-1" />
+                                          Hide Details
+                                        </>
+                                      ) : (
+                                        <>
+                                          <ChevronDown className="h-4 w-4 mr-1" />
+                                          Show Media & Comments
+                                        </>
+                                      )}
+                                    </Button>
+                                    
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => removeDrillFromWorkout(index)}
+                                    >
+                                      <Trash2 className="h-4 w-4 text-red-500" />
+                                    </Button>
+                                  </div>
                                 </div>
-                                
-                                <div className="flex items-center gap-2">
-                                  <Input
-                                    type="number"
-                                    placeholder="Duration (min)"
-                                    value={Math.floor((workoutDrill.duration || 0) / 60)}
-                                    onChange={(e) => updateDrillDuration(index, parseInt(e.target.value || '0') * 60)}
-                                    className="w-20"
-                                  />
-                                  <span className="text-sm text-gray-600">min</span>
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => removeDrillFromWorkout(index)}
-                                  >
-                                    <Trash2 className="h-4 w-4 text-red-500" />
-                                  </Button>
-                                </div>
+
+                                {/* Expanded Drill Content */}
+                                <AnimatePresence>
+                                  {expandedDrills.has(workoutDrill.id) && (
+                                    <motion.div
+                                      initial={{ height: 0, opacity: 0 }}
+                                      animate={{ height: 'auto', opacity: 1 }}
+                                      exit={{ height: 0, opacity: 0 }}
+                                      transition={{ duration: 0.3 }}
+                                      className="border-t border-gray-200 bg-gray-50"
+                                    >
+                                      <div className="p-4">
+                                        <Tabs 
+                                          value={activeTab[workoutDrill.id] || 'details'} 
+                                          onValueChange={(value) => setActiveTab(prev => ({ ...prev, [workoutDrill.id]: value }))}
+                                        >
+                                          <TabsList className="grid w-full grid-cols-3">
+                                            <TabsTrigger value="details" className="flex items-center gap-2">
+                                              <FileText className="h-4 w-4" />
+                                              Details
+                                            </TabsTrigger>
+                                            <TabsTrigger value="media" className="flex items-center gap-2">
+                                              <Camera className="h-4 w-4" />
+                                              Media
+                                            </TabsTrigger>
+                                            <TabsTrigger value="comments" className="flex items-center gap-2">
+                                              <MessageCircle className="h-4 w-4" />
+                                              Comments
+                                            </TabsTrigger>
+                                          </TabsList>
+                                          
+                                          <TabsContent value="details" className="mt-4">
+                                            <div className="space-y-4">
+                                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div>
+                                                  <h5 className="font-medium text-sm mb-2">Equipment Needed</h5>
+                                                  <p className="text-sm text-gray-600">{workoutDrill.drill.equipment}</p>
+                                                </div>
+                                                <div>
+                                                  <h5 className="font-medium text-sm mb-2">Skill Level</h5>
+                                                  <Badge variant="outline">{workoutDrill.drill.skillLevel}</Badge>
+                                                </div>
+                                              </div>
+                                              
+                                              <div>
+                                                <h5 className="font-medium text-sm mb-2">Step-by-Step Instructions</h5>
+                                                <div className="text-sm text-gray-600 space-y-1">
+                                                  {Array.isArray(workoutDrill.drill.stepByStep) ? (
+                                                    workoutDrill.drill.stepByStep.map((step, stepIndex) => (
+                                                      <p key={stepIndex}>{stepIndex + 1}. {step}</p>
+                                                    ))
+                                                  ) : (
+                                                    <p>{workoutDrill.drill.stepByStep}</p>
+                                                  )}
+                                                </div>
+                                              </div>
+                                              
+                                              <div>
+                                                <h5 className="font-medium text-sm mb-2">Coaching Tips</h5>
+                                                <div className="text-sm text-gray-600 space-y-1">
+                                                  {Array.isArray(workoutDrill.drill.coachingTips) ? (
+                                                    workoutDrill.drill.coachingTips.map((tip, tipIndex) => (
+                                                      <p key={tipIndex}>• {tip}</p>
+                                                    ))
+                                                  ) : (
+                                                    <p>{workoutDrill.drill.coachingTips}</p>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </TabsContent>
+                                          
+                                          <TabsContent value="media" className="mt-4">
+                                            <div className="space-y-6">
+                                              {/* Upload Section */}
+                                              <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+                                                <CardHeader className="text-center pb-3">
+                                                  <CardTitle className="text-lg flex items-center justify-center gap-2">
+                                                    <Upload className="h-5 w-5 text-blue-600" />
+                                                    Upload Practice Videos & Images
+                                                  </CardTitle>
+                                                  <CardDescription>
+                                                    Record yourself performing this drill to get feedback from coaches and track your progress
+                                                  </CardDescription>
+                                                </CardHeader>
+                                                <CardContent>
+                                                  <MediaUpload
+                                                    onUpload={(files) => handleMediaUpload(workoutDrill.drill.id, files)}
+                                                    acceptedTypes={['video/*', 'image/*']}
+                                                    maxFileSize={100} // 100MB for videos
+                                                    maxFiles={3}
+                                                    className="border-2 border-dashed border-blue-300 rounded-lg p-6 bg-white hover:bg-blue-50 transition-colors"
+                                                  />
+                                                </CardContent>
+                                              </Card>
+
+                                              {/* Media Gallery */}
+                                              <Card className="bg-gray-50 border-gray-200">
+                                                <CardHeader>
+                                                  <CardTitle className="text-lg flex items-center gap-2">
+                                                    <Video className="h-5 w-5 text-gray-600" />
+                                                    Your Practice Media
+                                                  </CardTitle>
+                                                  <CardDescription>
+                                                    View and manage your uploaded practice videos and images
+                                                  </CardDescription>
+                                                </CardHeader>
+                                                <CardContent>
+                                                  <MediaViewer
+                                                    mediaUploads={mediaUploads[workoutDrill.drill.id] || []}
+                                                    className="max-h-96 overflow-y-auto"
+                                                  />
+                                                </CardContent>
+                                              </Card>
+                                            </div>
+                                          </TabsContent>
+                                          
+                                          <TabsContent value="comments" className="mt-4">
+                                            <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+                                              <CardHeader className="text-center pb-3">
+                                                <CardTitle className="text-lg flex items-center justify-center gap-2">
+                                                  <MessageCircle className="h-5 w-5 text-green-600" />
+                                                  Drill Discussion
+                                                </CardTitle>
+                                                <CardDescription>
+                                                  Ask questions, share tips, or get feedback from coaches and other players
+                                                </CardDescription>
+                                              </CardHeader>
+                                              <CardContent>
+                                                <Comments 
+                                                  drillId={workoutDrill.drill.id}
+                                                  className="max-h-96 overflow-y-auto bg-white rounded-lg p-4 border"
+                                                />
+                                              </CardContent>
+                                            </Card>
+                                          </TabsContent>
+                                        </Tabs>
+                                      </div>
+                                    </motion.div>
+                                  )}
+                                </AnimatePresence>
                               </div>
                             )}
                           </Draggable>
@@ -449,6 +925,191 @@ export default function WorkoutBuilder() {
           </DialogContent>
         </Dialog>
       </div>
+
+      {/* Drill Edit Dialog */}
+      <Dialog open={editingDrill !== null} onOpenChange={(open) => !open && cancelDrillEdit()}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              Edit Drill
+            </DialogTitle>
+            <DialogDescription>
+              Modify the drill details. Changes will be saved to your custom drill library.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-6">
+            {/* Basic Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="drill-name">Drill Name</Label>
+                <Input
+                  id="drill-name"
+                  value={drillEditState.name}
+                  onChange={(e) => updateDrillEditField('name', e.target.value)}
+                  placeholder="Enter drill name"
+                />
+              </div>
+              <div>
+                <Label htmlFor="drill-category">Category</Label>
+                <Select 
+                  value={drillEditState.category} 
+                  onValueChange={(value) => updateDrillEditField('category', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="shooting">Shooting</SelectItem>
+                    <SelectItem value="dribbling">Dribbling</SelectItem>
+                    <SelectItem value="passing">Passing</SelectItem>
+                    <SelectItem value="defense">Defense</SelectItem>
+                    <SelectItem value="conditioning">Conditioning</SelectItem>
+                    <SelectItem value="rebounding">Rebounding</SelectItem>
+                    <SelectItem value="footwork">Footwork</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="drill-skill-level">Skill Level</Label>
+                <Select 
+                  value={drillEditState.skillLevel} 
+                  onValueChange={(value) => updateDrillEditField('skillLevel', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select skill level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="BEGINNER">Beginner</SelectItem>
+                    <SelectItem value="INTERMEDIATE">Intermediate</SelectItem>
+                    <SelectItem value="ADVANCED">Advanced</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="drill-duration">Duration (minutes)</Label>
+                <Input
+                  id="drill-duration"
+                  type="number"
+                  min="1"
+                  value={parseInt(drillEditState.duration) || 0}
+                  onChange={(e) => updateDrillEditField('duration', e.target.value)}
+                  placeholder="15"
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="drill-description">Description</Label>
+              <Textarea
+                id="drill-description"
+                value={drillEditState.description}
+                onChange={(e) => updateDrillEditField('description', e.target.value)}
+                placeholder="Describe the drill..."
+                className="min-h-[100px]"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="drill-equipment">Equipment Needed</Label>
+              <Input
+                id="drill-equipment"
+                value={drillEditState.equipment}
+                onChange={(e) => updateDrillEditField('equipment', e.target.value)}
+                placeholder="Basketball, cones, etc."
+              />
+            </div>
+
+            {/* Step-by-Step Instructions */}
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <Label>Step-by-Step Instructions</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addStepToEdit}
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Step
+                </Button>
+              </div>
+              <div className="space-y-2">
+                {drillEditState.stepByStep.map((step, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <span className="text-sm font-medium w-8">{index + 1}.</span>
+                    <Input
+                      value={step}
+                      onChange={(e) => updateStepInEdit(index, e.target.value)}
+                      placeholder={`Step ${index + 1}`}
+                      className="flex-1"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeStepFromEdit(index)}
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Coaching Tips */}
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <Label>Coaching Tips</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addTipToEdit}
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Tip
+                </Button>
+              </div>
+              <div className="space-y-2">
+                {drillEditState.coachingTips.map((tip, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <span className="text-sm font-medium w-8">•</span>
+                    <Input
+                      value={tip}
+                      onChange={(e) => updateTipInEdit(index, e.target.value)}
+                      placeholder={`Tip ${index + 1}`}
+                      className="flex-1"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeTipFromEdit(index)}
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-4 border-t">
+            <Button variant="outline" onClick={cancelDrillEdit}>
+              Cancel
+            </Button>
+            <Button onClick={saveDrillEdit} className="bg-green-600 hover:bg-green-700">
+              <Save className="h-4 w-4 mr-2" />
+              Save Changes
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Workouts List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -524,25 +1185,6 @@ export default function WorkoutBuilder() {
           </motion.div>
         ))}
       </div>
-
-      {workouts.length === 0 && (
-        <Card className="border-orange-100">
-          <CardContent className="text-center py-12">
-            <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No workouts yet</h3>
-            <p className="text-gray-600 mb-4">
-              Create your first workout by combining drills into a structured routine.
-            </p>
-            <Button 
-              onClick={() => setShowCreateDialog(true)}
-              className="bg-orange-600 hover:bg-orange-700"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Create Your First Workout
-            </Button>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }

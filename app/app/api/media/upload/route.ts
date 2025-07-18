@@ -1,19 +1,25 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth-config';
 import { prisma } from '@/lib/db';
+import { authOptions } from '@/lib/auth-config';
 import { writeFile, mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
-import sharp from 'sharp';
+import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 export const dynamic = 'force-dynamic';
 
-const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
-const ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/webm', 'video/ogg', 'video/mov', 'video/avi'];
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+const ALLOWED_TYPES = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/gif': 'gif',
+  'image/webp': 'webp',
+  'video/mp4': 'mp4',
+  'video/webm': 'webm',
+  'video/quicktime': 'mov',
+  'video/x-msvideo': 'avi',
+};
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,138 +29,164 @@ export async function POST(request: NextRequest) {
     }
 
     const formData = await request.formData();
-    const file = formData.get('file') as File;
+    const files = formData.getAll('files') as File[];
     const drillId = formData.get('drillId') as string;
     const drillCompletionId = formData.get('drillCompletionId') as string | null;
 
-    if (!file || !drillId) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    if (!drillId) {
+      return NextResponse.json({ error: 'drillId is required' }, { status: 400 });
     }
 
-    // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
-      return NextResponse.json({ error: 'File too large' }, { status: 400 });
+    if (!files || files.length === 0) {
+      return NextResponse.json({ error: 'No files provided' }, { status: 400 });
     }
 
-    // Determine media type
-    const isVideo = ALLOWED_VIDEO_TYPES.includes(file.type);
-    const isImage = ALLOWED_IMAGE_TYPES.includes(file.type);
-
-    if (!isVideo && !isImage) {
-      return NextResponse.json({ error: 'Invalid file type' }, { status: 400 });
+    // Validate drill exists
+    const drill = await prisma.drill.findUnique({
+      where: { id: drillId },
+    });
+    if (!drill) {
+      return NextResponse.json({ error: 'Drill not found' }, { status: 404 });
     }
 
-    const mediaType = isVideo ? 'VIDEO' : 'IMAGE';
-    const fileId = uuidv4();
-    const fileExtension = path.extname(file.name);
-    const fileName = `${fileId}${fileExtension}`;
+    const uploadedFiles = [];
+    const uploadDir = join(process.cwd(), 'public', 'uploads', 'media');
     
-    // Create upload directories if they don't exist
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads', isVideo ? 'videos' : 'images');
-    const thumbnailDir = path.join(process.cwd(), 'public', 'uploads', 'thumbnails');
-    
-    if (!existsSync(uploadDir)) {
+    // Ensure upload directory exists
+    try {
       await mkdir(uploadDir, { recursive: true });
-    }
-    if (!existsSync(thumbnailDir)) {
-      await mkdir(thumbnailDir, { recursive: true });
-    }
-
-    // Save the file
-    const filePath = path.join(uploadDir, fileName);
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    
-    await writeFile(filePath, buffer);
-
-    // Generate thumbnail
-    let thumbnailUrl = null;
-    if (isImage) {
-      // For images, create a thumbnail
-      const thumbnailName = `thumb_${fileId}.webp`;
-      const thumbnailPath = path.join(thumbnailDir, thumbnailName);
-      
-      await sharp(buffer)
-        .resize(300, 200, { fit: 'cover' })
-        .webp({ quality: 80 })
-        .toFile(thumbnailPath);
-      
-      thumbnailUrl = `/uploads/thumbnails/${thumbnailName}`;
-    } else if (isVideo) {
-      // For videos, we'll create a placeholder thumbnail
-      // In a real app, you'd use ffmpeg to extract a frame
-      const thumbnailName = `thumb_${fileId}.webp`;
-      const thumbnailPath = path.join(thumbnailDir, thumbnailName);
-      
-      // Create a simple placeholder thumbnail
-      await sharp({
-        create: {
-          width: 300,
-          height: 200,
-          channels: 3,
-          background: { r: 59, g: 130, b: 246 }
-        }
-      })
-      .png()
-      .composite([{
-        input: Buffer.from('<svg width="60" height="60" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>'),
-        top: 70,
-        left: 120
-      }])
-      .webp({ quality: 80 })
-      .toFile(thumbnailPath);
-      
-      thumbnailUrl = `/uploads/thumbnails/${thumbnailName}`;
+    } catch (error) {
+      // Directory might already exist
     }
 
-    // Save to database
-    const fileUrl = `/uploads/${isVideo ? 'videos' : 'images'}/${fileName}`;
-    
-    const mediaUpload = await prisma.mediaUpload.create({
-      data: {
-        userId: session.user.id,
-        drillId,
-        drillCompletionId,
-        mediaType,
-        fileUrl,
-        thumbnailUrl,
-        filename: file.name,
-        fileSize: file.size,
-        duration: null, // TODO: Extract duration for videos
-      },
-      include: {
-        drill: true,
-        user: true,
-      },
+    for (const file of files) {
+      // Validate file type
+      if (!ALLOWED_TYPES[file.type as keyof typeof ALLOWED_TYPES]) {
+        return NextResponse.json({ 
+          error: `Invalid file type: ${file.type}. Allowed types: ${Object.keys(ALLOWED_TYPES).join(', ')}` 
+        }, { status: 400 });
+      }
+
+      // Validate file size
+      if (file.size > MAX_FILE_SIZE) {
+        return NextResponse.json({ 
+          error: `File ${file.name} is too large. Maximum size is ${MAX_FILE_SIZE / (1024 * 1024)}MB` 
+        }, { status: 400 });
+      }
+
+      // Generate unique filename
+      const fileExtension = ALLOWED_TYPES[file.type as keyof typeof ALLOWED_TYPES];
+      const filename = `${uuidv4()}.${fileExtension}`;
+      const filepath = join(uploadDir, filename);
+
+      // Save file
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      await writeFile(filepath, buffer);
+
+      // Determine media type
+      const mediaType = file.type.startsWith('video/') ? 'VIDEO' : 'IMAGE';
+
+             // Create database record
+       const mediaUpload = await prisma.mediaUpload.create({
+         data: {
+           filename: file.name,
+           fileUrl: `/uploads/media/${filename}`,
+           fileSize: file.size,
+           mediaType,
+           userId: session.user.id,
+           drillId: drillId,
+           drillCompletionId: drillCompletionId || undefined,
+         },
+         include: {
+           user: {
+             select: {
+               id: true,
+               name: true,
+               email: true,
+             },
+           },
+           drill: {
+             select: {
+               id: true,
+               name: true,
+               category: true,
+             },
+           },
+         },
+       });
+
+      uploadedFiles.push(mediaUpload);
+    }
+
+    return NextResponse.json({
+      success: true,
+      files: uploadedFiles,
+      message: `Successfully uploaded ${uploadedFiles.length} file(s)`,
     });
 
-    // Create notification for parent
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { parentId: true }
-    });
-
-    if (user?.parentId) {
-      await prisma.notification.create({
-        data: {
-          userId: user.parentId,
-          type: 'MEDIA_UPLOAD',
-          title: 'New Media Upload',
-          message: `${session.user.name} uploaded a ${mediaType.toLowerCase()} for ${mediaUpload.drill.name}`,
-          data: {
-            mediaUploadId: mediaUpload.id,
-            drillId: mediaUpload.drillId,
-            mediaType: mediaUpload.mediaType,
-          },
-        },
-      });
-    }
-
-    return NextResponse.json(mediaUpload);
   } catch (error) {
     console.error('Error uploading media:', error);
     return NextResponse.json(
-      { error: 'Failed to upload media' },
+      { error: 'Failed to upload media files' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const drillId = searchParams.get('drillId');
+    const userId = searchParams.get('userId');
+
+    const whereClause: any = {};
+
+    if (drillId) {
+      whereClause.drillId = drillId;
+    }
+
+    if (userId) {
+      whereClause.userId = userId;
+    } else {
+      // If no specific user requested, only show current user's uploads
+      whereClause.userId = session.user.id;
+    }
+
+    const mediaUploads = await prisma.mediaUpload.findMany({
+      where: whereClause,
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        drill: {
+          select: {
+            id: true,
+            name: true,
+            category: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return NextResponse.json(mediaUploads);
+
+  } catch (error) {
+    console.error('Error fetching media uploads:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch media uploads' },
       { status: 500 }
     );
   }

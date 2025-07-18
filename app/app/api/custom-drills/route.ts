@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     const existingDrill = await prisma.drill.findFirst({
       where: {
         name,
-        userId: session.user.id,
+        createdBy: session.user.id,
       },
     });
 
