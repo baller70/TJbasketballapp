@@ -80,7 +80,6 @@ export default function MediaViewer({
       setFeedback('');
       setSelectedMedia(null);
     } catch (error) {
-      console.error('Error providing feedback:', error);
     } finally {
       setProvidingFeedback(false);
     }

@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
+    const requestedUserId = searchParams.get('userId');
     const drillId = searchParams.get('drillId');
     const drillCompletionId = searchParams.get('drillCompletionId');
     const mediaType = searchParams.get('mediaType');
@@ -23,9 +23,9 @@ export async function GET(request: NextRequest) {
     // Build where clause
     const where: any = {};
     
-    // If userId is provided, filter by that user
-    if (userId) {
-      where.userId = userId;
+    // If requestedUserId is provided, filter by that user
+    if (requestedUserId) {
+      where.userId = requestedUserId;
     }
     
     // If drillId is provided, filter by that drill

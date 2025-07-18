@@ -387,7 +387,6 @@ export default function AICoachAssistant({
         setAiInsights(insights);
       }
     } catch (error) {
-      console.error('Error fetching AI insights:', error);
     }
   };
 
@@ -716,4 +715,4 @@ export default function AICoachAssistant({
       )}
     </div>
   );
-} 
+}  

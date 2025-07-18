@@ -347,7 +347,6 @@ export default function UserProfile({ userId, onBack }: UserProfileProps) {
       const ctx = canvas.getContext('2d');
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        console.log('Canvas cleared');
         
         // Visual feedback for clearing
         ctx.save();
@@ -369,28 +368,8 @@ export default function UserProfile({ userId, onBack }: UserProfileProps) {
 
   // Enhanced test function
   const testCoachingToolkit = () => {
-    console.log('=== COACHING TOOLKIT TEST ===');
-    console.log('Testing coaching toolkit:', {
-      selectedMedia: !!selectedMedia,
-      showAnalysis,
-      drawingTool,
-      drawingColor,
-      brushSize,
-      annotations: annotations.length
-    });
-    
     const canvas = document.getElementById('drawing-canvas') as HTMLCanvasElement;
     const image = document.getElementById('analysis-image') as HTMLImageElement;
-    
-    console.log('Canvas state:', {
-      canvas: !!canvas,
-      image: !!image,
-      canvasWidth: canvas?.width,
-      canvasHeight: canvas?.height,
-      imageComplete: image?.complete,
-      imageNaturalHeight: image?.naturalHeight,
-      canvasStyle: canvas?.style.cssText
-    });
     
     if (canvas && image) {
       const ctx = canvas.getContext('2d');
@@ -433,13 +412,10 @@ export default function UserProfile({ userId, onBack }: UserProfileProps) {
         
         ctx.restore();
         
-        console.log('Test drawings completed successfully');
-        
         // Show success message
         alert('Coaching toolkit test completed! Check the canvas for test drawings.');
       }
     } else {
-      console.error('Canvas or image not found!');
       alert('Canvas or image not found! Make sure you have selected an image for analysis.');
     }
   };
@@ -582,10 +558,6 @@ export default function UserProfile({ userId, onBack }: UserProfileProps) {
     e.preventDefault();
     e.stopPropagation();
     
-    console.log('=== MOUSE DOWN EVENT ===');
-    console.log('Current tool:', drawingTool);
-    console.log('Drawing color:', drawingColor);
-    console.log('Brush size:', brushSize);
     
     const canvas = e.target as HTMLCanvasElement;
     const rect = canvas.getBoundingClientRect();
@@ -609,16 +581,11 @@ export default function UserProfile({ userId, onBack }: UserProfileProps) {
       if (drawingTool === 'pencil') {
         ctx.beginPath();
         ctx.moveTo(x, y);
-        console.log('Pencil tool - started path at:', { x, y });
-      } else {
-        console.log('Shape tool - starting:', drawingTool, 'at:', { x, y });
       }
     }
     
     // Visual feedback
     canvas.style.cursor = 'crosshair';
-    
-    console.log('Mouse down processed:', { x, y, tool: drawingTool, color: drawingColor, size: brushSize });
   }, [drawingTool, drawingColor, brushSize]);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
@@ -643,7 +610,6 @@ export default function UserProfile({ userId, onBack }: UserProfileProps) {
         ctx.lineWidth = brushSize;
         ctx.lineTo(x, y);
         ctx.stroke();
-        console.log('Pencil drawing to:', { x, y });
       } else {
         // For shapes, clear and redraw preview
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -663,7 +629,6 @@ export default function UserProfile({ userId, onBack }: UserProfileProps) {
           const width = x - startX;
           const height = y - startY;
           ctx.strokeRect(startX, startY, width, height);
-          console.log('Rectangle preview:', { startX, startY, width, height });
         } else if (drawingTool === 'circle') {
           const radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
           ctx.beginPath();
@@ -2853,4 +2818,4 @@ export default function UserProfile({ userId, onBack }: UserProfileProps) {
       )}
     </div>
   );
-} 
+}  
