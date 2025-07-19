@@ -102,3 +102,97 @@
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   }
 }
+
+/* Basketball Theme Enhancements */
+@layer base {
+  :root {
+    /* Basketball-specific colors */
+    --basketball-orange: 255 102 0;
+    --basketball-orange-light: 255 140 51;
+    --basketball-orange-dark: 204 82 0;
+    --court-wood: 139 69 19;
+    --court-wood-light: 160 82 45;
+    --rim-silver: 192 192 192;
+    --net-white: 248 250 252;
+    
+    /* Enhanced gradients */
+    --gradient-basketball: linear-gradient(135deg, hsl(var(--basketball-orange)) 0%, hsl(var(--basketball-orange-dark)) 100%);
+    --gradient-court: linear-gradient(45deg, hsl(var(--court-wood)) 0%, hsl(var(--court-wood-light)) 100%);
+    
+    /* Basketball-specific shadows */
+    --shadow-basketball: 0 4px 20px rgba(255, 102, 0, 0.3);
+    --shadow-court: 0 8px 32px rgba(139, 69, 19, 0.2);
+  }
+}
+
+/* Basketball-themed animations */
+@keyframes bounce-basketball {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.05); }
+}
+
+@keyframes swish {
+  0% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(5px) rotate(2deg); }
+  75% { transform: translateX(-5px) rotate(-2deg); }
+  100% { transform: translateX(0) rotate(0deg); }
+}
+
+.animate-basketball-bounce {
+  animation: bounce-basketball 2s ease-in-out infinite;
+}
+
+.animate-swish {
+  animation: swish 0.6s ease-in-out;
+}
+
+/* Enhanced card styles */
+.card-basketball {
+  background: linear-gradient(135deg, rgba(255, 102, 0, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+
+.card-basketball::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: var(--gradient-basketball);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  z-index: -1;
+}
+
+/* Enhanced Accessibility */
+.focus-basketball {
+  @apply focus:outline-none focus:ring-4 focus:ring-orange-500/50 focus:ring-offset-2 focus:ring-offset-white;
+}
+
+.focus-basketball-dark {
+  @apply focus:outline-none focus:ring-4 focus:ring-orange-400/50 focus:ring-offset-2 focus:ring-offset-gray-900;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .card-basketball {
+    border-width: 3px;
+    border-color: hsl(var(--basketball-orange));
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-basketball-bounce,
+  .animate-swish {
+    animation: none;
+  }
+  
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
