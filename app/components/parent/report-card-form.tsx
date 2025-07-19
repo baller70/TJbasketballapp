@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { BookOpen, Star, BarChart3, MessageSquare, Save, User } from 'lucide-react';
+import { BookOpen, Star, BarChart3, MessageSquare, Save, User, Brain, Sparkles } from 'lucide-react';
 
 interface ReportCardFormProps {
   childId: string;
@@ -66,6 +66,7 @@ export default function ReportCardForm({ childId, childName, onSuccess }: Report
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const { toast } = useToast();
 
   const handleSliderChange = (field: string, value: number[]) => {
@@ -80,6 +81,46 @@ export default function ReportCardForm({ childId, childName, onSuccess }: Report
       ...prev,
       [field]: value
     }));
+  };
+
+  const handleAIAutoFill = async () => {
+    setIsGeneratingAI(true);
+    
+    try {
+      const response = await fetch('/api/ai/report-card-assessment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          playerId: childId,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setFormData(prev => ({
+          ...prev,
+          ...result.assessment
+        }));
+        
+        toast({
+          title: "AI Assessment Complete",
+          description: `AI has analyzed ${childName}'s performance and filled out the assessment form.`,
+        });
+      } else {
+        throw new Error('Failed to generate AI assessment');
+      }
+    } catch (error) {
+      console.error('Error generating AI assessment:', error);
+      toast({
+        title: "AI Generation Failed",
+        description: "Unable to generate AI assessment. Please fill out manually.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGeneratingAI(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -142,9 +183,20 @@ export default function ReportCardForm({ childId, childName, onSuccess }: Report
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5" />
-            Basketball Report Card for {childName}
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BookOpen className="h-5 w-5" />
+              Basketball Report Card for {childName}
+            </div>
+            <Button 
+              type="button"
+              onClick={handleAIAutoFill}
+              disabled={isGeneratingAI || isSubmitting}
+              className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700"
+            >
+              <Brain className="h-4 w-4" />
+              {isGeneratingAI ? 'Generating...' : 'AI Auto-Fill'}
+            </Button>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
@@ -379,4 +431,4 @@ export default function ReportCardForm({ childId, childName, onSuccess }: Report
       </Card>
     </form>
   );
-} 
+}  
