@@ -50,7 +50,7 @@ interface AICoachAssistantProps {
 
 interface AITaskStatus {
   id: string;
-  type: 'assessment' | 'drill_creation' | 'workout_creation' | 'commenting' | 'skill_evaluation';
+  type: 'assessment' | 'drill_creation' | 'workout_creation' | 'commenting' | 'skill_evaluation' | 'weekly_summary' | 'anomaly_detection' | 'motivational_feedback';
   playerId?: string;
   playerName?: string;
   status: 'pending' | 'processing' | 'completed' | 'failed';
@@ -370,6 +370,144 @@ export default function AICoachAssistant({
     setIsProcessing(false);
   };
 
+  const generateWeeklySummaries = async (playerIds: string[]) => {
+    setIsProcessing(true);
+    
+    for (const playerId of playerIds) {
+      const player = children.find(c => c.id === playerId);
+      if (!player) continue;
+
+      const taskId = addTask({
+        type: 'weekly_summary',
+        playerId,
+        playerName: player.name,
+        status: 'processing',
+        progress: 0,
+      });
+
+      try {
+        const response = await fetch('/api/ai/brain', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            operation: 'weekly_summary',
+            targetUserId: playerId,
+          }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          updateTask(taskId, { 
+            status: 'completed', 
+            progress: 100, 
+            result: result.result 
+          });
+        } else {
+          throw new Error('Weekly summary generation failed');
+        }
+      } catch (error) {
+        updateTask(taskId, { 
+          status: 'failed', 
+          error: error instanceof Error ? error.message : 'Unknown error' 
+        });
+      }
+    }
+    
+    setIsProcessing(false);
+  };
+
+  const detectAnomalies = async (playerIds: string[]) => {
+    setIsProcessing(true);
+    
+    for (const playerId of playerIds) {
+      const player = children.find(c => c.id === playerId);
+      if (!player) continue;
+
+      const taskId = addTask({
+        type: 'anomaly_detection',
+        playerId,
+        playerName: player.name,
+        status: 'processing',
+        progress: 0,
+      });
+
+      try {
+        const response = await fetch('/api/ai/brain', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            operation: 'anomaly_detection',
+            targetUserId: playerId,
+          }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          updateTask(taskId, { 
+            status: 'completed', 
+            progress: 100, 
+            result: result.result 
+          });
+        } else {
+          throw new Error('Anomaly detection failed');
+        }
+      } catch (error) {
+        updateTask(taskId, { 
+          status: 'failed', 
+          error: error instanceof Error ? error.message : 'Unknown error' 
+        });
+      }
+    }
+    
+    setIsProcessing(false);
+  };
+
+  const generateMotivationalFeedback = async (playerIds: string[]) => {
+    setIsProcessing(true);
+    
+    for (const playerId of playerIds) {
+      const player = children.find(c => c.id === playerId);
+      if (!player) continue;
+
+      const taskId = addTask({
+        type: 'motivational_feedback',
+        playerId,
+        playerName: player.name,
+        status: 'processing',
+        progress: 0,
+      });
+
+      try {
+        const response = await fetch('/api/ai/brain', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            operation: 'motivational_feedback',
+            targetUserId: playerId,
+          }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          updateTask(taskId, { 
+            status: 'completed', 
+            progress: 100, 
+            result: result.result 
+          });
+        } else {
+          throw new Error('Motivational feedback generation failed');
+        }
+      } catch (error) {
+        updateTask(taskId, { 
+          status: 'failed', 
+          error: error instanceof Error ? error.message : 'Unknown error' 
+        });
+      }
+    }
+    
+    setIsProcessing(false);
+  };
+
   // Get AI insights
   const fetchAIInsights = async () => {
     try {
@@ -643,6 +781,39 @@ export default function AICoachAssistant({
               Skill Evaluations
             </Button>
           </div>
+
+          {/* AI Brain Operations */}
+          <div className="border-t pt-4">
+            <Label className="text-sm font-medium text-blue-600">AI Brain Operations</Label>
+            <div className="mt-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Button
+                onClick={() => generateWeeklySummaries(bulkOperations.selectedPlayers)}
+                disabled={isProcessing || bulkOperations.selectedPlayers.length === 0}
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+              >
+                <FileText className="h-4 w-4" />
+                Weekly Summaries
+              </Button>
+
+              <Button
+                onClick={() => detectAnomalies(bulkOperations.selectedPlayers)}
+                disabled={isProcessing || bulkOperations.selectedPlayers.length === 0}
+                className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700"
+              >
+                <AlertCircle className="h-4 w-4" />
+                Detect Anomalies
+              </Button>
+
+              <Button
+                onClick={() => generateMotivationalFeedback(bulkOperations.selectedPlayers)}
+                disabled={isProcessing || bulkOperations.selectedPlayers.length === 0}
+                className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
+              >
+                <Sparkles className="h-4 w-4" />
+                Motivational Feedback
+              </Button>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
@@ -716,4 +887,4 @@ export default function AICoachAssistant({
       )}
     </div>
   );
-} 
+}    

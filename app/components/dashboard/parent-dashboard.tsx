@@ -1304,11 +1304,9 @@ export default function ParentDashboard({ user }: ParentDashboardProps) {
               children={dashboardData.children}
               onModeChange={(mode) => {
                 console.log('AI mode changed to:', mode);
-                // Handle global AI mode changes
               }}
               onPlayerModeChange={(playerId, mode) => {
                 console.log('Player AI mode changed:', playerId, mode);
-                // Handle individual player AI mode changes
               }}
             />
           </TabsContent>
