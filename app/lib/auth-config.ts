@@ -10,8 +10,9 @@ import { validatePassword, isCommonWeakPassword } from './password-validation';
 const env = getEnvConfig();
 
 export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
   session: {
-    strategy: 'jwt',
+    strategy: 'database',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   providers: [
@@ -93,14 +94,14 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    async session({ session, token }) {
-      if (token) {
-        session.user.id = token.sub!;
-        session.user.role = token.role as any;
-        session.user.parentId = token.parentId as string;
-        session.user.playerProfile = token.playerProfile as any;
-        session.user.children = token.children as any;
-        session.user.parent = token.parent as any;
+    async session({ session, token, user }) {
+      if (session.user) {
+        session.user.id = user.id;
+        session.user.role = user.role;
+        session.user.parentId = user.parentId;
+        session.user.playerProfile = user.playerProfile;
+        session.user.children = user.children;
+        session.user.parent = user.parent;
       }
       return session;
     },
