@@ -229,14 +229,10 @@ export default function ParentDashboard({ user }: ParentDashboardProps) {
 
   const fetchTeams = async () => {
     try {
-      console.log('Fetching teams...');
       const response = await fetch('/api/teams');
       if (response.ok) {
         const data = await response.json();
-        console.log('Teams fetched:', data);
         setTeams(data);
-      } else {
-        console.error('Failed to fetch teams, status:', response.status);
       }
     } catch (error) {
       console.error('Error fetching teams:', error);
@@ -302,7 +298,6 @@ export default function ParentDashboard({ user }: ParentDashboardProps) {
 
   const addUserToTeam = async (teamId: string, userId: string) => {
     try {
-      console.log('Making API call to add user:', userId, 'to team:', teamId);
       const response = await fetch(`/api/teams/${teamId}/members`, {
         method: 'POST',
         headers: {
@@ -310,11 +305,8 @@ export default function ParentDashboard({ user }: ParentDashboardProps) {
         },
         body: JSON.stringify({ userId }),
       });
-
-      console.log('API response status:', response.status);
       
       if (response.ok) {
-        console.log('User added successfully, refreshing teams and users');
         // Force refresh both teams and users data
         await fetchTeams();
         await fetchAllUsers();
@@ -355,7 +347,6 @@ export default function ParentDashboard({ user }: ParentDashboardProps) {
   };
 
   const handleDragStart = (e: React.DragEvent, user: any) => {
-    console.log('Drag started for user:', user.name);
     setDraggedUser(user);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', user.id);
@@ -2259,6 +2250,7 @@ export default function ParentDashboard({ user }: ParentDashboardProps) {
                           checked={emailSettings.receiveAllCompletions}
                           onChange={(e) => setEmailSettings(prev => ({ ...prev, receiveAllCompletions: e.target.checked }))}
                           className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                          aria-label="Receive notifications for all drill and workout completions"
                         />
                       </div>
 
@@ -2277,6 +2269,7 @@ export default function ParentDashboard({ user }: ParentDashboardProps) {
                           checked={emailSettings.receiveAchievements}
                           onChange={(e) => setEmailSettings(prev => ({ ...prev, receiveAchievements: e.target.checked }))}
                           className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                          aria-label="Receive notifications for achievements and level ups"
                         />
                       </div>
 

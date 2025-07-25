@@ -87,7 +87,6 @@ export default function CustomLevelManager({ onLevelsChange, onLevelsUpdate }: C
         setLevels(data.levels);
       }
     } catch (error) {
-      console.error('Error loading levels:', error);
     } finally {
       setLoading(false);
     }
@@ -119,7 +118,7 @@ export default function CustomLevelManager({ onLevelsChange, onLevelsUpdate }: C
       onLevelsChange?.();
       onLevelsUpdate?.();
     } catch (error) {
-      console.error('Error reordering levels:', error);
+      loadLevels();
     }
   };
 
@@ -141,7 +140,6 @@ export default function CustomLevelManager({ onLevelsChange, onLevelsUpdate }: C
         onLevelsUpdate?.();
       }
     } catch (error) {
-      console.error('Error creating level:', error);
     }
   };
 
@@ -170,7 +168,6 @@ export default function CustomLevelManager({ onLevelsChange, onLevelsUpdate }: C
         onLevelsUpdate?.();
       }
     } catch (error) {
-      console.error('Error editing level:', error);
     }
   };
 
@@ -195,7 +192,6 @@ export default function CustomLevelManager({ onLevelsChange, onLevelsUpdate }: C
         onLevelsUpdate?.();
       }
     } catch (error) {
-      console.error('Error deleting level:', error);
     }
   };
 
@@ -765,4 +761,4 @@ export default function CustomLevelManager({ onLevelsChange, onLevelsUpdate }: C
       </Dialog>
     </div>
   );
-} 
+}  

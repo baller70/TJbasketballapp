@@ -167,7 +167,6 @@ export default function CustomDrillCreator({ onDrillCreated, isOpen, onClose }: 
         description: "Your custom drill video has been uploaded.",
       });
     } catch (error) {
-      console.error('Error uploading video:', error);
       toast({
         title: "Upload failed",
         description: "There was an error uploading your video. Please try again.",
@@ -232,7 +231,6 @@ export default function CustomDrillCreator({ onDrillCreated, isOpen, onClose }: 
       
       onClose();
     } catch (error) {
-      console.error('Error creating custom drill:', error);
       toast({
         title: "Error creating drill",
         description: error instanceof Error ? error.message : "Please try again.",
@@ -553,4 +551,4 @@ export default function CustomDrillCreator({ onDrillCreated, isOpen, onClose }: 
       </DialogContent>
     </Dialog>
   );
-} 
+}  

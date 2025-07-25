@@ -186,7 +186,6 @@ export default function TimerComponent() {
 
   const startWorkoutTimer = (workout: Workout) => {
     if (!workout.workoutDrills || workout.workoutDrills.length === 0) {
-      console.error('No drills found in workout');
       return;
     }
 
