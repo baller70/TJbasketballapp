@@ -147,12 +147,38 @@ Format as JSON with fields: name, description, instructions, equipment, duration
     }
   ];
 
-  const response = await generateChatCompletion(messages, 'gpt-3.5-turbo', 0.7, 1200);
-  
   try {
-    return JSON.parse(response);
+    const response = await generateChatCompletion(messages, 'gpt-3.5-turbo', 0.7, 1200);
+    try {
+      // Clean common code fences and extract JSON object bounds
+      let cleaned = response.trim().replace(/```json|```/g, '').trim();
+      const first = cleaned.indexOf('{');
+      const last = cleaned.lastIndexOf('}');
+      if (first !== -1 && last !== -1 && last > first) {
+        cleaned = cleaned.slice(first, last + 1);
+      }
+      return JSON.parse(cleaned);
+    } catch (error) {
+      console.error('Failed to parse custom drill response:', error);
+      return {
+        name: `${focusArea} Development Drill`,
+        description: `A personalized drill focusing on ${focusArea} skills`,
+        instructions: [
+          'Set up the drill area',
+          'Practice the fundamental movement',
+          'Focus on proper technique',
+          'Repeat with consistency'
+        ],
+        equipment: ['Basketball', 'Cones'],
+        duration: '15 minutes',
+        repetitions: '3 sets of 10',
+        successCriteria: 'Consistent technique and improvement',
+        variations: ['Increase speed', 'Add complexity'],
+        coachingTips: ['Focus on form over speed', 'Encourage consistent practice']
+      };
+    }
   } catch (error) {
-    console.error('Failed to parse custom drill response:', error);
+    console.error('OpenAI generation failed, using fallback drill:', error);
     return {
       name: `${focusArea} Development Drill`,
       description: `A personalized drill focusing on ${focusArea} skills`,

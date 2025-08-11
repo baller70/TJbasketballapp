@@ -57,7 +57,7 @@ function createCSP(nonce: string): string {
     `font-src 'self' https://fonts.gstatic.com`,
     `img-src 'self' data: https: blob:`,
     `media-src 'self' blob:`,
-    `connect-src 'self' https://api.openai.com https://api.resend.com`,
+    `connect-src 'self' https://api.openai.com https://api.resend.com https://national-collie-97.clerk.accounts.dev https://scdn.clerk.com https://segapi.clerk.com https://clerk-telemetry.com https://o449981.ingest.us.sentry.io`,
     `frame-src 'none'`,
     `object-src 'none'`,
     `base-uri 'self'`,

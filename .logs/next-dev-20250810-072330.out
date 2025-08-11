@@ -1,0 +1,545 @@
+
+> dev
+> next dev -p 3000
+
+  ▲ Next.js 14.2.28
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1868ms
+ ✓ Compiled /middleware in 456ms (188 modules)
+ ○ Compiling /dashboard ...
+(node:71603) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ✓ Compiled /dashboard in 4.9s (2130 modules)
+ GET /dashboard?view=player 200 in 5686ms
+ ✓ Compiled in 879ms (967 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (158kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ GET /dashboard?view=player 200 in 45ms
+ ○ Compiling /api/users/[id]/assessments ...
+ ✓ Compiled /api/users/[id]/assessments in 681ms (1387 modules)
+ ✓ Compiled (1393 modules)
+[next-auth][warn][DEBUG_ENABLED] 
+https://next-auth.js.org/warnings#debug_enabled
+No session found, using mock dashboard stats data
+ GET /api/dashboard/stats 200 in 1026ms
+No session found, using mock dashboard stats data
+ GET /api/dashboard/stats 200 in 10ms
+ GET /api/users/user_304MJPGXQJW83Qq1EO3hcRLOeEh/assessments 401 in 1249ms
+ GET /api/users/user_304MJPGXQJW83Qq1EO3hcRLOeEh/assessments 401 in 7ms
+Error generating motivational quote: Error: Failed to generate quote
+    at GET (webpack-internal:///(rsc)/./app/api/ai/motivational-quote/route.ts:44:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+ GET /api/ai/motivational-quote 200 in 1539ms
+Error generating motivational quote: Error: Failed to generate quote
+    at GET (webpack-internal:///(rsc)/./app/api/ai/motivational-quote/route.ts:44:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+ GET /api/ai/motivational-quote 200 in 194ms
+ ✓ Compiled /api/drills in 140ms (1395 modules)
+ GET /api/drills 200 in 183ms
+ GET /api/drills 200 in 7ms
+ GET /api/drills 200 in 181ms
+ GET /api/drills 200 in 32ms
+ ✓ Compiled in 1203ms (967 modules)
+ GET /dashboard?view=player&_rsc=mcjx5 200 in 230ms
+ ○ Compiling /api/drills/seed-default ...
+ ✓ Compiled /api/drills/seed-default in 928ms (1158 modules)
+ POST /api/drills/seed-default 200 in 1029ms
+ ✓ Compiled /api/drills in 145ms (1160 modules)
+No session found, using mock drills data
+ GET /api/drills 200 in 222ms
+ ✓ Compiled in 574ms (2125 modules)
+ GET /dashboard?view=player&_rsc=mcjx5 200 in 86ms
+ GET /api/drills 200 in 15ms
+ ✓ Compiled in 837ms (2121 modules)
+ GET /dashboard?view=player&_rsc=mcjx5 200 in 213ms
+ ✓ Compiled in 311ms (967 modules)
+ GET /dashboard?view=player&_rsc=mcjx5 200 in 15ms
+ ✓ Compiled /api/drills in 455ms (1258 modules)
+ GET /api/drills 200 in 642ms
+ GET /dashboard?view=player&_rsc=mcjx5 200 in 50ms
+ ✓ Compiled in 468ms (967 modules)
+ GET /dashboard?view=player&_rsc=mcjx5 200 in 16ms
+ ✓ Compiled in 1936ms (2295 modules)
+ GET /dashboard?view=player&_rsc=mcjx5 200 in 1729ms
+ GET /dashboard?view=player&_rsc=mcjx5 200 in 11ms
+ ✓ Compiled /api/drills/regenerate-ai in 334ms (1258 modules)
+Failed to parse custom drill response: SyntaxError: Unexpected token '`', "```json
+{
+"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at generateCustomDrill (webpack-internal:///(rsc)/./lib/openai.ts:155:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:66:28)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+Error regenerating drills with AI: PrismaClientKnownRequestError: 
+Invalid `prisma.drill.update()` invocation:
+
+
+Unique constraint failed on the fields: (`name`)
+    at zn.handleRequestError (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:130:9778)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:76:37)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'P2002',
+  meta: { modelName: 'Drill', target: [ 'name' ] },
+  clientVersion: '6.7.0'
+}
+ POST /api/drills/regenerate-ai 500 in 11115ms
+Failed to parse custom drill response: SyntaxError: Unexpected token '`', "```json
+{
+"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at generateCustomDrill (webpack-internal:///(rsc)/./lib/openai.ts:155:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:66:28)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+Failed to parse custom drill response: SyntaxError: Unexpected token ']', ..."ds.",
+    ],
+    "eq"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at generateCustomDrill (webpack-internal:///(rsc)/./lib/openai.ts:155:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:66:28)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+Error regenerating drills with AI: PrismaClientKnownRequestError: 
+Invalid `prisma.drill.update()` invocation:
+
+
+Unique constraint failed on the fields: (`name`)
+    at zn.handleRequestError (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:130:9778)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:76:37)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'P2002',
+  meta: { modelName: 'Drill', target: [ 'name' ] },
+  clientVersion: '6.7.0'
+}
+ POST /api/drills/regenerate-ai 500 in 9628ms
+ ✓ Compiled in 139ms (188 modules)
+Failed to parse custom drill response: SyntaxError: Unexpected token '`', "```json
+{
+"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at generateCustomDrill (webpack-internal:///(rsc)/./lib/openai.ts:155:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:66:28)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+Failed to parse custom drill response: SyntaxError: Unexpected token '`', "```json
+{
+"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at generateCustomDrill (webpack-internal:///(rsc)/./lib/openai.ts:155:21)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:66:28)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+Error regenerating drills with AI: PrismaClientKnownRequestError: 
+Invalid `prisma.drill.update()` invocation:
+
+
+Unique constraint failed on the fields: (`name`)
+    at zn.handleRequestError (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:130:9778)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:76:37)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'P2002',
+  meta: { modelName: 'Drill', target: [ 'name' ] },
+  clientVersion: '6.7.0'
+}
+ POST /api/drills/regenerate-ai 500 in 22285ms
+ ✓ Compiled in 441ms (1258 modules)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (158kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ GET /dashboard?view=player&_rsc=mcjx5 200 in 86ms
+Error regenerating drills with AI: PrismaClientKnownRequestError: 
+Invalid `prisma.drill.update()` invocation:
+
+
+Unique constraint failed on the fields: (`name`)
+    at zn.handleRequestError (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:121:7459)
+    at zn.handleAndLogRequestError (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:121:6784)
+    at zn.request (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:121:6491)
+    at async l (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/@prisma/client/runtime/library.js:130:9778)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:76:37)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'P2002',
+  meta: { modelName: 'Drill', target: [ 'name' ] },
+  clientVersion: '6.7.0'
+}
+ POST /api/drills/regenerate-ai 500 in 3582ms
+ ✓ Compiled in 506ms (1154 modules)
+ ✓ Compiled in 431ms (967 modules)
+ GET /dashboard?view=player&_rsc=mcjx5 200 in 110ms
+ ✓ Compiled /api/drills/regenerate-ai in 262ms (1258 modules)
+ GET /dashboard?view=player&_rsc=mcjx5 200 in 38ms
+Failed to parse custom drill response: SyntaxError: Unexpected token ']', ..."ation.",
+	],
+	"equip"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at generateCustomDrill (webpack-internal:///(rsc)/./lib/openai.ts:163:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:66:28)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+Failed to parse custom drill response: SyntaxError: Unexpected token ']', ..."ce.",
+    ],
+    "eq"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at generateCustomDrill (webpack-internal:///(rsc)/./lib/openai.ts:163:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:66:28)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+Failed to parse custom drill response: SyntaxError: Unexpected token ']', ..."ns.",
+    ],
+    "eq"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at generateCustomDrill (webpack-internal:///(rsc)/./lib/openai.ts:163:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:66:28)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+Failed to parse custom drill response: SyntaxError: Unexpected token ']', ..."es.",
+    ],
+    "eq"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at generateCustomDrill (webpack-internal:///(rsc)/./lib/openai.ts:163:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:66:28)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+Failed to parse custom drill response: SyntaxError: Unexpected token ']', ..."on.",
+    ],
+    "eq"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at generateCustomDrill (webpack-internal:///(rsc)/./lib/openai.ts:163:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:66:28)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+Failed to parse custom drill response: SyntaxError: Unexpected token ']', ..."ds.",
+    ],
+    "eq"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at generateCustomDrill (webpack-internal:///(rsc)/./lib/openai.ts:163:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:66:28)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+Failed to parse custom drill response: SyntaxError: Unexpected token ']', ..."ds.",
+    ],
+    "eq"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at generateCustomDrill (webpack-internal:///(rsc)/./lib/openai.ts:163:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async POST (webpack-internal:///(rsc)/./app/api/drills/regenerate-ai/route.ts:66:28)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Volumes/Softwaare Program/TJAPPFINAL/TJbasketballapp/app/node_modules/next/dist/server/lib/start-server.js:141:13)
+ POST /api/drills/regenerate-ai 200 in 65585ms

@@ -7,13 +7,13 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const { userId: authedUserId } = await auth();
+    if (!authedUserId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
+    const queryUserId = searchParams.get('userId');
     const drillId = searchParams.get('drillId');
     const drillCompletionId = searchParams.get('drillCompletionId');
     const mediaType = searchParams.get('mediaType');
@@ -24,8 +24,8 @@ export async function GET(request: NextRequest) {
     const where: any = {};
     
     // If userId is provided, filter by that user
-    if (userId) {
-      where.userId = userId;
+    if (queryUserId) {
+      where.userId = queryUserId;
     }
     
     // If drillId is provided, filter by that drill
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
 
     // Get current user to determine access permissions
     const currentUser = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: authedUserId },
       select: {
         id: true,
         role: true,

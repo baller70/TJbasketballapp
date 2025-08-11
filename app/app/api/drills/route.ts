@@ -2,70 +2,87 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { prisma } from '@/lib/db';
+import { generateCustomDrill } from '@/lib/openai';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const { userId } = await auth();
-    
-    if (!userId) {
-      console.log('No session found, using mock drills data');
-      // Return mock data for development
-      return NextResponse.json([
-        {
-          id: 'drill-1',
-          name: 'Basic Dribbling',
-          description: 'Learn fundamental dribbling techniques',
-          difficulty: 'BEGINNER',
-          duration: 15,
-          equipment: ['Basketball'],
-          stepByStep: ['Dribble with right hand', 'Switch to left hand', 'Repeat'],
-          coachingTips: ['Keep your head up', 'Use fingertips'],
-          videoUrl: 'https://example.com/video1.mp4',
-          alternativeVideos: [],
-          isCustom: false,
-          category: 'Ball Handling',
-          skillLevel: 'BEGINNER',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: 'drill-2',
-          name: 'Shooting Form',
-          description: 'Perfect your shooting technique',
-          difficulty: 'INTERMEDIATE',
-          duration: 20,
-          equipment: ['Basketball', 'Hoop'],
-          stepByStep: ['Set your feet', 'Align your shooting hand', 'Follow through'],
-          coachingTips: ['Keep elbow under the ball', 'Snap your wrist'],
-          videoUrl: 'https://example.com/video2.mp4',
-          alternativeVideos: [],
-          isCustom: false,
-          category: 'Shooting',
-          skillLevel: 'INTERMEDIATE',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ]);
-    }
-
+    // Always try DB first (even if unauthenticated)
     const drills = await prisma.drill.findMany({
-      orderBy: {
-        name: 'asc',
-      },
+      orderBy: { name: 'asc' },
     });
 
-    // Parse JSON strings to arrays for frontend consumption
-    const parsedDrills = drills.map((drill: any) => ({
-      ...drill,
-      equipment: JSON.parse(drill.equipment || '[]'),
-      stepByStep: JSON.parse(drill.stepByStep || '[]'),
-      coachingTips: JSON.parse(drill.coachingTips || '[]'),
-      alternativeVideos: JSON.parse(drill.alternativeVideos || '[]'),
-    }));
+    if (drills.length > 0) {
+      // Normalize JSON fields and strings for UI
+      const normalized = drills.map((drill: any) => ({
+        ...drill,
+        equipment: (() => {
+          try { return JSON.parse(drill.equipment || '[]'); } catch { return []; }
+        })(),
+        stepByStep: (() => {
+          try { return JSON.parse(drill.stepByStep || '[]').join(', '); } catch { return drill.stepByStep || ''; }
+        })(),
+        coachingTips: (() => {
+          try { return JSON.parse(drill.coachingTips || '[]').join(', '); } catch { return drill.coachingTips || ''; }
+        })(),
+        alternativeVideos: (() => {
+          try { return JSON.parse(drill.alternativeVideos || '[]'); } catch { return []; }
+        })(),
+      }));
+      return NextResponse.json(normalized);
+    }
 
-    return NextResponse.json(parsedDrills);
+    // Fallback: Generate drills with OpenAI if DB is empty
+    const categories: Array<{id: string; skillLevel: string; focus: string}> = [
+      { id: 'shooting', skillLevel: 'Beginner', focus: 'Form shooting and free throws' },
+      { id: 'dribbling', skillLevel: 'Beginner', focus: 'Ball control and crossovers' },
+      { id: 'passing', skillLevel: 'Intermediate', focus: 'Chest/bounce and on-the-move passing' },
+      { id: 'defense', skillLevel: 'Intermediate', focus: 'Stance, slides, closeouts' },
+      { id: 'conditioning', skillLevel: 'All Levels', focus: 'Court sprints and intervals' },
+      { id: 'footwork', skillLevel: 'Beginner', focus: 'Mikan, drop step, cone agility' },
+      { id: 'fundamentals', skillLevel: 'Beginner', focus: 'Triple threat, pivots, layups' },
+    ];
+
+    const generated: any[] = [];
+
+    for (const cat of categories) {
+      for (let i = 0; i < 3; i++) {
+        try {
+          const drill = await generateCustomDrill(cat.skillLevel, `${cat.id}: ${cat.focus}`, {});
+          // Normalize fields
+          const name = drill.name || `${cat.id} drill ${i+1}`;
+          const description = drill.description || `AI-generated ${cat.id} drill`;
+          const equipment = Array.isArray(drill.equipment) ? drill.equipment : ['Basketball'];
+          const steps = Array.isArray(drill.instructions) ? drill.instructions : (Array.isArray(drill.steps) ? drill.steps : []);
+          const tips = Array.isArray(drill.coachingTips) ? drill.coachingTips : [];
+          const duration = typeof drill.duration === 'string' ? drill.duration.replace(/[^0-9]/g, '') || '15' : String(drill.duration || '15');
+
+          const created = await prisma.drill.upsert({
+            where: { name },
+            update: {},
+            create: {
+              name,
+              description,
+              category: cat.id,
+              skillLevel: cat.skillLevel,
+              duration,
+              equipment: JSON.stringify(equipment),
+              stepByStep: JSON.stringify(steps),
+              coachingTips: JSON.stringify(tips),
+              videoUrl: null,
+              alternativeVideos: JSON.stringify([]),
+              isCustom: false,
+            },
+          });
+          generated.push({ id: created.id, name: created.name, category: created.category });
+        } catch (e) {
+          console.error('AI drill generation failed for', cat.id, e);
+        }
+      }
+    }
+
+    return NextResponse.json(generated, { status: 200 });
   } catch (error) {
     console.error('Error fetching drills:', error);
     return NextResponse.json(
