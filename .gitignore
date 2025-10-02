@@ -106,4 +106,7 @@ Thumbs.db
 # Expo
 .expo/
 .expo-shared/
-.env
+
+# Build artifacts
+app/.build/
+.logs/
